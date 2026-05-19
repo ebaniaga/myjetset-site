@@ -185,6 +185,23 @@
     box-shadow: 0 6px 16px rgba(255, 210, 122, 0.35);
   }
 
+  .signup button:disabled {
+    opacity: 0.7;
+    cursor: default;
+    transform: none;
+    box-shadow: none;
+  }
+
+  .signup-message {
+    font-size: 1rem;
+    color: var(--accent);
+    margin-top: 1.5rem;
+    letter-spacing: 0.02em;
+    font-weight: 500;
+  }
+
+  .signup-message[hidden] { display: none; }
+
   footer {
     position: absolute;
     bottom: 16px;
@@ -276,13 +293,42 @@
         from the polar south to wherever your compass points next.
       </p>
 
-      <form class="signup" onsubmit="event.preventDefault(); this.querySelector('button').textContent='Thanks ✈';">
-        <input type="email" placeholder="your@email.com" required aria-label="Email address" />
+      <form class="signup" id="signup-form"
+            action="https://buttondown.com/api/emails/embed-subscribe/myjetsetlife"
+            method="post">
+        <input type="email" name="email" placeholder="your@email.com" required aria-label="Email address" />
         <button type="submit">Notify me</button>
       </form>
+      <p class="signup-message" id="signup-message" hidden>Thanks — check your inbox to confirm ✈</p>
     </main>
 
     <footer>© myjetset.life — coming soon</footer>
   </div>
+
+  <script>
+    (function () {
+      var form = document.getElementById('signup-form');
+      var message = document.getElementById('signup-message');
+      var input = form.querySelector('input[type="email"]');
+      var button = form.querySelector('button');
+      form.addEventListener('submit', function (e) {
+        e.preventDefault();
+        if (!input.value) return;
+        button.disabled = true;
+        button.textContent = 'Sending…';
+        var data = new FormData();
+        data.append('email', input.value);
+        fetch(form.action, { method: 'POST', body: data, mode: 'no-cors' })
+          .then(function () {
+            form.hidden = true;
+            message.hidden = false;
+          })
+          .catch(function () {
+            button.disabled = false;
+            button.textContent = 'Try again';
+          });
+      });
+    })();
+  </script>
 </body>
 </html>
