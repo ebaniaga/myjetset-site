@@ -202,6 +202,34 @@
 
   .signup-message[hidden] { display: none; }
 
+  .or-divider {
+    margin-top: 1.75rem;
+    font-size: 0.78rem;
+    letter-spacing: 0.1em;
+    text-transform: uppercase;
+    opacity: 0.5;
+  }
+
+  .tool-link {
+    display: inline-block;
+    margin-top: 0.7rem;
+    padding: 12px 26px;
+    border: 1px solid var(--accent);
+    border-radius: 999px;
+    color: var(--accent);
+    text-decoration: none;
+    font-weight: 600;
+    font-size: 0.95rem;
+    transition: background 0.15s ease, color 0.15s ease, transform 0.15s ease;
+  }
+
+  .tool-link:hover {
+    background: var(--accent);
+    color: var(--ink);
+    transform: translateY(-1px);
+    box-shadow: 0 6px 16px rgba(255, 210, 122, 0.35);
+  }
+
   footer {
     position: absolute;
     bottom: 16px;
@@ -300,6 +328,11 @@
         <button type="submit">Notify me</button>
       </form>
       <p class="signup-message" id="signup-message" hidden>Thanks — check your inbox to confirm ✈</p>
+
+      <p class="or-divider">or try it now</p>
+      <a class="tool-link" href="https://search.myjetset.life/search">
+        Search award flights with your points →
+      </a>
     </main>
 
     <footer>© myjetset.life — coming soon</footer>
