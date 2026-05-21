@@ -532,7 +532,8 @@
           b.type = 'button';
           b.className = 'dp-flex-btn' + (n === flex ? ' active' : '');
           b.textContent = '± ' + n + 'd';
-          b.addEventListener('click', function () {
+          b.addEventListener('click', function (e) {
+            e.stopPropagation();
             flex = n;
             renderFlex();
             renderTrigger();
@@ -562,7 +563,8 @@
             b.disabled = true;
           } else {
             (function (dateVal) {
-              b.addEventListener('click', function () {
+              b.addEventListener('click', function (e) {
+                e.stopPropagation();
                 selectedDate = dateVal;
                 viewYear = dateVal.getFullYear();
                 viewMonth = dateVal.getMonth();
@@ -604,13 +606,15 @@
         renderTrigger();
         if (!dp.panel.hidden) renderCalendar();
       });
-      dp.prev.addEventListener('click', function () {
+      dp.prev.addEventListener('click', function (e) {
+        e.stopPropagation();
         if (dp.prev.disabled) return;
         viewMonth--;
         if (viewMonth < 0) { viewMonth = 11; viewYear--; }
         renderCalendar();
       });
-      dp.next.addEventListener('click', function () {
+      dp.next.addEventListener('click', function (e) {
+        e.stopPropagation();
         viewMonth++;
         if (viewMonth > 11) { viewMonth = 0; viewYear++; }
         renderCalendar();
