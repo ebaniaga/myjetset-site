@@ -27,7 +27,7 @@ const PROGRAM_NAMES = {
 const CABIN_KEYS = { economy: "Y", premium: "W", business: "J", first: "F" };
 const CABIN_LABEL = { Y: "Economy", W: "Premium economy", J: "Business", F: "First" };
 
-const MAX_RANGE_DAYS = 90;
+const MAX_RANGE_DAYS = 28; // 4 weeks
 const MAX_RESULTS_IN_EMAIL = 15;
 
 function json(data, status = 200) {
@@ -79,9 +79,13 @@ export async function onRequestPost(context) {
 
   if (endDate < startDate)
     return json({ error: "Latest departure must be on or after the earliest." }, 400);
+  // Reject past dates (1-day grace so timezone offsets don't reject a valid "today")
+  const earliestAllowed = new Date(Date.now() - 86400000).toISOString().slice(0, 10);
+  if (startDate < earliestAllowed)
+    return json({ error: "Departure dates must be in the future." }, 400);
   const rangeDays = (Date.parse(endDate) - Date.parse(startDate)) / 86400000;
   if (rangeDays > MAX_RANGE_DAYS)
-    return json({ error: `Keep the date range within ${MAX_RANGE_DAYS} days.` }, 400);
+    return json({ error: `Keep the date range within ${MAX_RANGE_DAYS} days (4 weeks).` }, 400);
 
   const cabinKeys = cabin === "any" ? ["Y", "W", "J", "F"] : [CABIN_KEYS[cabin]];
 

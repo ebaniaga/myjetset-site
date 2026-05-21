@@ -285,12 +285,34 @@
       var startEl = document.getElementById('startDate');
       var endEl = document.getElementById('endDate');
 
-      var today = new Date().toISOString().slice(0, 10);
+      var MAX_SPAN_DAYS = 28; // 4 weeks
+
+      function isoAddDays(iso, n) {
+        var p = iso.split('-');
+        var d = new Date(Date.UTC(+p[0], +p[1] - 1, +p[2]));
+        d.setUTCDate(d.getUTCDate() + n);
+        return d.toISOString().slice(0, 10);
+      }
+
+      // Local calendar date (so the picker's minimum matches the user's "today")
+      var now = new Date();
+      var today = new Date(now.getTime() - now.getTimezoneOffset() * 60000)
+        .toISOString().slice(0, 10);
+
       startEl.min = today;
       endEl.min = today;
-      startEl.addEventListener('change', function () {
-        endEl.min = startEl.value || today;
-      });
+
+      // Keep the end date within [start, start + 4 weeks]
+      function syncEndBounds() {
+        var start = startEl.value || today;
+        endEl.min = start;
+        endEl.max = isoAddDays(start, MAX_SPAN_DAYS);
+        if (endEl.value && (endEl.value < endEl.min || endEl.value > endEl.max)) {
+          endEl.value = '';
+        }
+      }
+      syncEndBounds();
+      startEl.addEventListener('change', syncEndBounds);
 
       function show(kind, text) {
         msg.className = 'message ' + kind;
@@ -318,6 +340,20 @@
             !payload.destination || !payload.startDate || !payload.endDate ||
             !payload.email) {
           show('err', 'Please fill in every field before searching.');
+          return;
+        }
+
+        if (payload.startDate < today || payload.endDate < today) {
+          show('err', 'Please choose departure dates in the future.');
+          return;
+        }
+        if (payload.endDate < payload.startDate) {
+          show('err', 'The latest departure must be on or after the earliest.');
+          return;
+        }
+        if (Date.parse(payload.endDate) - Date.parse(payload.startDate)
+            > MAX_SPAN_DAYS * 86400000) {
+          show('err', 'Keep your date range within 4 weeks (28 days).');
           return;
         }
 
