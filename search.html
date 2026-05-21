@@ -1,0 +1,365 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8" />
+<meta name="viewport" content="width=device-width, initial-scale=1.0" />
+<title>myjetset — Find award flights with your points</title>
+<meta name="description" content="Tell us your points and where you want to go. We'll email you award flight options." />
+<style>
+  :root {
+    --ink: #0b1d2a;
+    --sky-top: #0a1a2f;
+    --sky-mid: #1f3b5c;
+    --sky-low: #6ea8c9;
+    --ice: #e8f3fb;
+    --ice-shadow: #b9d6e8;
+    --accent: #ffd27a;
+  }
+
+  * { box-sizing: border-box; margin: 0; padding: 0; }
+
+  html, body {
+    min-height: 100%;
+    font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", Inter, system-ui, sans-serif;
+    color: var(--ice);
+    background: var(--sky-top);
+    -webkit-font-smoothing: antialiased;
+  }
+
+  body {
+    min-height: 100vh;
+    background: linear-gradient(
+      to bottom,
+      var(--sky-top) 0%,
+      var(--sky-mid) 55%,
+      var(--sky-low) 100%
+    );
+    padding: 6vh 20px 8vh;
+  }
+
+  .wrap {
+    max-width: 560px;
+    margin: 0 auto;
+  }
+
+  header {
+    text-align: center;
+    margin-bottom: 2.5rem;
+  }
+
+  .brand {
+    font-size: clamp(1.8rem, 5vw, 2.6rem);
+    font-weight: 700;
+    letter-spacing: -0.02em;
+    line-height: 1;
+  }
+
+  .brand .dot { color: var(--accent); }
+
+  .lead {
+    margin-top: 0.9rem;
+    font-size: clamp(1rem, 2.4vw, 1.15rem);
+    font-weight: 300;
+    opacity: 0.9;
+    line-height: 1.45;
+  }
+
+  .card {
+    background: rgba(255, 255, 255, 0.07);
+    border: 1px solid rgba(255, 255, 255, 0.16);
+    backdrop-filter: blur(10px);
+    border-radius: 20px;
+    padding: 28px;
+  }
+
+  .field { margin-bottom: 18px; }
+
+  label {
+    display: block;
+    font-size: 0.82rem;
+    font-weight: 600;
+    letter-spacing: 0.04em;
+    text-transform: uppercase;
+    opacity: 0.8;
+    margin-bottom: 6px;
+  }
+
+  .hint {
+    font-size: 0.78rem;
+    font-weight: 400;
+    text-transform: none;
+    letter-spacing: 0;
+    opacity: 0.6;
+  }
+
+  input, select {
+    width: 100%;
+    background: rgba(255, 255, 255, 0.1);
+    border: 1px solid rgba(255, 255, 255, 0.2);
+    border-radius: 12px;
+    color: var(--ice);
+    padding: 12px 14px;
+    font-size: 0.98rem;
+    font-family: inherit;
+    outline: 0;
+    transition: border-color 0.15s ease, background 0.15s ease;
+  }
+
+  input:focus, select:focus {
+    border-color: var(--accent);
+    background: rgba(255, 255, 255, 0.14);
+  }
+
+  input::placeholder { color: rgba(232, 243, 251, 0.45); }
+
+  select option { background: var(--sky-mid); color: var(--ice); }
+
+  .row {
+    display: flex;
+    gap: 14px;
+  }
+  .row .field { flex: 1; margin-bottom: 18px; }
+
+  .hp {
+    position: absolute;
+    left: -9999px;
+    width: 1px;
+    height: 1px;
+    overflow: hidden;
+  }
+
+  button {
+    width: 100%;
+    background: var(--accent);
+    color: var(--ink);
+    border: 0;
+    border-radius: 999px;
+    padding: 14px 22px;
+    font-weight: 700;
+    font-size: 1rem;
+    cursor: pointer;
+    font-family: inherit;
+    margin-top: 6px;
+    transition: transform 0.15s ease, box-shadow 0.15s ease;
+  }
+
+  button:hover:not(:disabled) {
+    transform: translateY(-1px);
+    box-shadow: 0 6px 18px rgba(255, 210, 122, 0.35);
+  }
+
+  button:disabled { opacity: 0.6; cursor: default; }
+
+  .message {
+    margin-top: 18px;
+    padding: 14px 16px;
+    border-radius: 12px;
+    font-size: 0.95rem;
+    line-height: 1.45;
+  }
+  .message[hidden] { display: none; }
+  .message.ok {
+    background: rgba(120, 210, 170, 0.15);
+    border: 1px solid rgba(120, 210, 170, 0.4);
+    color: #d6f6e8;
+  }
+  .message.err {
+    background: rgba(230, 130, 130, 0.15);
+    border: 1px solid rgba(230, 130, 130, 0.4);
+    color: #f6dada;
+  }
+
+  footer {
+    text-align: center;
+    margin-top: 2rem;
+    font-size: 0.78rem;
+    opacity: 0.5;
+  }
+
+  @media (max-width: 460px) {
+    .row { flex-direction: column; gap: 0; }
+    .card { padding: 22px; }
+  }
+</style>
+</head>
+<body>
+  <div class="wrap">
+    <header>
+      <h1 class="brand">myjetset<span class="dot">.</span>life</h1>
+      <p class="lead">
+        Tell us how many points you have and where you'd like to go.
+        We'll search award availability and email you the options.
+      </p>
+    </header>
+
+    <form class="card" id="search-form" novalidate>
+      <div class="field">
+        <label for="program">Mileage program</label>
+        <select id="program" name="program" required>
+          <option value="" disabled selected>Select your program…</option>
+          <option value="aeroplan">Air Canada Aeroplan</option>
+          <option value="aeromexico">Aeroméxico Club Premier</option>
+          <option value="alaska">Alaska Mileage Plan</option>
+          <option value="american">American AAdvantage</option>
+          <option value="azul">Azul TudoAzul</option>
+          <option value="british">British Airways Club</option>
+          <option value="delta">Delta SkyMiles</option>
+          <option value="etihad">Etihad Guest</option>
+          <option value="finnair">Finnair Plus</option>
+          <option value="flyingblue">Air France-KLM Flying Blue</option>
+          <option value="jetblue">JetBlue TrueBlue</option>
+          <option value="qantas">Qantas Frequent Flyer</option>
+          <option value="qatar">Qatar Privilege Club</option>
+          <option value="saudia">Saudia AlFursan</option>
+          <option value="smiles">GOL Smiles</option>
+          <option value="united">United MileagePlus</option>
+          <option value="velocity">Virgin Australia Velocity</option>
+          <option value="virginatlantic">Virgin Atlantic Flying Club</option>
+        </select>
+      </div>
+
+      <div class="field">
+        <label for="balance">Points balance</label>
+        <input type="number" id="balance" name="balance" min="1000" step="1000"
+               placeholder="e.g. 120000" required inputmode="numeric" />
+      </div>
+
+      <div class="row">
+        <div class="field">
+          <label for="origin">From <span class="hint">airport code</span></label>
+          <input type="text" id="origin" name="origin" placeholder="JFK"
+                 maxlength="23" autocapitalize="characters" required />
+        </div>
+        <div class="field">
+          <label for="destination">To <span class="hint">airport code</span></label>
+          <input type="text" id="destination" name="destination" placeholder="LHR"
+                 maxlength="23" autocapitalize="characters" required />
+        </div>
+      </div>
+
+      <div class="row">
+        <div class="field">
+          <label for="startDate">Earliest departure</label>
+          <input type="date" id="startDate" name="startDate" required />
+        </div>
+        <div class="field">
+          <label for="endDate">Latest departure</label>
+          <input type="date" id="endDate" name="endDate" required />
+        </div>
+      </div>
+
+      <div class="field">
+        <label for="cabin">Cabin</label>
+        <select id="cabin" name="cabin">
+          <option value="any" selected>Any cabin</option>
+          <option value="economy">Economy</option>
+          <option value="premium">Premium economy</option>
+          <option value="business">Business</option>
+          <option value="first">First</option>
+        </select>
+      </div>
+
+      <div class="field">
+        <label for="email">Your email</label>
+        <input type="email" id="email" name="email" placeholder="your@email.com" required />
+      </div>
+
+      <div class="hp" aria-hidden="true">
+        <label for="company">Company</label>
+        <input type="text" id="company" name="company" tabindex="-1" autocomplete="off" />
+      </div>
+
+      <button type="submit" id="submit-btn">Find my options</button>
+
+      <div class="message" id="message" hidden></div>
+    </form>
+
+    <footer>© myjetset.life — award availability provided by seats.aero</footer>
+  </div>
+
+  <script>
+    (function () {
+      var form = document.getElementById('search-form');
+      var btn = document.getElementById('submit-btn');
+      var msg = document.getElementById('message');
+      var startEl = document.getElementById('startDate');
+      var endEl = document.getElementById('endDate');
+
+      var today = new Date().toISOString().slice(0, 10);
+      startEl.min = today;
+      endEl.min = today;
+      startEl.addEventListener('change', function () {
+        endEl.min = startEl.value || today;
+      });
+
+      function show(kind, text) {
+        msg.className = 'message ' + kind;
+        msg.textContent = text;
+        msg.hidden = false;
+      }
+
+      form.addEventListener('submit', function (e) {
+        e.preventDefault();
+        msg.hidden = true;
+
+        var payload = {
+          program: form.program.value,
+          balance: form.balance.value,
+          origin: form.origin.value.trim().toUpperCase(),
+          destination: form.destination.value.trim().toUpperCase(),
+          startDate: form.startDate.value,
+          endDate: form.endDate.value,
+          cabin: form.cabin.value,
+          email: form.email.value.trim(),
+          company: form.company.value
+        };
+
+        if (!payload.program || !payload.balance || !payload.origin ||
+            !payload.destination || !payload.startDate || !payload.endDate ||
+            !payload.email) {
+          show('err', 'Please fill in every field before searching.');
+          return;
+        }
+
+        btn.disabled = true;
+        btn.textContent = 'Searching…';
+
+        fetch('/api/search', {
+          method: 'POST',
+          headers: { 'Content-Type': 'application/json' },
+          body: JSON.stringify(payload)
+        })
+          .then(function (res) {
+            return res.json().then(function (body) {
+              return { ok: res.ok, body: body };
+            });
+          })
+          .then(function (r) {
+            if (!r.ok) {
+              show('err', (r.body && r.body.error) || 'Something went wrong. Please try again.');
+              btn.disabled = false;
+              btn.textContent = 'Find my options';
+              return;
+            }
+            form.querySelectorAll('input, select, button').forEach(function (el) {
+              el.disabled = true;
+            });
+            if (r.body.count > 0) {
+              show('ok', 'We found ' + r.body.count + ' option' +
+                (r.body.count > 1 ? 's' : '') +
+                ' you can afford. Check your inbox — they’re on the way ✈');
+            } else {
+              show('ok', 'No award space matched right now. We’ve emailed you the ' +
+                'details and we’ll keep an eye out. ✈');
+            }
+          })
+          .catch(function () {
+            show('err', 'Network error. Please check your connection and try again.');
+            btn.disabled = false;
+            btn.textContent = 'Find my options';
+          });
+      });
+    })();
+  </script>
+</body>
+</html>
