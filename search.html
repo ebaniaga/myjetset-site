@@ -643,6 +643,17 @@
           show('err', 'Please fill in every field before searching.');
           return;
         }
+
+        var airportRe = /^[A-Z]{3}(,[A-Z]{3})*$/;
+        if (!airportRe.test(form.origin.value.replace(/\s+/g, '').toUpperCase())) {
+          show('err', 'The "From" field needs a 3-letter airport code (e.g. JFK).');
+          return;
+        }
+        if (!airportRe.test(form.destination.value.replace(/\s+/g, '').toUpperCase())) {
+          show('err', 'The "To" field needs a 3-letter airport code (e.g. LHR).');
+          return;
+        }
+
         if (!selectedDate) {
           show('err', 'Please choose a departure date.');
           return;
@@ -656,8 +667,8 @@
         var payload = {
           program: form.program.value,
           balance: form.balance.value,
-          origin: form.origin.value.trim().toUpperCase(),
-          destination: form.destination.value.trim().toUpperCase(),
+          origin: form.origin.value.replace(/\s+/g, '').toUpperCase(),
+          destination: form.destination.value.replace(/\s+/g, '').toUpperCase(),
           startDate: iso(startD),
           endDate: iso(endD),
           cabin: form.cabin.value,
