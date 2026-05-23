@@ -410,6 +410,14 @@ function formatDateLabel(isoDate) {
 function renderOption(o) {
   const taxesDollars = (o.taxesCents / 100).toFixed(2);
   const trip = o.trip;
+  const carrierCodes = ((trip && trip.Carriers) || o.airlines || "")
+    .split(",")
+    .map((c) => c.trim().toUpperCase())
+    .filter(Boolean);
+  const primaryAirline = carrierCodes[0] || "";
+  const logoImg = primaryAirline
+    ? `<img src="https://images.kiwi.com/airlines/64x64/${primaryAirline}.png" alt="" width="28" height="28" style="display:inline-block;vertical-align:middle;border-radius:4px;background:#fff;margin-right:8px;" />`
+    : "";
   let routeBlock;
   if (trip) {
     const originTz = AIRPORT_TZ.get(o.origin);
@@ -447,8 +455,8 @@ function renderOption(o) {
       <table role="presentation" style="width:100%;border-collapse:collapse;" cellpadding="0" cellspacing="0">
         <tr>
           <td style="font-weight:600;font-size:14px;color:#0b1d2a;vertical-align:top;">
-            ${formatDateLabel(o.date)} · ${o.cabin}
-            <div style="font-weight:400;font-size:12px;color:#5d7a8c;margin-top:2px;">${o.programShort}</div>
+            ${logoImg}<span style="vertical-align:middle;">${formatDateLabel(o.date)} · ${o.cabin}</span>
+            <div style="font-weight:400;font-size:12px;color:#5d7a8c;margin-top:2px;${logoImg ? "padding-left:36px;" : ""}">${o.programShort}${primaryAirline && o.programShort.toUpperCase() !== primaryAirline ? ` · operated by ${primaryAirline}` : ""}</div>
           </td>
           <td style="font-weight:600;font-size:14px;color:#0b1d2a;text-align:right;white-space:nowrap;vertical-align:top;">
             ${fmt(o.miles)} mi

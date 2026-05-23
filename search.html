@@ -700,6 +700,29 @@
       var programInputs = document.querySelectorAll('input[name="programs"]');
       var programsErr = document.getElementById('programs-error');
 
+      // Airline IATA codes for program logos. Keys mirror the input values.
+      var PROGRAM_AIRLINE_IATA = {
+        aeroplan: 'AC', aeromexico: 'AM', alaska: 'AS', american: 'AA',
+        azul: 'AD', british: 'BA', delta: 'DL', etihad: 'EY', finnair: 'AY',
+        flyingblue: 'AF', jetblue: 'B6', qantas: 'QF', qatar: 'QR',
+        saudia: 'SV', smiles: 'G3', united: 'UA', velocity: 'VA',
+        virginatlantic: 'VS'
+      };
+      programInputs.forEach(function (i) {
+        var iata = PROGRAM_AIRLINE_IATA[i.value];
+        if (!iata) return;
+        var label = i.parentNode.querySelector('.chip-label');
+        if (!label) return;
+        var img = document.createElement('img');
+        img.src = 'https://images.kiwi.com/airlines/64x64/' + iata + '.png';
+        img.alt = '';
+        img.loading = 'lazy';
+        img.style.cssText =
+          'width:18px;height:18px;margin-right:8px;vertical-align:middle;' +
+          'border-radius:3px;background:#fff;';
+        label.insertBefore(img, label.firstChild);
+      });
+
       function updateProgramLimit() {
         var checkedCount = 0;
         programInputs.forEach(function (i) { if (i.checked) checkedCount++; });
