@@ -57,6 +57,33 @@ const HELP_OPTIONS = {
   insurance: "Travel insurance",
 };
 
+// "Surprise me" — curated destinations grouped by tier so we can prioritize
+// major hubs first in the emailed results.
+const SURPRISE_DESTINATIONS = {
+  tier1: [
+    "JFK","LAX","ORD","ATL","DFW","MIA","SFO","SEA","BOS","IAH","DEN","YYZ","YVR","MEX",
+    "LHR","CDG","AMS","FRA","MAD","BCN","FCO","MUC","ZRH","IST","VIE","DUB","CPH","BRU",
+    "NRT","HND","ICN","PEK","PVG","HKG","SIN","BKK","KUL","DEL","BOM","TPE",
+    "DXB","DOH","AUH","TLV",
+    "SYD","MEL","AKL",
+    "GRU","EZE","SCL","BOG","LIM",
+    "JNB","NBO","CAI","CPT",
+  ],
+  tier2: [
+    "PHX","MSP","DTW","EWR","LGA","MCO","LAS","IAD","FLL","TPA","AUS","SAN","PDX","SLC","PHL","CLT","HNL","OGG","MEM","MCI",
+    "ORY","LGW","MAN","EDI","OPO","MXP","LIN","VCE","NCE","PMI","AGP","IBZ","HEL","ARN","OSL","ATH","LIS","PRG","BUD","WAW",
+    "KIX","FUK","CTS","OKA","MNL","CGK","HKT","DPS","SGN","HAN","MAA","BLR",
+    "CUN","NAS","PUJ","AUA","SJU","MBJ","LIR","SJO","PTY","GUA",
+    "BNE","PER","ADL","CHC",
+    "GIG","CWB","MVD","CCS","UIO","REC",
+    "RAK","CMN","JED","BEY","ALG","MRU","ZNZ","DAR",
+  ],
+};
+const SURPRISE_ALL = [...SURPRISE_DESTINATIONS.tier1, ...SURPRISE_DESTINATIONS.tier2];
+const SURPRISE_TIER = new Map();
+SURPRISE_DESTINATIONS.tier1.forEach((c) => SURPRISE_TIER.set(c, 1));
+SURPRISE_DESTINATIONS.tier2.forEach((c) => SURPRISE_TIER.set(c, 2));
+
 const MAX_RANGE_DAYS = 28; // 4 weeks
 const MAX_RESULTS_IN_EMAIL = 15;
 
@@ -103,7 +130,10 @@ export async function onRequestPost(context) {
   const balanceMax = parseInt(body.balanceMax, 10);
   const MAX_POINTS = 500000;
   const origin = String(body.origin || "").toUpperCase().replace(/\s+/g, "");
-  const destination = String(body.destination || "").toUpperCase().replace(/\s+/g, "");
+  const surprise = body.surprise === true;
+  const destination = surprise
+    ? ""
+    : String(body.destination || "").toUpperCase().replace(/\s+/g, "");
   const startDate = String(body.startDate || "").trim();
   const endDate = String(body.endDate || "").trim();
   const cabins = Array.isArray(body.cabins)
@@ -132,8 +162,10 @@ export async function onRequestPost(context) {
     errors.push("Min points budget must be less than max.");
   const originErr = checkAirports(origin, "Origin");
   if (originErr) errors.push(originErr);
-  const destErr = checkAirports(destination, "Destination");
-  if (destErr) errors.push(destErr);
+  if (!surprise) {
+    const destErr = checkAirports(destination, "Destination");
+    if (destErr) errors.push(destErr);
+  }
   if (!dateRe.test(startDate) || !dateRe.test(endDate))
     errors.push("Enter valid departure dates.");
   if (!/^[^@\s]+@[^@\s]+\.[^@\s]+$/.test(email))
@@ -164,7 +196,10 @@ export async function onRequestPost(context) {
   // --- Search seats.aero ---------------------------------------------------
   const searchUrl = new URL("https://seats.aero/partnerapi/search");
   searchUrl.searchParams.set("origin_airport", origin);
-  searchUrl.searchParams.set("destination_airport", destination);
+  searchUrl.searchParams.set(
+    "destination_airport",
+    surprise ? SURPRISE_ALL.join(",") : destination
+  );
   searchUrl.searchParams.set("start_date", startDate);
   searchUrl.searchParams.set("end_date", endDate);
   searchUrl.searchParams.set("sources", programs.join(","));
@@ -215,22 +250,31 @@ export async function onRequestPost(context) {
       });
     }
   }
-  options.sort((a, b) => a.miles - b.miles);
+  options.sort((a, b) => {
+    if (surprise) {
+      const ta = SURPRISE_TIER.get(a.destination) || 99;
+      const tb = SURPRISE_TIER.get(b.destination) || 99;
+      if (ta !== tb) return ta - tb;
+    }
+    return a.miles - b.miles;
+  });
   const shown = options.slice(0, MAX_RESULTS_IN_EMAIL);
 
   // --- Email the traveler --------------------------------------------------
   const programNames = programs.map((p) => PROGRAM_NAMES[p]);
+  const destinationText = surprise ? "Anywhere ✨" : destination;
   const subject =
     options.length > 0
-      ? `${options.length} award option${options.length > 1 ? "s" : ""}: ${origin} → ${destination}`
-      : `No award space yet: ${origin} → ${destination}`;
+      ? `${options.length} award option${options.length > 1 ? "s" : ""}: ${origin} → ${destinationText}`
+      : `No award space yet: ${origin} → ${destinationText}`;
 
   const html = renderEmail({
     programNames,
     balanceMin,
     balanceMax,
     origin,
-    destination,
+    destinationText,
+    surprise,
     startDate,
     endDate,
     cabinsText,
@@ -281,10 +325,14 @@ function renderEmail(d) {
 
   const programsText = d.programNames.join(", ");
   const budgetText = `${fmt(d.balanceMin)}–${fmt(d.balanceMax)} points`;
+  const routeText = `${d.origin} → ${d.destinationText}`;
+  const surpriseSuffix = d.surprise
+    ? " Major hubs are listed first, then smaller destinations."
+    : "";
   const intro =
     d.options.length > 0
-      ? `Here ${d.options.length === 1 ? "is an option" : "are some options"} we found between <strong>${budgetText}</strong> across <strong>${programsText}</strong>.`
-      : `We searched <strong>${programsText}</strong> for ${d.origin} → ${d.destination} but didn't find award space in the <strong>${budgetText}</strong> range for those dates. Award seats open up constantly — it's worth trying a wider date range or a nearby airport.`;
+      ? `Here ${d.options.length === 1 ? "is an option" : "are some options"} we found between <strong>${budgetText}</strong> across <strong>${programsText}</strong>.${surpriseSuffix}`
+      : `We searched <strong>${programsText}</strong> for ${routeText} but didn't find award space in the <strong>${budgetText}</strong> range for those dates. Award seats open up constantly — it's worth trying a wider date range or a nearby airport.`;
 
   let rows = "";
   for (const o of d.shown) {
@@ -338,7 +386,7 @@ function renderEmail(d) {
 
     <div style="margin-top:24px;padding:14px 16px;background:#fff;border-radius:10px;font-size:13px;color:#5d7a8c;line-height:1.5;">
       <strong style="color:${ink};">Your search</strong><br/>
-      ${d.programNames.join(", ")} · ${fmt(d.balanceMin)}–${fmt(d.balanceMax)} points · ${d.origin} → ${d.destination}<br/>
+      ${d.programNames.join(", ")} · ${fmt(d.balanceMin)}–${fmt(d.balanceMax)} points · ${d.origin} → ${d.destinationText}<br/>
       Departing ${d.startDate} to ${d.endDate} · ${d.cabinsText}
     </div>
 

@@ -363,6 +363,31 @@
     .chips { grid-template-columns: 1fr; }
   }
 
+  label.check-inline {
+    display: flex;
+    align-items: center;
+    gap: 10px;
+    cursor: pointer;
+    font-size: 0.95rem;
+    font-weight: 400;
+    letter-spacing: 0;
+    text-transform: none;
+    opacity: 1;
+    margin-bottom: 0;
+  }
+  .check-inline input[type="checkbox"] {
+    width: 18px;
+    height: 18px;
+    padding: 0;
+    margin: 0;
+    background: transparent;
+    border: 0;
+    flex-shrink: 0;
+    accent-color: var(--accent);
+    cursor: pointer;
+  }
+  input:disabled { opacity: 0.4; cursor: not-allowed; }
+
   .message {
     margin-top: 18px;
     padding: 14px 16px;
@@ -458,6 +483,13 @@
                  maxlength="23" autocapitalize="characters" required />
           <div class="field-error" id="destination-error" hidden></div>
         </div>
+      </div>
+
+      <div class="field">
+        <label class="check-inline">
+          <input type="checkbox" id="surprise" />
+          <span>✨ Surprise me — search every destination from my origin</span>
+        </label>
       </div>
 
       <div class="field">
@@ -581,6 +613,19 @@
         var err = document.getElementById(id + '-error');
         input.addEventListener('input', function () { validateAirport(input, err, false); });
         input.addEventListener('blur', function () { validateAirport(input, err, true); });
+      });
+
+      // ---- Surprise me toggle (disables destination) ------------------------
+      var surpriseCheckbox = document.getElementById('surprise');
+      surpriseCheckbox.addEventListener('change', function () {
+        var s = surpriseCheckbox.checked;
+        var destInput = document.getElementById('destination');
+        var destErrEl = document.getElementById('destination-error');
+        destInput.disabled = s;
+        if (s) {
+          destInput.value = '';
+          destErrEl.hidden = true;
+        }
       });
 
       // ---- Points budget (min/max, in 1,000s up to 500,000) -----------------
@@ -840,7 +885,9 @@
         e.preventDefault();
         msg.hidden = true;
 
-        if (!form.origin.value.trim() || !form.destination.value.trim() ||
+        var surprise = surpriseCheckbox.checked;
+
+        if (!form.origin.value.trim() || (!surprise && !form.destination.value.trim()) ||
             !form.email.value.trim()) {
           show('err', 'Please fill in every field before searching.');
           return;
@@ -868,7 +915,7 @@
 
         var originOk = validateAirport(form.origin,
           document.getElementById('origin-error'), true);
-        var destOk = validateAirport(form.destination,
+        var destOk = surprise ? true : validateAirport(form.destination,
           document.getElementById('destination-error'), true);
         if (!originOk || !destOk) {
           (originOk ? form.destination : form.origin).focus();
@@ -890,7 +937,8 @@
           balanceMin: balanceMinVal,
           balanceMax: balanceMaxVal,
           origin: form.origin.value.replace(/\s+/g, '').toUpperCase(),
-          destination: form.destination.value.replace(/\s+/g, '').toUpperCase(),
+          destination: surprise ? '' : form.destination.value.replace(/\s+/g, '').toUpperCase(),
+          surprise: surprise,
           startDate: iso(startD),
           endDate: iso(endD),
           cabins: selectedCabins,
