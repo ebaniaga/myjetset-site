@@ -23,6 +23,28 @@ const PROGRAM_NAMES = {
   virginatlantic: "Virgin Atlantic Flying Club",
 };
 
+// Shorter labels for the email table column.
+const PROGRAM_SHORT = {
+  aeroplan: "Aeroplan",
+  aeromexico: "Aeroméxico",
+  alaska: "Alaska",
+  american: "American",
+  azul: "Azul",
+  british: "British Airways",
+  delta: "Delta",
+  etihad: "Etihad",
+  finnair: "Finnair",
+  flyingblue: "Flying Blue",
+  jetblue: "JetBlue",
+  qantas: "Qantas",
+  qatar: "Qatar",
+  saudia: "Saudia",
+  smiles: "Smiles",
+  united: "United",
+  velocity: "Velocity",
+  virginatlantic: "Virgin Atlantic",
+};
+
 // seats.aero encodes cabins as Y / W / J / F
 const CABIN_KEYS = { economy: "Y", premium: "W", business: "J", first: "F" };
 const CABIN_LABEL = { Y: "Economy", W: "Premium economy", J: "Business", F: "First" };
@@ -66,7 +88,9 @@ export async function onRequestPost(context) {
   // Honeypot — bots fill the hidden "company" field. Pretend success, do nothing.
   if (body.company) return json({ ok: true, count: 0 });
 
-  const program = String(body.program || "").trim();
+  const programs = Array.isArray(body.programs)
+    ? body.programs.map((p) => String(p).trim())
+    : [];
   const balance = parseInt(body.balance, 10);
   const origin = String(body.origin || "").toUpperCase().replace(/\s+/g, "");
   const destination = String(body.destination || "").toUpperCase().replace(/\s+/g, "");
@@ -78,7 +102,13 @@ export async function onRequestPost(context) {
   const errors = [];
   const dateRe = /^\d{4}-\d{2}-\d{2}$/;
 
-  if (!PROGRAM_NAMES[program]) errors.push("Choose a valid mileage program.");
+  if (programs.length < 1 || programs.length > 3) {
+    errors.push("Choose 1–3 mileage programs.");
+  } else {
+    for (const p of programs) {
+      if (!PROGRAM_NAMES[p]) { errors.push(`Unknown mileage program: ${p}.`); break; }
+    }
+  }
   if (!Number.isFinite(balance) || balance < 1000)
     errors.push("Enter a points balance of at least 1,000.");
   const originErr = checkAirports(origin, "Origin");
@@ -110,7 +140,7 @@ export async function onRequestPost(context) {
   searchUrl.searchParams.set("destination_airport", destination);
   searchUrl.searchParams.set("start_date", startDate);
   searchUrl.searchParams.set("end_date", endDate);
-  searchUrl.searchParams.set("sources", program);
+  searchUrl.searchParams.set("sources", programs.join(","));
   searchUrl.searchParams.set("take", "1000");
   searchUrl.searchParams.set("order_by", "lowest_mileage");
 
@@ -139,13 +169,14 @@ export async function onRequestPost(context) {
   // --- Filter to options the traveler can afford ---------------------------
   const options = [];
   for (const item of searchData.data || []) {
-    if (item.Source !== program) continue;
+    if (!programs.includes(item.Source)) continue;
     for (const key of cabinKeys) {
       if (!item[key + "Available"]) continue;
       const miles = item[key + "MileageCostRaw"];
       if (!miles || miles > balance) continue;
       options.push({
         date: item.Date,
+        programShort: PROGRAM_SHORT[item.Source] || item.Source,
         origin: item.Route ? item.Route.OriginAirport : origin,
         destination: item.Route ? item.Route.DestinationAirport : destination,
         cabin: CABIN_LABEL[key],
@@ -161,14 +192,14 @@ export async function onRequestPost(context) {
   const shown = options.slice(0, MAX_RESULTS_IN_EMAIL);
 
   // --- Email the traveler --------------------------------------------------
-  const programName = PROGRAM_NAMES[program];
+  const programNames = programs.map((p) => PROGRAM_NAMES[p]);
   const subject =
     options.length > 0
       ? `${options.length} award option${options.length > 1 ? "s" : ""}: ${origin} → ${destination}`
       : `No award space yet: ${origin} → ${destination}`;
 
   const html = renderEmail({
-    programName,
+    programNames,
     balance,
     origin,
     destination,
@@ -219,16 +250,18 @@ function renderEmail(d) {
   const accent = "#caa24a";
   const ink = "#0b1d2a";
 
+  const programsText = d.programNames.join(", ");
   const intro =
     d.options.length > 0
-      ? `Here ${d.options.length === 1 ? "is an option" : "are some options"} you can book with your <strong>${fmt(d.balance)} ${d.programName}</strong> points.`
-      : `We searched <strong>${d.programName}</strong> for ${d.origin} → ${d.destination} but didn't find award space within your ${fmt(d.balance)}-point budget for those dates. Award seats open up constantly — it's worth trying a wider date range or a nearby airport.`;
+      ? `Here ${d.options.length === 1 ? "is an option" : "are some options"} we found within your <strong>${fmt(d.balance)}-point</strong> budget across <strong>${programsText}</strong>.`
+      : `We searched <strong>${programsText}</strong> for ${d.origin} → ${d.destination} but didn't find award space within your ${fmt(d.balance)}-point budget for those dates. Award seats open up constantly — it's worth trying a wider date range or a nearby airport.`;
 
   let rows = "";
   for (const o of d.shown) {
     rows += `
       <tr>
         <td style="padding:10px 12px;border-bottom:1px solid #e3eef5;">${o.date}</td>
+        <td style="padding:10px 12px;border-bottom:1px solid #e3eef5;">${o.programShort}</td>
         <td style="padding:10px 12px;border-bottom:1px solid #e3eef5;">${o.origin} → ${o.destination}</td>
         <td style="padding:10px 12px;border-bottom:1px solid #e3eef5;">${o.cabin}</td>
         <td style="padding:10px 12px;border-bottom:1px solid #e3eef5;">${o.airlines || "—"}${o.direct ? "" : " <span style=\"color:#888;\">(connection)</span>"}</td>
@@ -242,6 +275,7 @@ function renderEmail(d) {
            <thead>
              <tr style="text-align:left;color:#5d7a8c;font-size:12px;text-transform:uppercase;letter-spacing:0.04em;">
                <th style="padding:8px 12px;">Date</th>
+               <th style="padding:8px 12px;">Program</th>
                <th style="padding:8px 12px;">Route</th>
                <th style="padding:8px 12px;">Cabin</th>
                <th style="padding:8px 12px;">Airline</th>
@@ -266,7 +300,7 @@ function renderEmail(d) {
 
     <div style="margin-top:24px;padding:14px 16px;background:#fff;border-radius:10px;font-size:13px;color:#5d7a8c;line-height:1.5;">
       <strong style="color:${ink};">Your search</strong><br/>
-      ${d.programName} · ${fmt(d.balance)} points · ${d.origin} → ${d.destination}<br/>
+      ${d.programNames.join(", ")} · ${fmt(d.balance)} points · ${d.origin} → ${d.destination}<br/>
       Departing ${d.startDate} to ${d.endDate} · ${d.cabin === "any" ? "Any cabin" : d.cabin}
     </div>
 

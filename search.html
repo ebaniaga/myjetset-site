@@ -323,6 +323,46 @@
   }
   .field-error[hidden] { display: none; }
 
+  .chips {
+    display: grid;
+    grid-template-columns: repeat(2, 1fr);
+    gap: 8px;
+  }
+  .chip { position: relative; cursor: pointer; }
+  .chip input {
+    position: absolute;
+    opacity: 0;
+    pointer-events: none;
+  }
+  .chip-label {
+    display: block;
+    padding: 10px 12px;
+    border: 1px solid rgba(255, 255, 255, 0.2);
+    border-radius: 10px;
+    font-size: 0.88rem;
+    background: rgba(255, 255, 255, 0.05);
+    text-align: center;
+    transition: background 0.15s ease, border-color 0.15s ease, color 0.15s ease;
+  }
+  .chip:hover .chip-label { border-color: var(--accent); }
+  .chip input:checked + .chip-label {
+    background: var(--accent);
+    border-color: var(--accent);
+    color: var(--ink);
+    font-weight: 600;
+  }
+  .chip input:disabled + .chip-label {
+    opacity: 0.35;
+    cursor: not-allowed;
+  }
+  .chip input:focus-visible + .chip-label {
+    outline: 2px solid rgba(255, 210, 122, 0.4);
+    outline-offset: 1px;
+  }
+  @media (max-width: 460px) {
+    .chips { grid-template-columns: 1fr; }
+  }
+
   .message {
     margin-top: 18px;
     padding: 14px 16px;
@@ -367,28 +407,28 @@
 
     <form class="card" id="search-form" novalidate>
       <div class="field">
-        <label for="program">Mileage program</label>
-        <select id="program" name="program" required>
-          <option value="" disabled selected>Select your program…</option>
-          <option value="aeroplan">Air Canada Aeroplan</option>
-          <option value="aeromexico">Aeroméxico Club Premier</option>
-          <option value="alaska">Alaska Mileage Plan</option>
-          <option value="american">American AAdvantage</option>
-          <option value="azul">Azul TudoAzul</option>
-          <option value="british">British Airways Club</option>
-          <option value="delta">Delta SkyMiles</option>
-          <option value="etihad">Etihad Guest</option>
-          <option value="finnair">Finnair Plus</option>
-          <option value="flyingblue">Air France-KLM Flying Blue</option>
-          <option value="jetblue">JetBlue TrueBlue</option>
-          <option value="qantas">Qantas Frequent Flyer</option>
-          <option value="qatar">Qatar Privilege Club</option>
-          <option value="saudia">Saudia AlFursan</option>
-          <option value="smiles">GOL Smiles</option>
-          <option value="united">United MileagePlus</option>
-          <option value="velocity">Virgin Australia Velocity</option>
-          <option value="virginatlantic">Virgin Atlantic Flying Club</option>
-        </select>
+        <label>Mileage programs <span class="hint">pick up to 3</span></label>
+        <div class="chips" id="programs-chips">
+          <label class="chip"><input type="checkbox" name="programs" value="aeroplan" /><span class="chip-label">Air Canada Aeroplan</span></label>
+          <label class="chip"><input type="checkbox" name="programs" value="aeromexico" /><span class="chip-label">Aeroméxico Club Premier</span></label>
+          <label class="chip"><input type="checkbox" name="programs" value="alaska" /><span class="chip-label">Alaska Mileage Plan</span></label>
+          <label class="chip"><input type="checkbox" name="programs" value="american" /><span class="chip-label">American AAdvantage</span></label>
+          <label class="chip"><input type="checkbox" name="programs" value="azul" /><span class="chip-label">Azul TudoAzul</span></label>
+          <label class="chip"><input type="checkbox" name="programs" value="british" /><span class="chip-label">British Airways Club</span></label>
+          <label class="chip"><input type="checkbox" name="programs" value="delta" /><span class="chip-label">Delta SkyMiles</span></label>
+          <label class="chip"><input type="checkbox" name="programs" value="etihad" /><span class="chip-label">Etihad Guest</span></label>
+          <label class="chip"><input type="checkbox" name="programs" value="finnair" /><span class="chip-label">Finnair Plus</span></label>
+          <label class="chip"><input type="checkbox" name="programs" value="flyingblue" /><span class="chip-label">Air France-KLM Flying Blue</span></label>
+          <label class="chip"><input type="checkbox" name="programs" value="jetblue" /><span class="chip-label">JetBlue TrueBlue</span></label>
+          <label class="chip"><input type="checkbox" name="programs" value="qantas" /><span class="chip-label">Qantas Frequent Flyer</span></label>
+          <label class="chip"><input type="checkbox" name="programs" value="qatar" /><span class="chip-label">Qatar Privilege Club</span></label>
+          <label class="chip"><input type="checkbox" name="programs" value="saudia" /><span class="chip-label">Saudia AlFursan</span></label>
+          <label class="chip"><input type="checkbox" name="programs" value="smiles" /><span class="chip-label">GOL Smiles</span></label>
+          <label class="chip"><input type="checkbox" name="programs" value="united" /><span class="chip-label">United MileagePlus</span></label>
+          <label class="chip"><input type="checkbox" name="programs" value="velocity" /><span class="chip-label">Virgin Australia Velocity</span></label>
+          <label class="chip"><input type="checkbox" name="programs" value="virginatlantic" /><span class="chip-label">Virgin Atlantic Flying Club</span></label>
+        </div>
+        <div class="field-error" id="programs-error" hidden></div>
       </div>
 
       <div class="field">
@@ -523,6 +563,23 @@
         var err = document.getElementById(id + '-error');
         input.addEventListener('input', function () { validateAirport(input, err, false); });
         input.addEventListener('blur', function () { validateAirport(input, err, true); });
+      });
+
+      // ---- Mileage programs (multi-select, max 3) ---------------------------
+      var MAX_PROGRAMS = 3;
+      var programInputs = document.querySelectorAll('input[name="programs"]');
+      var programsErr = document.getElementById('programs-error');
+
+      function updateProgramLimit() {
+        var checkedCount = 0;
+        programInputs.forEach(function (i) { if (i.checked) checkedCount++; });
+        programInputs.forEach(function (i) {
+          i.disabled = (!i.checked && checkedCount >= MAX_PROGRAMS);
+        });
+        if (checkedCount > 0) programsErr.hidden = true;
+      }
+      programInputs.forEach(function (i) {
+        i.addEventListener('change', updateProgramLimit);
       });
 
       // ---- Date picker ------------------------------------------------------
@@ -693,10 +750,18 @@
         e.preventDefault();
         msg.hidden = true;
 
-        if (!form.program.value || !form.balance.value ||
+        if (!form.balance.value ||
             !form.origin.value.trim() || !form.destination.value.trim() ||
             !form.email.value.trim()) {
           show('err', 'Please fill in every field before searching.');
+          return;
+        }
+
+        var selectedPrograms = [];
+        programInputs.forEach(function (i) { if (i.checked) selectedPrograms.push(i.value); });
+        if (selectedPrograms.length === 0) {
+          programsErr.textContent = 'Pick at least one mileage program.';
+          programsErr.hidden = false;
           return;
         }
 
@@ -720,7 +785,7 @@
         var endD = addDays(selectedDate, flex);
 
         var payload = {
-          program: form.program.value,
+          programs: selectedPrograms,
           balance: form.balance.value,
           origin: form.origin.value.replace(/\s+/g, '').toUpperCase(),
           destination: form.destination.value.replace(/\s+/g, '').toUpperCase(),
