@@ -143,6 +143,7 @@ export async function onRequestPost(context) {
     ? body.helpWith.map((h) => String(h).trim()).filter((h) => HELP_OPTIONS[h])
     : [];
   const email = String(body.email || "").trim();
+  const name = String(body.name || "").trim().slice(0, 80);
 
   const errors = [];
   const dateRe = /^\d{4}-\d{2}-\d{2}$/;
@@ -170,6 +171,7 @@ export async function onRequestPost(context) {
     errors.push("Enter valid departure dates.");
   if (!/^[^@\s]+@[^@\s]+\.[^@\s]+$/.test(email))
     errors.push("Enter a valid email address.");
+  if (!name) errors.push("Enter your name.");
   if (cabins.length === 0) {
     errors.push("Pick at least one cabin.");
   } else {
@@ -269,6 +271,7 @@ export async function onRequestPost(context) {
       : `No award space yet: ${origin} → ${destinationText}`;
 
   const html = renderEmail({
+    name,
     programNames,
     balanceMin,
     balanceMax,
@@ -329,10 +332,11 @@ function renderEmail(d) {
   const surpriseSuffix = d.surprise
     ? " Major hubs are listed first, then smaller destinations."
     : "";
+  const greeting = d.name ? `Hi ${d.name},<br/><br/>` : "";
   const intro =
     d.options.length > 0
-      ? `Here ${d.options.length === 1 ? "is an option" : "are some options"} we found between <strong>${budgetText}</strong> across <strong>${programsText}</strong>.${surpriseSuffix}`
-      : `We searched <strong>${programsText}</strong> for ${routeText} but didn't find award space in the <strong>${budgetText}</strong> range for those dates. Award seats open up constantly — it's worth trying a wider date range or a nearby airport.`;
+      ? `${greeting}Here ${d.options.length === 1 ? "is an option" : "are some options"} we found between <strong>${budgetText}</strong> across <strong>${programsText}</strong>.${surpriseSuffix}`
+      : `${greeting}We searched <strong>${programsText}</strong> for ${routeText} but didn't find award space in the <strong>${budgetText}</strong> range for those dates. Award seats open up constantly — it's worth trying a wider date range or a nearby airport.`;
 
   let rows = "";
   for (const o of d.shown) {

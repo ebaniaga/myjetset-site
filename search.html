@@ -546,6 +546,12 @@
       </div>
 
       <div class="field">
+        <label for="name">Your name</label>
+        <input type="text" id="name" name="name" placeholder="e.g. Erickson"
+               maxlength="80" autocomplete="given-name" required />
+      </div>
+
+      <div class="field">
         <label for="email">Your email</label>
         <input type="email" id="email" name="email" placeholder="your@email.com" required />
       </div>
@@ -887,7 +893,8 @@
 
         var surprise = surpriseCheckbox.checked;
 
-        if (!form.origin.value.trim() || (!surprise && !form.destination.value.trim()) ||
+        if (!form.name.value.trim() || !form.origin.value.trim() ||
+            (!surprise && !form.destination.value.trim()) ||
             !form.email.value.trim()) {
           show('err', 'Please fill in every field before searching.');
           return;
@@ -933,6 +940,7 @@
         var endD = addDays(selectedDate, flex);
 
         var payload = {
+          name: form.name.value.trim(),
           programs: selectedPrograms,
           balanceMin: balanceMinVal,
           balanceMax: balanceMaxVal,
