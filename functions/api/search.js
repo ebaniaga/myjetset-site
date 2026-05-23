@@ -538,8 +538,8 @@ function renderEmail(d) {
     </div>
 
     <p style="font-size:13px;color:#5d7a8c;line-height:1.5;margin-top:24px;">
-      Costs and taxes are estimates from cached award data (via seats.aero) and can
-      change before you book. Reply to this email if you'd like help.
+      Costs and taxes are estimates from cached award data and can change
+      before you book. Reply to this email if you'd like help.
     </p>
     <p style="font-size:12px;color:#9bb0bd;margin-top:20px;">© myjetset.life</p>
   </div>
