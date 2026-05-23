@@ -91,7 +91,9 @@ export async function onRequestPost(context) {
   const programs = Array.isArray(body.programs)
     ? body.programs.map((p) => String(p).trim())
     : [];
-  const balance = parseInt(body.balance, 10);
+  const balanceMin = parseInt(body.balanceMin, 10);
+  const balanceMax = parseInt(body.balanceMax, 10);
+  const MAX_POINTS = 500000;
   const origin = String(body.origin || "").toUpperCase().replace(/\s+/g, "");
   const destination = String(body.destination || "").toUpperCase().replace(/\s+/g, "");
   const startDate = String(body.startDate || "").trim();
@@ -109,8 +111,12 @@ export async function onRequestPost(context) {
       if (!PROGRAM_NAMES[p]) { errors.push(`Unknown mileage program: ${p}.`); break; }
     }
   }
-  if (!Number.isFinite(balance) || balance < 1000)
-    errors.push("Enter a points balance of at least 1,000.");
+  if (!Number.isFinite(balanceMin) || !Number.isFinite(balanceMax))
+    errors.push("Enter both min and max points budget.");
+  else if (balanceMin < 0 || balanceMax > MAX_POINTS)
+    errors.push(`Points budget must be between 0 and ${MAX_POINTS.toLocaleString("en-US")}.`);
+  else if (balanceMin >= balanceMax)
+    errors.push("Min points budget must be less than max.");
   const originErr = checkAirports(origin, "Origin");
   if (originErr) errors.push(originErr);
   const destErr = checkAirports(destination, "Destination");
@@ -173,7 +179,7 @@ export async function onRequestPost(context) {
     for (const key of cabinKeys) {
       if (!item[key + "Available"]) continue;
       const miles = item[key + "MileageCostRaw"];
-      if (!miles || miles > balance) continue;
+      if (!miles || miles < balanceMin || miles > balanceMax) continue;
       options.push({
         date: item.Date,
         programShort: PROGRAM_SHORT[item.Source] || item.Source,
@@ -200,7 +206,8 @@ export async function onRequestPost(context) {
 
   const html = renderEmail({
     programNames,
-    balance,
+    balanceMin,
+    balanceMax,
     origin,
     destination,
     startDate,
@@ -251,10 +258,11 @@ function renderEmail(d) {
   const ink = "#0b1d2a";
 
   const programsText = d.programNames.join(", ");
+  const budgetText = `${fmt(d.balanceMin)}–${fmt(d.balanceMax)} points`;
   const intro =
     d.options.length > 0
-      ? `Here ${d.options.length === 1 ? "is an option" : "are some options"} we found within your <strong>${fmt(d.balance)}-point</strong> budget across <strong>${programsText}</strong>.`
-      : `We searched <strong>${programsText}</strong> for ${d.origin} → ${d.destination} but didn't find award space within your ${fmt(d.balance)}-point budget for those dates. Award seats open up constantly — it's worth trying a wider date range or a nearby airport.`;
+      ? `Here ${d.options.length === 1 ? "is an option" : "are some options"} we found between <strong>${budgetText}</strong> across <strong>${programsText}</strong>.`
+      : `We searched <strong>${programsText}</strong> for ${d.origin} → ${d.destination} but didn't find award space in the <strong>${budgetText}</strong> range for those dates. Award seats open up constantly — it's worth trying a wider date range or a nearby airport.`;
 
   let rows = "";
   for (const o of d.shown) {
@@ -300,7 +308,7 @@ function renderEmail(d) {
 
     <div style="margin-top:24px;padding:14px 16px;background:#fff;border-radius:10px;font-size:13px;color:#5d7a8c;line-height:1.5;">
       <strong style="color:${ink};">Your search</strong><br/>
-      ${d.programNames.join(", ")} · ${fmt(d.balance)} points · ${d.origin} → ${d.destination}<br/>
+      ${d.programNames.join(", ")} · ${fmt(d.balanceMin)}–${fmt(d.balanceMax)} points · ${d.origin} → ${d.destination}<br/>
       Departing ${d.startDate} to ${d.endDate} · ${d.cabin === "any" ? "Any cabin" : d.cabin}
     </div>
 

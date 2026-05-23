@@ -431,11 +431,19 @@
         <div class="field-error" id="programs-error" hidden></div>
       </div>
 
-      <div class="field">
-        <label for="balance">Points balance</label>
-        <input type="number" id="balance" name="balance" min="1000" step="1000"
-               placeholder="e.g. 120000" required inputmode="numeric" />
+      <div class="row">
+        <div class="field">
+          <label for="balanceMin">Min budget <span class="hint">in points</span></label>
+          <input type="text" id="balanceMin" name="balanceMin" placeholder="e.g. 50,000"
+                 inputmode="numeric" autocomplete="off" required />
+        </div>
+        <div class="field">
+          <label for="balanceMax">Max budget <span class="hint">in points</span></label>
+          <input type="text" id="balanceMax" name="balanceMax" placeholder="e.g. 150,000"
+                 inputmode="numeric" autocomplete="off" required />
+        </div>
       </div>
+      <div class="field-error" id="balance-error" style="margin-top:-12px;margin-bottom:18px;" hidden></div>
 
       <div class="row">
         <div class="field">
@@ -563,6 +571,67 @@
         var err = document.getElementById(id + '-error');
         input.addEventListener('input', function () { validateAirport(input, err, false); });
         input.addEventListener('blur', function () { validateAirport(input, err, true); });
+      });
+
+      // ---- Points budget (min/max, in 1,000s up to 500,000) -----------------
+      var MAX_POINTS = 500000;
+      var balMin = document.getElementById('balanceMin');
+      var balMax = document.getElementById('balanceMax');
+      var balErr = document.getElementById('balance-error');
+
+      function parsePoints(str) {
+        var n = parseInt(String(str).replace(/[^\d]/g, ''), 10);
+        return isNaN(n) ? null : n;
+      }
+      function formatPoints(n) {
+        return n == null ? '' : n.toLocaleString('en-US');
+      }
+      function formatOnInput(input) {
+        var raw = parsePoints(input.value);
+        if (raw == null) { input.value = ''; return; }
+        if (raw > MAX_POINTS) raw = MAX_POINTS;
+        input.value = formatPoints(raw);
+      }
+      function validateBalance(strict) {
+        var min = parsePoints(balMin.value);
+        var max = parsePoints(balMax.value);
+        if (min == null && max == null) {
+          if (strict) {
+            balErr.textContent = 'Enter your min and max points budget.';
+            balErr.hidden = false;
+            return false;
+          }
+          balErr.hidden = true;
+          return true;
+        }
+        if (min == null || max == null) {
+          if (strict) {
+            balErr.textContent = 'Enter both min and max points.';
+            balErr.hidden = false;
+            return false;
+          }
+          balErr.hidden = true;
+          return false;
+        }
+        if (max > MAX_POINTS) {
+          balErr.textContent = 'Max allowed is 500,000 points.';
+          balErr.hidden = false;
+          return false;
+        }
+        if (min >= max) {
+          balErr.textContent = 'Min must be less than max.';
+          balErr.hidden = false;
+          return false;
+        }
+        balErr.hidden = true;
+        return true;
+      }
+      [balMin, balMax].forEach(function (input) {
+        input.addEventListener('input', function () {
+          formatOnInput(input);
+          if (!balErr.hidden) validateBalance(false);
+        });
+        input.addEventListener('blur', function () { validateBalance(true); });
       });
 
       // ---- Mileage programs (multi-select, max 3) ---------------------------
@@ -750,12 +819,15 @@
         e.preventDefault();
         msg.hidden = true;
 
-        if (!form.balance.value ||
-            !form.origin.value.trim() || !form.destination.value.trim() ||
+        if (!form.origin.value.trim() || !form.destination.value.trim() ||
             !form.email.value.trim()) {
           show('err', 'Please fill in every field before searching.');
           return;
         }
+
+        if (!validateBalance(true)) return;
+        var balanceMinVal = parsePoints(balMin.value);
+        var balanceMaxVal = parsePoints(balMax.value);
 
         var selectedPrograms = [];
         programInputs.forEach(function (i) { if (i.checked) selectedPrograms.push(i.value); });
@@ -786,7 +858,8 @@
 
         var payload = {
           programs: selectedPrograms,
-          balance: form.balance.value,
+          balanceMin: balanceMinVal,
+          balanceMax: balanceMaxVal,
           origin: form.origin.value.replace(/\s+/g, '').toUpperCase(),
           destination: form.destination.value.replace(/\s+/g, '').toUpperCase(),
           startDate: iso(startD),
