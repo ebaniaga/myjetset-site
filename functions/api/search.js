@@ -98,7 +98,9 @@ export async function onRequestPost(context) {
   const destination = String(body.destination || "").toUpperCase().replace(/\s+/g, "");
   const startDate = String(body.startDate || "").trim();
   const endDate = String(body.endDate || "").trim();
-  const cabin = String(body.cabin || "any").trim();
+  const cabins = Array.isArray(body.cabins)
+    ? body.cabins.map((c) => String(c).trim())
+    : [];
   const email = String(body.email || "").trim();
 
   const errors = [];
@@ -125,7 +127,13 @@ export async function onRequestPost(context) {
     errors.push("Enter valid departure dates.");
   if (!/^[^@\s]+@[^@\s]+\.[^@\s]+$/.test(email))
     errors.push("Enter a valid email address.");
-  if (cabin !== "any" && !CABIN_KEYS[cabin]) errors.push("Choose a valid cabin.");
+  if (cabins.length === 0) {
+    errors.push("Pick at least one cabin.");
+  } else {
+    for (const c of cabins) {
+      if (!CABIN_KEYS[c]) { errors.push(`Unknown cabin: ${c}.`); break; }
+    }
+  }
   if (errors.length) return json({ error: errors.join(" ") }, 400);
 
   if (endDate < startDate)
@@ -138,7 +146,9 @@ export async function onRequestPost(context) {
   if (rangeDays > MAX_RANGE_DAYS)
     return json({ error: `Keep the date range within ${MAX_RANGE_DAYS} days (4 weeks).` }, 400);
 
-  const cabinKeys = cabin === "any" ? ["Y", "W", "J", "F"] : [CABIN_KEYS[cabin]];
+  const cabinKeys = cabins.map((c) => CABIN_KEYS[c]);
+  const cabinLabels = cabinKeys.map((k) => CABIN_LABEL[k]);
+  const cabinsText = cabinLabels.length === 4 ? "Any cabin" : cabinLabels.join(", ");
 
   // --- Search seats.aero ---------------------------------------------------
   const searchUrl = new URL("https://seats.aero/partnerapi/search");
@@ -212,7 +222,7 @@ export async function onRequestPost(context) {
     destination,
     startDate,
     endDate,
-    cabin,
+    cabinsText,
     options,
     shown,
   });
@@ -309,7 +319,7 @@ function renderEmail(d) {
     <div style="margin-top:24px;padding:14px 16px;background:#fff;border-radius:10px;font-size:13px;color:#5d7a8c;line-height:1.5;">
       <strong style="color:${ink};">Your search</strong><br/>
       ${d.programNames.join(", ")} · ${fmt(d.balanceMin)}–${fmt(d.balanceMax)} points · ${d.origin} → ${d.destination}<br/>
-      Departing ${d.startDate} to ${d.endDate} · ${d.cabin === "any" ? "Any cabin" : d.cabin}
+      Departing ${d.startDate} to ${d.endDate} · ${d.cabinsText}
     </div>
 
     <p style="font-size:13px;color:#5d7a8c;line-height:1.5;margin-top:24px;">

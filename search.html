@@ -493,14 +493,14 @@
       </div>
 
       <div class="field">
-        <label for="cabin">Cabin</label>
-        <select id="cabin" name="cabin">
-          <option value="any" selected>Any cabin</option>
-          <option value="economy">Economy</option>
-          <option value="premium">Premium economy</option>
-          <option value="business">Business</option>
-          <option value="first">First</option>
-        </select>
+        <label>Cabin <span class="hint">pick one or more</span></label>
+        <div class="chips" id="cabins-chips">
+          <label class="chip"><input type="checkbox" name="cabins" value="economy" /><span class="chip-label">Economy</span></label>
+          <label class="chip"><input type="checkbox" name="cabins" value="premium" /><span class="chip-label">Premium economy</span></label>
+          <label class="chip"><input type="checkbox" name="cabins" value="business" /><span class="chip-label">Business</span></label>
+          <label class="chip"><input type="checkbox" name="cabins" value="first" /><span class="chip-label">First</span></label>
+        </div>
+        <div class="field-error" id="cabins-error" hidden></div>
       </div>
 
       <div class="field">
@@ -649,6 +649,17 @@
       }
       programInputs.forEach(function (i) {
         i.addEventListener('change', updateProgramLimit);
+      });
+
+      // ---- Cabins (multi-select) --------------------------------------------
+      var cabinInputs = document.querySelectorAll('input[name="cabins"]');
+      var cabinsErr = document.getElementById('cabins-error');
+      cabinInputs.forEach(function (i) {
+        i.addEventListener('change', function () {
+          if (Array.from(cabinInputs).some(function (c) { return c.checked; })) {
+            cabinsErr.hidden = true;
+          }
+        });
       });
 
       // ---- Date picker ------------------------------------------------------
@@ -837,6 +848,14 @@
           return;
         }
 
+        var selectedCabins = [];
+        cabinInputs.forEach(function (i) { if (i.checked) selectedCabins.push(i.value); });
+        if (selectedCabins.length === 0) {
+          cabinsErr.textContent = 'Pick at least one cabin.';
+          cabinsErr.hidden = false;
+          return;
+        }
+
         var originOk = validateAirport(form.origin,
           document.getElementById('origin-error'), true);
         var destOk = validateAirport(form.destination,
@@ -864,7 +883,7 @@
           destination: form.destination.value.replace(/\s+/g, '').toUpperCase(),
           startDate: iso(startD),
           endDate: iso(endD),
-          cabin: form.cabin.value,
+          cabins: selectedCabins,
           email: form.email.value.trim(),
           company: form.company.value
         };
