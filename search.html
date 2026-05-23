@@ -504,6 +504,16 @@
       </div>
 
       <div class="field">
+        <label>Need help booking anything else? <span class="hint">optional</span></label>
+        <div class="chips" id="help-chips">
+          <label class="chip"><input type="checkbox" name="helpWith" value="hotel" /><span class="chip-label">Hotel</span></label>
+          <label class="chip"><input type="checkbox" name="helpWith" value="car" /><span class="chip-label">Car rental</span></label>
+          <label class="chip"><input type="checkbox" name="helpWith" value="activities" /><span class="chip-label">Activities</span></label>
+          <label class="chip"><input type="checkbox" name="helpWith" value="insurance" /><span class="chip-label">Travel insurance</span></label>
+        </div>
+      </div>
+
+      <div class="field">
         <label for="email">Your email</label>
         <input type="email" id="email" name="email" placeholder="your@email.com" required />
       </div>
@@ -884,6 +894,7 @@
           startDate: iso(startD),
           endDate: iso(endD),
           cabins: selectedCabins,
+          helpWith: Array.from(document.querySelectorAll('input[name="helpWith"]:checked')).map(function (i) { return i.value; }),
           email: form.email.value.trim(),
           company: form.company.value
         };

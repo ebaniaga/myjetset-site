@@ -49,6 +49,14 @@ const PROGRAM_SHORT = {
 const CABIN_KEYS = { economy: "Y", premium: "W", business: "J", first: "F" };
 const CABIN_LABEL = { Y: "Economy", W: "Premium economy", J: "Business", F: "First" };
 
+// Booking-help add-ons the traveler can ask for.
+const HELP_OPTIONS = {
+  hotel: "Hotel",
+  car: "Car rental",
+  activities: "Activities",
+  insurance: "Travel insurance",
+};
+
 const MAX_RANGE_DAYS = 28; // 4 weeks
 const MAX_RESULTS_IN_EMAIL = 15;
 
@@ -100,6 +108,9 @@ export async function onRequestPost(context) {
   const endDate = String(body.endDate || "").trim();
   const cabins = Array.isArray(body.cabins)
     ? body.cabins.map((c) => String(c).trim())
+    : [];
+  const helpWith = Array.isArray(body.helpWith)
+    ? body.helpWith.map((h) => String(h).trim()).filter((h) => HELP_OPTIONS[h])
     : [];
   const email = String(body.email || "").trim();
 
@@ -223,6 +234,7 @@ export async function onRequestPost(context) {
     startDate,
     endDate,
     cabinsText,
+    helpWith,
     options,
     shown,
   });
@@ -315,6 +327,14 @@ function renderEmail(d) {
     <p style="font-size:15px;line-height:1.5;">${intro}</p>
 
     ${table}
+
+    ${(d.helpWith && d.helpWith.length > 0)
+      ? `<div style="margin-top:18px;padding:14px 16px;background:#fff6dc;border:1px solid #f1d98f;border-radius:10px;font-size:13px;color:#5b4400;line-height:1.5;">
+          <strong style="color:#2a1b00;">We can also help with:</strong>
+          ${d.helpWith.map((h) => ({hotel:"Hotel",car:"Car rental",activities:"Activities",insurance:"Travel insurance"}[h])).join(", ")}.<br/>
+          We'll follow up with options shortly.
+        </div>`
+      : ""}
 
     <div style="margin-top:24px;padding:14px 16px;background:#fff;border-radius:10px;font-size:13px;color:#5d7a8c;line-height:1.5;">
       <strong style="color:${ink};">Your search</strong><br/>
