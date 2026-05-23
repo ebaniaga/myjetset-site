@@ -85,7 +85,7 @@ SURPRISE_DESTINATIONS.tier1.forEach((c) => SURPRISE_TIER.set(c, 1));
 SURPRISE_DESTINATIONS.tier2.forEach((c) => SURPRISE_TIER.set(c, 2));
 
 const MAX_RANGE_DAYS = 28; // 4 weeks
-const MAX_RESULTS_IN_EMAIL = 15;
+const MAX_RESULTS_IN_EMAIL = 10;
 
 // Valid IATA airport codes (OpenFlights dataset) — used to reject codes that
 // have the right shape but aren't real airports.
@@ -393,6 +393,26 @@ function fmt(n) {
   return n.toLocaleString("en-US");
 }
 
+function buildTeaser(rest) {
+  if (!rest.length) return "";
+  const byCabin = {};
+  for (const o of rest) {
+    if (!byCabin[o.cabin]) byCabin[o.cabin] = { count: 0, minMiles: Infinity };
+    byCabin[o.cabin].count++;
+    if (o.miles < byCabin[o.cabin].minMiles) byCabin[o.cabin].minMiles = o.miles;
+  }
+  const parts = Object.entries(byCabin)
+    .sort((a, b) => b[1].count - a[1].count)
+    .map(([cabin, info]) =>
+      `${info.count} ${cabin.toLowerCase()} from ${fmt(info.minMiles)} mi`
+    );
+  return `
+    <div style="margin-top:6px;padding:14px 16px;background:#eef5fa;border:1px dashed #b9d6e8;border-radius:10px;font-size:13px;color:#5d7a8c;line-height:1.5;">
+      <strong style="color:#0b1d2a;">+ ${rest.length} more option${rest.length > 1 ? "s" : ""}</strong> — ${parts.join(" · ")}.<br/>
+      Reply to this email and we'll send you the full list.
+    </div>`;
+}
+
 function formatDateLabel(isoDate) {
   try {
     const d = new Date(isoDate + "T00:00:00Z");
@@ -488,9 +508,8 @@ function renderEmail(d) {
     ? d.shown.map((o) => renderOption(o)).join("")
     : "";
 
-  const moreNote = d.options.length > d.shown.length
-    ? `<p style="font-size:13px;color:#5d7a8c;margin-top:8px;">Showing the ${d.shown.length} lowest-cost of ${d.options.length} matches.</p>`
-    : "";
+  const rest = d.options.slice(d.shown.length);
+  const teaser = rest.length ? buildTeaser(rest) : "";
 
   return `<!DOCTYPE html>
 <html>
@@ -502,7 +521,7 @@ function renderEmail(d) {
     <p style="font-size:15px;line-height:1.5;">${intro}</p>
 
     ${cards}
-    ${moreNote}
+    ${teaser}
 
     ${(d.helpWith && d.helpWith.length > 0)
       ? `<div style="margin-top:18px;padding:14px 16px;background:#fff6dc;border:1px solid #f1d98f;border-radius:10px;font-size:13px;color:#5b4400;line-height:1.5;">
