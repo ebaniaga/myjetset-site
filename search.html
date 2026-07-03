@@ -459,6 +459,119 @@
     font-weight: 600;
   }
 
+  /* ── Multi-select dropdown (airline programs) ───────────────────────── */
+  .ms { position: relative; }
+  .ms-trigger {
+    display: flex;
+    align-items: center;
+    gap: 10px;
+    width: 100%;
+    background: #fff;
+    border: 1px solid var(--field-line);
+    border-radius: var(--radius-btn);
+    padding: 13px 14px;
+    cursor: pointer;
+    color: var(--ink);
+    font-size: 15px;
+    text-align: left;
+    transition: border-color .15s ease, box-shadow .15s ease;
+  }
+  .ms-trigger:hover, .ms-trigger.open { border-color: var(--emerald); }
+  .ms-trigger:focus-visible {
+    border-color: var(--emerald);
+    outline: 0;
+    box-shadow: 0 0 0 1px rgba(22,70,58,.32);
+  }
+  .ms-summary { flex: 1; }
+  .ms-summary.placeholder { color: var(--sage); }
+  .ms-caret {
+    width: 12px; height: 12px;
+    flex-shrink: 0;
+    fill: none;
+    stroke: var(--sage);
+    stroke-width: 2.2;
+    stroke-linecap: round;
+    stroke-linejoin: round;
+    transition: transform .15s ease;
+  }
+  .ms-trigger.open .ms-caret { transform: rotate(180deg); }
+
+  .ms-panel {
+    position: absolute;
+    z-index: 20;
+    top: calc(100% + 8px);
+    left: 0;
+    right: 0;
+    background: #fff;
+    border: 1px solid var(--line);
+    border-radius: var(--radius-card);
+    padding: 10px;
+    box-shadow: var(--shadow-raised);
+  }
+  .ms-panel[hidden] { display: none; }
+
+  .ms-search {
+    width: 100%;
+    background: var(--cream);
+    border: 1px solid var(--field-line);
+    border-radius: var(--radius-btn);
+    padding: 9px 12px;
+    font-size: 14px;
+    font-family: var(--sans);
+    color: var(--ink);
+    outline: 0;
+    margin-bottom: 8px;
+  }
+  .ms-search:focus { border-color: var(--emerald); }
+  .ms-search::placeholder { color: var(--sage); }
+
+  .ms-list {
+    max-height: 244px;
+    overflow-y: auto;
+    display: flex;
+    flex-direction: column;
+    gap: 2px;
+  }
+  .ms-row {
+    display: flex;
+    align-items: center;
+    gap: 10px;
+    padding: 9px 10px;
+    border-radius: var(--radius-btn);
+    cursor: pointer;
+    font-size: 14px;
+    color: var(--ink-soft);
+    transition: background .12s ease;
+    text-transform: none;
+    letter-spacing: 0;
+    font-weight: 400;
+    margin: 0;
+  }
+  .ms-row input { position: absolute; opacity: 0; pointer-events: none; }
+  .ms-row:hover { background: var(--cream); }
+  .ms-row:has(input:checked) { background: rgba(22,70,58,.07); color: var(--ink); font-weight: 500; }
+  .ms-row:has(input:disabled) { opacity: .38; cursor: not-allowed; }
+  .ms-row[hidden] { display: none; }
+  .ms-name { flex: 1; }
+  .ms-check {
+    width: 16px; height: 16px;
+    flex-shrink: 0;
+    opacity: 0;
+    fill: none;
+    stroke: var(--emerald);
+    stroke-width: 2.4;
+    stroke-linecap: round;
+    stroke-linejoin: round;
+  }
+  .ms-row:has(input:checked) .ms-check { opacity: 1; }
+  .ms-empty {
+    padding: 14px 10px;
+    font-size: 13px;
+    color: var(--sage);
+    text-align: center;
+  }
+  .ms-empty[hidden] { display: none; }
+
   /* ── Submit (Accent · gold button) ──────────────────────────────────── */
   #submit-btn {
     width: 100%;
@@ -545,26 +658,37 @@
     <form class="card" id="search-form" novalidate>
       <div class="card-frame" aria-hidden="true"></div>
       <div class="field">
-        <label>Mileage programs <span class="hint">pick up to 3</span></label>
-        <div class="chips" id="programs-chips">
-          <label class="chip"><input type="checkbox" name="programs" value="aeroplan" /><span class="chip-label">Air Canada Aeroplan</span></label>
-          <label class="chip"><input type="checkbox" name="programs" value="aeromexico" /><span class="chip-label">Aeroméxico Club Premier</span></label>
-          <label class="chip"><input type="checkbox" name="programs" value="alaska" /><span class="chip-label">Alaska Mileage Plan</span></label>
-          <label class="chip"><input type="checkbox" name="programs" value="american" /><span class="chip-label">American AAdvantage</span></label>
-          <label class="chip"><input type="checkbox" name="programs" value="azul" /><span class="chip-label">Azul TudoAzul</span></label>
-          <label class="chip"><input type="checkbox" name="programs" value="british" /><span class="chip-label">British Airways Club</span></label>
-          <label class="chip"><input type="checkbox" name="programs" value="delta" /><span class="chip-label">Delta SkyMiles</span></label>
-          <label class="chip"><input type="checkbox" name="programs" value="etihad" /><span class="chip-label">Etihad Guest</span></label>
-          <label class="chip"><input type="checkbox" name="programs" value="finnair" /><span class="chip-label">Finnair Plus</span></label>
-          <label class="chip"><input type="checkbox" name="programs" value="flyingblue" /><span class="chip-label">Air France-KLM Flying Blue</span></label>
-          <label class="chip"><input type="checkbox" name="programs" value="jetblue" /><span class="chip-label">JetBlue TrueBlue</span></label>
-          <label class="chip"><input type="checkbox" name="programs" value="qantas" /><span class="chip-label">Qantas Frequent Flyer</span></label>
-          <label class="chip"><input type="checkbox" name="programs" value="qatar" /><span class="chip-label">Qatar Privilege Club</span></label>
-          <label class="chip"><input type="checkbox" name="programs" value="saudia" /><span class="chip-label">Saudia AlFursan</span></label>
-          <label class="chip"><input type="checkbox" name="programs" value="smiles" /><span class="chip-label">GOL Smiles</span></label>
-          <label class="chip"><input type="checkbox" name="programs" value="united" /><span class="chip-label">United MileagePlus</span></label>
-          <label class="chip"><input type="checkbox" name="programs" value="velocity" /><span class="chip-label">Virgin Australia Velocity</span></label>
-          <label class="chip"><input type="checkbox" name="programs" value="virginatlantic" /><span class="chip-label">Virgin Atlantic Flying Club</span></label>
+        <label>Airline miles <span class="hint">pick up to 3</span></label>
+        <div class="ms" id="programs-ms">
+          <div class="ms-trigger" id="programs-trigger" role="button" tabindex="0"
+               aria-haspopup="listbox" aria-expanded="false">
+            <span class="ms-summary placeholder" id="programs-summary">Select airline programs…</span>
+            <svg class="ms-caret" viewBox="0 0 24 24" aria-hidden="true"><polyline points="6 9 12 15 18 9"></polyline></svg>
+          </div>
+          <div class="ms-panel" id="programs-panel" hidden>
+            <input type="text" class="ms-search" id="programs-search" placeholder="Search airlines…" autocomplete="off" />
+            <div class="ms-list" id="programs-list">
+              <label class="ms-row"><input type="checkbox" name="programs" value="aeroplan" /><span class="ms-name">Air Canada Aeroplan</span><svg class="ms-check" viewBox="0 0 24 24"><polyline points="20 6 9 17 4 12"></polyline></svg></label>
+              <label class="ms-row"><input type="checkbox" name="programs" value="aeromexico" /><span class="ms-name">Aeroméxico Club Premier</span><svg class="ms-check" viewBox="0 0 24 24"><polyline points="20 6 9 17 4 12"></polyline></svg></label>
+              <label class="ms-row"><input type="checkbox" name="programs" value="alaska" /><span class="ms-name">Alaska Mileage Plan</span><svg class="ms-check" viewBox="0 0 24 24"><polyline points="20 6 9 17 4 12"></polyline></svg></label>
+              <label class="ms-row"><input type="checkbox" name="programs" value="american" /><span class="ms-name">American AAdvantage</span><svg class="ms-check" viewBox="0 0 24 24"><polyline points="20 6 9 17 4 12"></polyline></svg></label>
+              <label class="ms-row"><input type="checkbox" name="programs" value="azul" /><span class="ms-name">Azul TudoAzul</span><svg class="ms-check" viewBox="0 0 24 24"><polyline points="20 6 9 17 4 12"></polyline></svg></label>
+              <label class="ms-row"><input type="checkbox" name="programs" value="british" /><span class="ms-name">British Airways Club</span><svg class="ms-check" viewBox="0 0 24 24"><polyline points="20 6 9 17 4 12"></polyline></svg></label>
+              <label class="ms-row"><input type="checkbox" name="programs" value="delta" /><span class="ms-name">Delta SkyMiles</span><svg class="ms-check" viewBox="0 0 24 24"><polyline points="20 6 9 17 4 12"></polyline></svg></label>
+              <label class="ms-row"><input type="checkbox" name="programs" value="etihad" /><span class="ms-name">Etihad Guest</span><svg class="ms-check" viewBox="0 0 24 24"><polyline points="20 6 9 17 4 12"></polyline></svg></label>
+              <label class="ms-row"><input type="checkbox" name="programs" value="finnair" /><span class="ms-name">Finnair Plus</span><svg class="ms-check" viewBox="0 0 24 24"><polyline points="20 6 9 17 4 12"></polyline></svg></label>
+              <label class="ms-row"><input type="checkbox" name="programs" value="flyingblue" /><span class="ms-name">Air France-KLM Flying Blue</span><svg class="ms-check" viewBox="0 0 24 24"><polyline points="20 6 9 17 4 12"></polyline></svg></label>
+              <label class="ms-row"><input type="checkbox" name="programs" value="jetblue" /><span class="ms-name">JetBlue TrueBlue</span><svg class="ms-check" viewBox="0 0 24 24"><polyline points="20 6 9 17 4 12"></polyline></svg></label>
+              <label class="ms-row"><input type="checkbox" name="programs" value="qantas" /><span class="ms-name">Qantas Frequent Flyer</span><svg class="ms-check" viewBox="0 0 24 24"><polyline points="20 6 9 17 4 12"></polyline></svg></label>
+              <label class="ms-row"><input type="checkbox" name="programs" value="qatar" /><span class="ms-name">Qatar Privilege Club</span><svg class="ms-check" viewBox="0 0 24 24"><polyline points="20 6 9 17 4 12"></polyline></svg></label>
+              <label class="ms-row"><input type="checkbox" name="programs" value="saudia" /><span class="ms-name">Saudia AlFursan</span><svg class="ms-check" viewBox="0 0 24 24"><polyline points="20 6 9 17 4 12"></polyline></svg></label>
+              <label class="ms-row"><input type="checkbox" name="programs" value="smiles" /><span class="ms-name">GOL Smiles</span><svg class="ms-check" viewBox="0 0 24 24"><polyline points="20 6 9 17 4 12"></polyline></svg></label>
+              <label class="ms-row"><input type="checkbox" name="programs" value="united" /><span class="ms-name">United MileagePlus</span><svg class="ms-check" viewBox="0 0 24 24"><polyline points="20 6 9 17 4 12"></polyline></svg></label>
+              <label class="ms-row"><input type="checkbox" name="programs" value="velocity" /><span class="ms-name">Virgin Australia Velocity</span><svg class="ms-check" viewBox="0 0 24 24"><polyline points="20 6 9 17 4 12"></polyline></svg></label>
+              <label class="ms-row"><input type="checkbox" name="programs" value="virginatlantic" /><span class="ms-name">Virgin Atlantic Flying Club</span><svg class="ms-check" viewBox="0 0 24 24"><polyline points="20 6 9 17 4 12"></polyline></svg></label>
+            </div>
+            <div class="ms-empty" id="programs-empty" hidden>No airlines match your search.</div>
+          </div>
         </div>
         <div class="field-error" id="programs-error" hidden></div>
       </div>
@@ -809,12 +933,18 @@
         input.addEventListener('blur', function () { validateBalance(true); });
       });
 
-      // ---- Mileage programs (multi-select, max 3) ---------------------------
+      // ---- Airline miles (searchable dropdown, max 3) -----------------------
       var MAX_PROGRAMS = 3;
       var programInputs = document.querySelectorAll('input[name="programs"]');
       var programsErr = document.getElementById('programs-error');
+      var programsMs = document.getElementById('programs-ms');
+      var programsTrigger = document.getElementById('programs-trigger');
+      var programsPanel = document.getElementById('programs-panel');
+      var programsSearch = document.getElementById('programs-search');
+      var programsSummary = document.getElementById('programs-summary');
+      var programsEmpty = document.getElementById('programs-empty');
 
-      // Airline IATA codes for program logos. Keys mirror the input values.
+      // Airline IATA codes for logos + short names for the trigger summary.
       var PROGRAM_AIRLINE_IATA = {
         aeroplan: 'AC', aeromexico: 'AM', alaska: 'AS', american: 'AA',
         azul: 'AD', british: 'BA', delta: 'DL', etihad: 'EY', finnair: 'AY',
@@ -822,20 +952,42 @@
         saudia: 'SV', smiles: 'G3', united: 'UA', velocity: 'VA',
         virginatlantic: 'VS'
       };
+      var PROGRAM_SHORT_FE = {
+        aeroplan: 'Aeroplan', aeromexico: 'Aeroméxico', alaska: 'Alaska',
+        american: 'American', azul: 'Azul', british: 'British Airways',
+        delta: 'Delta', etihad: 'Etihad', finnair: 'Finnair',
+        flyingblue: 'Flying Blue', jetblue: 'JetBlue', qantas: 'Qantas',
+        qatar: 'Qatar', saudia: 'Saudia', smiles: 'Smiles', united: 'United',
+        velocity: 'Velocity', virginatlantic: 'Virgin Atlantic'
+      };
+      // Inject the airline logo into each dropdown row.
       programInputs.forEach(function (i) {
         var iata = PROGRAM_AIRLINE_IATA[i.value];
         if (!iata) return;
-        var label = i.parentNode.querySelector('.chip-label');
-        if (!label) return;
+        var name = i.parentNode.querySelector('.ms-name');
+        if (!name) return;
         var img = document.createElement('img');
         img.src = 'https://images.kiwi.com/airlines/64x64/' + iata + '.png';
         img.alt = '';
         img.loading = 'lazy';
         img.style.cssText =
-          'width:18px;height:18px;margin-right:8px;vertical-align:middle;' +
-          'border-radius:3px;background:#fff;';
-        label.insertBefore(img, label.firstChild);
+          'width:20px;height:20px;flex-shrink:0;border-radius:3px;background:#fff;';
+        i.parentNode.insertBefore(img, name);
       });
+
+      function updateProgramSummary() {
+        var chosen = [];
+        programInputs.forEach(function (i) {
+          if (i.checked) chosen.push(PROGRAM_SHORT_FE[i.value] || i.value);
+        });
+        if (chosen.length === 0) {
+          programsSummary.textContent = 'Select airline programs…';
+          programsSummary.classList.add('placeholder');
+        } else {
+          programsSummary.textContent = chosen.join(', ');
+          programsSummary.classList.remove('placeholder');
+        }
+      }
 
       function updateProgramLimit() {
         var checkedCount = 0;
@@ -844,10 +996,48 @@
           i.disabled = (!i.checked && checkedCount >= MAX_PROGRAMS);
         });
         if (checkedCount > 0) programsErr.hidden = true;
+        updateProgramSummary();
       }
       programInputs.forEach(function (i) {
         i.addEventListener('change', updateProgramLimit);
       });
+
+      function openPrograms() {
+        programsPanel.hidden = false;
+        programsTrigger.classList.add('open');
+        programsTrigger.setAttribute('aria-expanded', 'true');
+        programsSearch.value = '';
+        filterPrograms('');
+        programsSearch.focus();
+      }
+      function closePrograms() {
+        programsPanel.hidden = true;
+        programsTrigger.classList.remove('open');
+        programsTrigger.setAttribute('aria-expanded', 'false');
+      }
+      function filterPrograms(q) {
+        q = q.trim().toLowerCase();
+        var shown = 0;
+        programInputs.forEach(function (i) {
+          var row = i.parentNode;
+          var match = row.querySelector('.ms-name').textContent.toLowerCase().indexOf(q) !== -1;
+          row.hidden = !match;
+          if (match) shown++;
+        });
+        programsEmpty.hidden = shown > 0;
+      }
+      programsTrigger.addEventListener('click', function () {
+        if (programsPanel.hidden) openPrograms(); else closePrograms();
+      });
+      programsTrigger.addEventListener('keydown', function (e) {
+        if (e.key === 'Enter' || e.key === ' ') { e.preventDefault(); programsTrigger.click(); }
+      });
+      programsSearch.addEventListener('input', function () { filterPrograms(programsSearch.value); });
+      programsPanel.addEventListener('click', function (e) { e.stopPropagation(); });
+      document.addEventListener('click', function (e) {
+        if (!programsPanel.hidden && !programsMs.contains(e.target)) closePrograms();
+      });
+      updateProgramSummary();
 
       // ---- Cabins (multi-select) --------------------------------------------
       var cabinInputs = document.querySelectorAll('input[name="cabins"]');
