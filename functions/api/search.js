@@ -224,6 +224,8 @@ export async function onRequestPost(context) {
   const allSources = [...sourceSet];
   const balanceMin = parseInt(body.balanceMin, 10);
   const balanceMax = parseInt(body.balanceMax, 10);
+  const maxOpen = body.maxOpen === true; // slider at ceiling = no upper limit
+  const effectiveMax = maxOpen ? Infinity : balanceMax;
   const MAX_POINTS = 500000;
   const origin = String(body.origin || "").toUpperCase().replace(/\s+/g, "");
   const surprise = body.surprise === true;
@@ -331,7 +333,7 @@ export async function onRequestPost(context) {
     for (const key of cabinKeys) {
       if (!item[key + "Available"]) continue;
       const miles = item[key + "MileageCostRaw"];
-      if (!miles || miles < balanceMin || miles > balanceMax) continue;
+      if (!miles || miles < balanceMin || miles > effectiveMax) continue;
       options.push({
         date: item.Date,
         programShort: PROGRAM_SHORT[item.Source] || item.Source,
@@ -373,6 +375,7 @@ export async function onRequestPost(context) {
     cardNames,
     balanceMin,
     balanceMax,
+    maxOpen,
     origin,
     destinationText,
     surprise,
@@ -520,7 +523,7 @@ function renderEmail(d) {
   const ink = "#0b1d2a";
 
   const programsText = d.programNames.join(", ");
-  const budgetText = `${fmt(d.balanceMin)}–${fmt(d.balanceMax)} points`;
+  const budgetText = `${fmt(d.balanceMin)}–${fmt(d.balanceMax)}${d.maxOpen ? "+" : ""} points`;
   const routeText = `${d.origin} → ${d.destinationText}`;
   const surpriseSuffix = d.surprise
     ? " Major hubs are listed first, then smaller destinations."
@@ -560,7 +563,7 @@ function renderEmail(d) {
 
     <div style="margin-top:24px;padding:14px 16px;background:#fff;border-radius:10px;font-size:13px;color:#5d7a8c;line-height:1.5;">
       <strong style="color:${ink};">Your search</strong><br/>
-      ${(d.cardNames && d.cardNames.length) ? `${d.cardNames.join(", ")} · ` : ""}${fmt(d.balanceMin)}–${fmt(d.balanceMax)} points · ${d.origin} → ${d.destinationText}<br/>
+      ${(d.cardNames && d.cardNames.length) ? `${d.cardNames.join(", ")} · ` : ""}${fmt(d.balanceMin)}–${fmt(d.balanceMax)}${d.maxOpen ? "+" : ""} points · ${d.origin} → ${d.destinationText}<br/>
       Searched: ${d.programNames.join(", ")}<br/>
       Departing ${d.startDate} to ${d.endDate} · ${d.cabinsText}
     </div>

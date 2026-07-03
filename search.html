@@ -572,6 +572,76 @@
   }
   .ms-empty[hidden] { display: none; }
 
+  /* ── Dual-range budget slider ────────────────────────────────────────── */
+  .range { position: relative; height: 46px; margin-top: 8px; }
+  .range-values {
+    display: flex;
+    justify-content: space-between;
+    font-family: var(--serif);
+    font-size: 20px;
+    font-weight: 600;
+    color: var(--emerald);
+    margin-bottom: 14px;
+  }
+  .range-track {
+    position: absolute;
+    top: 40px;
+    left: 11px;
+    right: 11px;
+    height: 4px;
+    background: var(--bone);
+    border-radius: 2px;
+  }
+  .range-fill {
+    position: absolute;
+    top: 0;
+    height: 100%;
+    background: var(--emerald);
+    border-radius: 2px;
+  }
+  .range input[type="range"] {
+    position: absolute;
+    top: 28px;
+    left: 0;
+    width: 100%;
+    height: 28px;
+    margin: 0;
+    background: transparent;
+    -webkit-appearance: none;
+    appearance: none;
+    pointer-events: none;
+  }
+  #rangeMin { z-index: 3; }
+  #rangeMax { z-index: 2; }
+  .range input[type="range"]::-webkit-slider-runnable-track { background: transparent; border: 0; }
+  .range input[type="range"]::-moz-range-track { background: transparent; border: 0; }
+  .range input[type="range"]::-webkit-slider-thumb {
+    -webkit-appearance: none;
+    appearance: none;
+    pointer-events: auto;
+    width: 22px;
+    height: 22px;
+    border-radius: 50%;
+    background: var(--emerald);
+    border: 3px solid #fff;
+    box-shadow: 0 1px 5px rgba(40,33,20,.3);
+    cursor: pointer;
+  }
+  .range input[type="range"]::-moz-range-thumb {
+    pointer-events: auto;
+    width: 22px;
+    height: 22px;
+    border-radius: 50%;
+    background: var(--emerald);
+    border: 3px solid #fff;
+    box-shadow: 0 1px 5px rgba(40,33,20,.3);
+    cursor: pointer;
+  }
+  .range input[type="range"]:focus-visible::-webkit-slider-thumb {
+    outline: 2px solid var(--gold);
+    outline-offset: 2px;
+  }
+
   /* ── Submit (Accent · gold button) ──────────────────────────────────── */
   #submit-btn {
     width: 100%;
@@ -705,19 +775,19 @@
         <div class="field-error" id="programs-error" hidden></div>
       </div>
 
-      <div class="row">
-        <div class="field">
-          <label for="balanceMin">Min budget <span class="hint">in points</span></label>
-          <input type="text" id="balanceMin" name="balanceMin" placeholder="e.g. 50,000"
-                 inputmode="numeric" autocomplete="off" required />
+      <div class="field">
+        <label>Points budget <span class="hint">per traveler · 5,000 steps</span></label>
+        <div class="range" id="range">
+          <div class="range-values">
+            <span id="rangeMinLabel">50,000</span>
+            <span id="rangeMaxLabel">150,000</span>
+          </div>
+          <div class="range-track"><div class="range-fill" id="rangeFill"></div></div>
+          <input type="range" id="rangeMin" min="15000" max="200000" step="5000" value="50000" aria-label="Minimum points" />
+          <input type="range" id="rangeMax" min="15000" max="200000" step="5000" value="150000" aria-label="Maximum points" />
         </div>
-        <div class="field">
-          <label for="balanceMax">Max budget <span class="hint">in points</span></label>
-          <input type="text" id="balanceMax" name="balanceMax" placeholder="e.g. 150,000"
-                 inputmode="numeric" autocomplete="off" required />
-        </div>
+        <div class="field-error" id="balance-error" hidden></div>
       </div>
-      <div class="field-error" id="balance-error" style="margin-top:-12px;margin-bottom:18px;" hidden></div>
 
       <div class="row">
         <div class="field">
@@ -884,66 +954,43 @@
         }
       });
 
-      // ---- Points budget (min/max, in 1,000s up to 500,000) -----------------
-      var MAX_POINTS = 500000;
-      var balMin = document.getElementById('balanceMin');
-      var balMax = document.getElementById('balanceMax');
-      var balErr = document.getElementById('balance-error');
+      // ---- Points budget (dual-range slider, 5k steps, 15k–200k+) -----------
+      var RANGE_MIN = 15000, RANGE_MAX = 200000, RANGE_STEP = 5000;
+      var rangeMin = document.getElementById('rangeMin');
+      var rangeMax = document.getElementById('rangeMax');
+      var rangeMinLabel = document.getElementById('rangeMinLabel');
+      var rangeMaxLabel = document.getElementById('rangeMaxLabel');
+      var rangeFill = document.getElementById('rangeFill');
 
-      function parsePoints(str) {
-        var n = parseInt(String(str).replace(/[^\d]/g, ''), 10);
-        return isNaN(n) ? null : n;
+      function formatPoints(n) { return Number(n).toLocaleString('en-US'); }
+      function rangePct(v) { return (v - RANGE_MIN) / (RANGE_MAX - RANGE_MIN) * 100; }
+
+      function renderRange() {
+        var lo = +rangeMin.value, hi = +rangeMax.value;
+        rangeMinLabel.textContent = formatPoints(lo);
+        rangeMaxLabel.textContent = hi >= RANGE_MAX ? formatPoints(hi) + '+' : formatPoints(hi);
+        rangeFill.style.left = rangePct(lo) + '%';
+        rangeFill.style.width = (rangePct(hi) - rangePct(lo)) + '%';
       }
-      function formatPoints(n) {
-        return n == null ? '' : n.toLocaleString('en-US');
-      }
-      function formatOnInput(input) {
-        var raw = parsePoints(input.value);
-        if (raw == null) { input.value = ''; return; }
-        if (raw > MAX_POINTS) raw = MAX_POINTS;
-        input.value = formatPoints(raw);
-      }
-      function validateBalance(strict) {
-        var min = parsePoints(balMin.value);
-        var max = parsePoints(balMax.value);
-        if (min == null && max == null) {
-          if (strict) {
-            balErr.textContent = 'Enter your min and max points budget.';
-            balErr.hidden = false;
-            return false;
-          }
-          balErr.hidden = true;
-          return true;
-        }
-        if (min == null || max == null) {
-          if (strict) {
-            balErr.textContent = 'Enter both min and max points.';
-            balErr.hidden = false;
-            return false;
-          }
-          balErr.hidden = true;
-          return false;
-        }
-        if (max > MAX_POINTS) {
-          balErr.textContent = 'Max allowed is 500,000 points.';
-          balErr.hidden = false;
-          return false;
-        }
-        if (min >= max) {
-          balErr.textContent = 'Min must be less than max.';
-          balErr.hidden = false;
-          return false;
-        }
-        balErr.hidden = true;
-        return true;
-      }
-      [balMin, balMax].forEach(function (input) {
-        input.addEventListener('input', function () {
-          formatOnInput(input);
-          if (!balErr.hidden) validateBalance(false);
-        });
-        input.addEventListener('blur', function () { validateBalance(true); });
+      rangeMin.addEventListener('input', function () {
+        if (+rangeMin.value > +rangeMax.value - RANGE_STEP)
+          rangeMin.value = +rangeMax.value - RANGE_STEP;
+        renderRange();
       });
+      rangeMax.addEventListener('input', function () {
+        if (+rangeMax.value < +rangeMin.value + RANGE_STEP)
+          rangeMax.value = +rangeMin.value + RANGE_STEP;
+        renderRange();
+      });
+      renderRange();
+
+      function currentBudget() {
+        return {
+          min: +rangeMin.value,
+          max: +rangeMax.value,
+          maxOpen: +rangeMax.value >= RANGE_MAX
+        };
+      }
 
       // ---- Airline miles (searchable dropdown, max 3) -----------------------
       var MAX_PROGRAMS = 3;
@@ -1239,9 +1286,7 @@
           return;
         }
 
-        if (!validateBalance(true)) return;
-        var balanceMinVal = parsePoints(balMin.value);
-        var balanceMaxVal = parsePoints(balMax.value);
+        var budget = currentBudget();
 
         var selectedPrograms = [];
         programInputs.forEach(function (i) { if (i.checked) selectedPrograms.push(i.value); });
@@ -1285,8 +1330,9 @@
           name: form.name.value.trim(),
           programs: selectedPrograms,
           cardPoints: selectedCards,
-          balanceMin: balanceMinVal,
-          balanceMax: balanceMaxVal,
+          balanceMin: budget.min,
+          balanceMax: budget.max,
+          maxOpen: budget.maxOpen,
           origin: form.origin.value.replace(/\s+/g, '').toUpperCase(),
           destination: surprise ? '' : form.destination.value.replace(/\s+/g, '').toUpperCase(),
           surprise: surprise,
