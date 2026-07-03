@@ -1,0 +1,200 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8" />
+<meta name="viewport" content="width=device-width, initial-scale=1.0" />
+<title>My Jet Set Life — We're on it</title>
+<meta name="description" content="Thanks — we're putting together award flight options just for you." />
+<link rel="preconnect" href="https://fonts.googleapis.com" />
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
+<link href="https://fonts.googleapis.com/css2?family=Cormorant+Garamond:ital,wght@0,400;0,500;0,600;0,700;1,400;1,500;1,600&family=Hanken+Grotesk:wght@300;400;500;600;700&display=swap" rel="stylesheet" />
+<style>
+  :root {
+    --emerald: #16463A;
+    --gold:    #E3C36E;
+    --cream:   #F1EEE4;
+    --paper:   #FBFAF6;
+    --sage:    #6E7C72;
+    --ink:     #1B1A17;
+    --ink-soft:#4A463D;
+    --line:    #ECE8DC;
+    --serif: 'Cormorant Garamond', Georgia, serif;
+    --sans:  'Hanken Grotesk', system-ui, -apple-system, sans-serif;
+  }
+  * { box-sizing: border-box; margin: 0; padding: 0; }
+  html, body {
+    min-height: 100%;
+    font-family: var(--sans);
+    color: var(--ink);
+    background: var(--cream);
+    -webkit-font-smoothing: antialiased;
+  }
+
+  .topbar { background: var(--emerald); }
+  .topbar-inner {
+    max-width: 1120px;
+    margin: 0 auto;
+    padding: 16px 24px;
+    display: flex;
+    align-items: center;
+  }
+  .topbar-brand { display: flex; align-items: center; gap: 10px; text-decoration: none; }
+  .topbar-mark { width: 20px; height: 20px; }
+  .topbar-mark path { fill: var(--gold); }
+  .topbar-brand span {
+    font-family: var(--serif);
+    font-style: italic;
+    font-size: 22px;
+    color: #F1EEE4;
+  }
+
+  .wrap {
+    max-width: 620px;
+    margin: 0 auto;
+    padding: 72px 20px;
+    text-align: center;
+  }
+
+  .card {
+    position: relative;
+    background: var(--paper);
+    border-radius: 10px;
+    padding: 56px 44px;
+    box-shadow: 0 4px 22px rgba(40,33,20,.07);
+  }
+  .card-frame {
+    position: absolute;
+    inset: 12px;
+    border: 1px solid rgba(227,195,110,.42);
+    border-radius: 6px;
+    pointer-events: none;
+  }
+
+  .star {
+    width: 46px;
+    height: 46px;
+    margin: 0 auto 22px;
+    display: block;
+  }
+  .star path { fill: var(--gold); }
+
+  .eyebrow {
+    font-size: 11px;
+    letter-spacing: .28em;
+    text-transform: uppercase;
+    color: var(--sage);
+    margin-bottom: 14px;
+  }
+  h1 {
+    font-family: var(--serif);
+    font-size: 40px;
+    line-height: 1.08;
+    font-weight: 500;
+    color: var(--emerald);
+    margin-bottom: 18px;
+  }
+  .lead {
+    font-size: 16px;
+    line-height: 1.6;
+    color: var(--ink-soft);
+    max-width: 40ch;
+    margin: 0 auto 10px;
+  }
+  .lead strong { color: var(--emerald); font-weight: 600; }
+  .meta {
+    font-size: 13px;
+    color: var(--sage);
+    margin-top: 18px;
+  }
+
+  .again {
+    display: inline-block;
+    margin-top: 30px;
+    padding: 14px 30px;
+    border: 1px solid var(--gold);
+    border-radius: 6px;
+    color: #8a6a1f;
+    text-decoration: none;
+    font-size: 12px;
+    font-weight: 600;
+    letter-spacing: .14em;
+    text-transform: uppercase;
+    transition: background .15s ease, color .15s ease, transform .15s ease;
+  }
+  .again:hover {
+    background: var(--gold);
+    color: var(--emerald);
+    transform: translateY(-1px);
+  }
+
+  footer {
+    text-align: center;
+    margin-top: 28px;
+    font-size: 12px;
+    color: var(--sage);
+  }
+
+  @media (max-width: 520px) {
+    .wrap { padding: 48px 16px; }
+    h1 { font-size: 32px; }
+    .card { padding: 40px 24px; }
+  }
+</style>
+</head>
+<body>
+  <nav class="topbar">
+    <div class="topbar-inner">
+      <a class="topbar-brand" href="https://myjetset.life">
+        <svg class="topbar-mark" viewBox="0 0 30 30" aria-hidden="true"><path d="M15 2 L17.4 12.6 L28 15 L17.4 17.4 L15 28 L12.6 17.4 L2 15 L12.6 12.6 Z"/></svg>
+        <span>My Jet Set Life</span>
+      </a>
+    </div>
+  </nav>
+
+  <div class="wrap">
+    <div class="card">
+      <div class="card-frame" aria-hidden="true"></div>
+      <svg class="star" viewBox="0 0 30 30" aria-hidden="true"><path d="M15 2 L17.4 12.6 L28 15 L17.4 17.4 L15 28 L12.6 17.4 L2 15 L12.6 12.6 Z"/></svg>
+      <p class="eyebrow">Request received</p>
+      <h1>We're working on a trip just for you!</h1>
+      <p class="lead" id="lead">
+        Thanks — we're combing through award space and will email your options shortly.
+      </p>
+      <p class="meta" id="meta">Most searches land in your inbox within a few minutes.</p>
+      <a class="again" href="/search.html">Plan another trip</a>
+    </div>
+    <footer>© myjetset.life</footer>
+  </div>
+
+  <script>
+    (function () {
+      var lead = document.getElementById('lead');
+      var meta = document.getElementById('meta');
+      var data = null;
+      try { data = JSON.parse(sessionStorage.getItem('mjsl_submit') || 'null'); } catch (e) {}
+
+      if (data) {
+        var greeting = data.name ? 'Thanks, ' + escapeHtml(data.name) + ' — ' : 'Thanks — ';
+        var route = (data.origin && data.destination)
+          ? ' for <strong>' + escapeHtml(data.origin) + ' → ' + escapeHtml(data.destination) + '</strong>'
+          : '';
+        lead.innerHTML = greeting + 'we’re combing through award space' + route +
+          ' and will email your options to <strong>' + escapeHtml(data.email || 'your inbox') +
+          '</strong> shortly.';
+        if (typeof data.count === 'number') {
+          meta.textContent = data.count > 0
+            ? 'We already spotted ' + data.count + ' option' + (data.count > 1 ? 's' : '') +
+              ' that fit — the full details are on the way.'
+            : 'Award space is tight for those exact dates right now — we’ve emailed you the details and we’ll keep watching.';
+        }
+      }
+
+      function escapeHtml(s) {
+        return String(s).replace(/[&<>"']/g, function (c) {
+          return { '&':'&amp;','<':'&lt;','>':'&gt;','"':'&quot;','\'':'&#39;' }[c];
+        });
+      }
+    })();
+  </script>
+</body>
+</html>

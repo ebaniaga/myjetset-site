@@ -1364,17 +1364,17 @@
               btn.textContent = 'Find my options';
               return;
             }
-            form.querySelectorAll('input, select, button').forEach(function (el) {
-              el.disabled = true;
-            });
-            if (r.body.count > 0) {
-              show('ok', 'We found ' + r.body.count + ' option' +
-                (r.body.count > 1 ? 's' : '') +
-                ' you can afford. Check your inbox — they’re on the way ✈');
-            } else {
-              show('ok', 'No award space matched right now. We’ve emailed you the ' +
-                'details and we’ll keep an eye out. ✈');
-            }
+            // Stash a little context for the confirmation page (no PII in the URL).
+            try {
+              sessionStorage.setItem('mjsl_submit', JSON.stringify({
+                name: payload.name,
+                email: payload.email,
+                count: r.body.count,
+                origin: payload.origin,
+                destination: payload.surprise ? 'Anywhere' : payload.destination
+              }));
+            } catch (e) {}
+            window.location.href = '/submitted.html';
           })
           .catch(function () {
             show('err', 'Network error. Please check your connection and try again.');
