@@ -3,122 +3,182 @@
 <head>
 <meta charset="UTF-8" />
 <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-<title>myjetset — Find award flights with your points</title>
+<title>My Jet Set Life — Find award flights with your points</title>
 <meta name="description" content="Tell us your points and where you want to go. We'll email you award flight options." />
+<link rel="preconnect" href="https://fonts.googleapis.com" />
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
+<link href="https://fonts.googleapis.com/css2?family=Cormorant+Garamond:ital,wght@0,400;0,500;0,600;0,700;1,400;1,500;1,600&family=Hanken+Grotesk:wght@300;400;500;600;700&display=swap" rel="stylesheet" />
 <style>
+  /* ── My Jet Set Life design tokens (Components.dc.html · guidelines/tokens.md)
+     Defaults mirror the DC: gold #E3C36E · Soft corners · Full frame ─────── */
   :root {
-    --ink: #0b1d2a;
-    --sky-top: #0a1a2f;
-    --sky-mid: #1f3b5c;
-    --sky-low: #6ea8c9;
-    --ice: #e8f3fb;
-    --ice-shadow: #b9d6e8;
-    --accent: #ffd27a;
+    --emerald: #16463A;   /* primary surface, primary buttons, headlines */
+    --pine:    #0E3329;   /* deepest backgrounds, overlays */
+    --verde:   #1F5E4B;   /* secondary fills, confirmed states */
+    --gold:      #E3C36E; /* accent, CTAs, star mark, hairline frames */
+    --gold-ink:  #8a6a1f; /* legible gold ink for text/icons on cream */
+    --cream:   #F1EEE4;   /* light page background */
+    --paper:   #FBFAF6;   /* cards on cream */
+    --bone:    #E7E5DF;   /* neutral canvas, disabled fills */
+    --sage:    #6E7C72;   /* muted text, meta */
+    --ink:     #1B1A17;   /* body text on light */
+    --ink-soft:#4A463D;   /* secondary body text */
+    --cream-90:#CDD6CF;   /* body text on emerald */
+    --line:    #ECE8DC;   /* hairline dividers on cream */
+    --meta:    #8a8275;   /* eyebrows / field labels */
+    --field-line: #E3DFD2;/* input borders */
+
+    --radius-card:  10px; /* Soft */
+    --radius-inner: 6px;
+    --radius-btn:   6px;
+    --radius-pill:  100px;
+    --frame:        1px solid rgba(227,195,110,.42);
+    --frame-strong: 1px solid rgba(227,195,110,.54);
+    --shadow-card:  0 4px 22px rgba(40,33,20,.07);
+    --shadow-raised:0 10px 44px rgba(40,33,20,.18);
+
+    --serif: 'Cormorant Garamond', Georgia, serif;
+    --sans:  'Hanken Grotesk', system-ui, -apple-system, sans-serif;
   }
 
   * { box-sizing: border-box; margin: 0; padding: 0; }
 
   html, body {
     min-height: 100%;
-    font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", Inter, system-ui, sans-serif;
-    color: var(--ice);
-    background: var(--sky-top);
+    font-family: var(--sans);
+    color: var(--ink);
+    background: var(--cream);
     -webkit-font-smoothing: antialiased;
   }
 
-  body {
-    min-height: 100vh;
-    background: linear-gradient(
-      to bottom,
-      var(--sky-top) 0%,
-      var(--sky-mid) 55%,
-      var(--sky-low) 100%
-    );
-    padding: 6vh 20px 8vh;
-  }
+  /* ── Top bar (Navigation component) ─────────────────────────────────── */
+  .topbar { background: var(--emerald); }
 
-  .wrap {
-    max-width: 560px;
+  .topbar-inner {
+    max-width: 1120px;
     margin: 0 auto;
+    padding: 16px 24px;
+    display: flex;
+    align-items: center;
   }
 
-  header {
-    text-align: center;
-    margin-bottom: 2.5rem;
+  .topbar-brand {
+    display: flex;
+    align-items: center;
+    gap: 10px;
+    text-decoration: none;
   }
 
-  .brand {
-    font-size: clamp(1.8rem, 5vw, 2.6rem);
-    font-weight: 700;
-    letter-spacing: -0.02em;
-    line-height: 1;
+  .topbar-mark { width: 20px; height: 20px; }
+  .topbar-mark path { fill: var(--gold); }
+
+  .topbar-brand span {
+    font-family: var(--serif);
+    font-style: italic;
+    font-size: 22px;
+    color: #F1EEE4;
   }
 
-  .brand .dot { color: var(--accent); }
+  /* ── Page scaffold ───────────────────────────────────────────────────── */
+  .wrap {
+    max-width: 620px;
+    margin: 0 auto;
+    padding: 48px 20px 72px;
+  }
+
+  header { margin-bottom: 28px; }
+
+  .eyebrow {
+    font-size: 11px;
+    letter-spacing: .28em;
+    text-transform: uppercase;
+    color: var(--meta);
+    margin-bottom: 12px;
+  }
+
+  .display {
+    font-family: var(--serif);
+    font-size: 42px;
+    line-height: 1.06;
+    font-weight: 500;
+    color: var(--emerald);
+  }
 
   .lead {
-    margin-top: 0.9rem;
-    font-size: clamp(1rem, 2.4vw, 1.15rem);
-    font-weight: 300;
-    opacity: 0.9;
-    line-height: 1.45;
+    font-size: 16px;
+    line-height: 1.6;
+    color: var(--ink-soft);
+    margin-top: 12px;
+    max-width: 46ch;
   }
 
+  /* ── Card (Paper surface + signature inset gold frame) ──────────────── */
   .card {
-    background: rgba(255, 255, 255, 0.07);
-    border: 1px solid rgba(255, 255, 255, 0.16);
-    backdrop-filter: blur(10px);
-    border-radius: 20px;
-    padding: 28px;
+    position: relative;
+    background: var(--paper);
+    border-radius: var(--radius-card);
+    padding: 44px 40px;
+    box-shadow: var(--shadow-card);
   }
 
-  .field { margin-bottom: 18px; }
+  .card-frame {
+    position: absolute;
+    inset: 12px;
+    border: var(--frame);
+    border-radius: var(--radius-inner);
+    pointer-events: none;
+  }
 
+  .field { margin-bottom: 22px; }
+
+  /* ── Labels (Label token: 11px caps, .14em) ─────────────────────────── */
   label {
     display: block;
-    font-size: 0.82rem;
+    font-size: 11px;
     font-weight: 600;
-    letter-spacing: 0.04em;
+    letter-spacing: .14em;
     text-transform: uppercase;
-    opacity: 0.8;
-    margin-bottom: 6px;
+    color: var(--meta);
+    margin-bottom: 7px;
   }
 
   .hint {
-    font-size: 0.78rem;
+    font-size: 11px;
     font-weight: 400;
+    letter-spacing: .02em;
     text-transform: none;
-    letter-spacing: 0;
-    opacity: 0.6;
+    color: var(--sage);
   }
 
-  input, select {
+  /* ── Form fields ─────────────────────────────────────────────────────── */
+  input[type="text"], input[type="email"] {
     width: 100%;
-    background: rgba(255, 255, 255, 0.1);
-    border: 1px solid rgba(255, 255, 255, 0.2);
-    border-radius: 12px;
-    color: var(--ice);
-    padding: 12px 14px;
-    font-size: 0.98rem;
-    font-family: inherit;
+    background: #fff;
+    border: 1px solid var(--field-line);
+    border-radius: var(--radius-btn);
+    color: var(--ink);
+    padding: 13px 14px;
+    font-size: 15px;
+    font-family: var(--sans);
     outline: 0;
-    transition: border-color 0.15s ease, background 0.15s ease;
+    transition: border-color .15s ease, box-shadow .15s ease;
   }
 
-  input:focus, select:focus {
-    border-color: var(--accent);
-    background: rgba(255, 255, 255, 0.14);
+  input[type="text"]:focus, input[type="email"]:focus {
+    border-color: var(--emerald);
+    box-shadow: 0 0 0 1px rgba(22,70,58,.32);
   }
 
-  input::placeholder { color: rgba(232, 243, 251, 0.45); }
+  input::placeholder { color: var(--sage); }
 
-  select option { background: var(--sky-mid); color: var(--ice); }
-
-  .row {
-    display: flex;
-    gap: 14px;
+  input[type="text"]:disabled {
+    background: var(--bone);
+    color: var(--sage);
+    cursor: not-allowed;
   }
-  .row .field { flex: 1; margin-bottom: 18px; }
+
+  .row { display: flex; gap: 14px; }
+  .row .field { flex: 1; margin-bottom: 22px; }
 
   .hp {
     position: absolute;
@@ -128,29 +188,106 @@
     overflow: hidden;
   }
 
-  #submit-btn {
-    width: 100%;
-    background: var(--accent);
-    color: var(--ink);
-    border: 0;
-    border-radius: 999px;
-    padding: 14px 22px;
-    font-weight: 700;
-    font-size: 1rem;
+  /* ── Chips (Segmented option component) ─────────────────────────────── */
+  .chips {
+    display: grid;
+    grid-template-columns: repeat(2, 1fr);
+    gap: 10px;
+  }
+  .chip {
+    position: relative;
     cursor: pointer;
-    font-family: inherit;
+    /* .chip is a <label>: undo the field-label treatment (inherited) */
+    text-transform: none;
+    letter-spacing: 0;
+    font-weight: 400;
+    margin-bottom: 0;
+  }
+  .chip input {
+    position: absolute;
+    opacity: 0;
+    pointer-events: none;
+  }
+  .chip-label {
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    padding: 12px 14px;
+    border: 1px solid var(--field-line);
+    border-radius: var(--radius-btn);
+    font-size: 13px;
+    color: var(--ink-soft);
+    background: #fff;
+    text-align: center;
+    transition: background .15s ease, border-color .15s ease, color .15s ease;
+  }
+  .chip:hover .chip-label { border-color: var(--emerald); }
+  .chip input:checked + .chip-label {
+    background: var(--emerald);
+    border-color: var(--emerald);
+    color: #F1EEE4;
+    font-weight: 600;
+  }
+  .chip input:disabled + .chip-label {
+    opacity: .35;
+    cursor: not-allowed;
+  }
+  .chip input:focus-visible + .chip-label {
+    outline: 2px solid rgba(22,70,58,.35);
+    outline-offset: 1px;
+  }
+
+  /* ── Inline errors ───────────────────────────────────────────────────── */
+  .field-error {
+    font-size: 12px;
+    color: #9c3a2e;
     margin-top: 6px;
-    transition: transform 0.15s ease, box-shadow 0.15s ease;
+    line-height: 1.4;
+  }
+  .field-error[hidden] { display: none; }
+
+  /* ── Checkbox (emerald box, gold check) ─────────────────────────────── */
+  label.check-inline {
+    display: flex;
+    align-items: center;
+    gap: 10px;
+    cursor: pointer;
+    font-size: 14px;
+    font-weight: 400;
+    letter-spacing: 0;
+    text-transform: none;
+    color: var(--ink-soft);
+    margin-bottom: 0;
+  }
+  .check-inline .star-bullet { width: 13px; height: 13px; flex-shrink: 0; }
+  .check-inline .star-bullet path { fill: var(--gold); }
+  .check-inline input[type="checkbox"] {
+    appearance: none;
+    -webkit-appearance: none;
+    width: 17px;
+    height: 17px;
+    border: 1.5px solid var(--emerald);
+    border-radius: 3px;
+    background: #fff;
+    margin: 0;
+    padding: 0;
+    flex-shrink: 0;
+    cursor: pointer;
+    transition: background .12s ease;
+  }
+  .check-inline input[type="checkbox"]:checked {
+    background-color: var(--emerald);
+    background-image: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 12 12'%3E%3Cpath d='M2 6.5 L5 9.5 L10 3' fill='none' stroke='%23E3C36E' stroke-width='2' stroke-linecap='round' stroke-linejoin='round'/%3E%3C/svg%3E");
+    background-repeat: no-repeat;
+    background-position: center;
+    background-size: 11px;
+  }
+  .check-inline input[type="checkbox"]:focus-visible {
+    outline: 2px solid rgba(22,70,58,.35);
+    outline-offset: 1px;
   }
 
-  #submit-btn:hover:not(:disabled) {
-    transform: translateY(-1px);
-    box-shadow: 0 6px 18px rgba(255, 210, 122, 0.35);
-  }
-
-  #submit-btn:disabled { opacity: 0.6; cursor: default; }
-
-  /* ---- Date picker ---- */
+  /* ── Date picker ─────────────────────────────────────────────────────── */
   .datepicker { position: relative; }
 
   .dp-trigger {
@@ -158,31 +295,32 @@
     align-items: center;
     gap: 10px;
     width: 100%;
-    background: rgba(255, 255, 255, 0.1);
-    border: 1px solid rgba(255, 255, 255, 0.2);
-    border-radius: 12px;
-    padding: 12px 14px;
+    background: #fff;
+    border: 1px solid var(--field-line);
+    border-radius: var(--radius-btn);
+    padding: 13px 14px;
     cursor: pointer;
-    color: var(--ice);
-    font-size: 0.98rem;
-    transition: border-color 0.15s ease, background 0.15s ease;
+    color: var(--ink);
+    font-size: 15px;
+    transition: border-color .15s ease, box-shadow .15s ease;
   }
-  .dp-trigger:hover, .dp-trigger.open {
-    border-color: var(--accent);
-    background: rgba(255, 255, 255, 0.14);
+  .dp-trigger:hover, .dp-trigger.open { border-color: var(--emerald); }
+  .dp-trigger:focus-visible {
+    border-color: var(--emerald);
+    outline: 0;
+    box-shadow: 0 0 0 1px rgba(22,70,58,.32);
   }
-  .dp-trigger:focus-visible { border-color: var(--accent); outline: 0; }
 
   .dp-cal-icon {
     width: 18px; height: 18px;
     flex-shrink: 0;
     fill: none;
-    stroke: var(--accent);
+    stroke: var(--gold-ink);
     stroke-width: 2;
     stroke-linecap: round;
   }
   .dp-text { flex: 1; text-align: left; }
-  .dp-text.placeholder { color: rgba(232, 243, 251, 0.45); }
+  .dp-text.placeholder { color: var(--sage); }
 
   .dp-clear {
     display: flex;
@@ -192,14 +330,14 @@
     padding: 0;
     border: 0;
     border-radius: 50%;
-    background: rgba(255, 255, 255, 0.12);
-    color: var(--ice);
-    font-size: 1.05rem;
+    background: var(--bone);
+    color: var(--ink-soft);
+    font-size: 15px;
     line-height: 1;
     cursor: pointer;
     flex-shrink: 0;
   }
-  .dp-clear:hover { background: rgba(255, 255, 255, 0.28); }
+  .dp-clear:hover { background: #d8d4c8; }
   .dp-clear[hidden] { display: none; }
 
   .dp-panel {
@@ -209,11 +347,11 @@
     left: 0;
     width: 330px;
     max-width: 100%;
-    background: #0e2138;
-    border: 1px solid rgba(255, 255, 255, 0.16);
-    border-radius: 16px;
-    padding: 14px;
-    box-shadow: 0 18px 44px rgba(0, 0, 0, 0.5);
+    background: #fff;
+    border: 1px solid var(--line);
+    border-radius: var(--radius-card);
+    padding: 16px;
+    box-shadow: var(--shadow-raised);
   }
   .dp-panel[hidden] { display: none; }
 
@@ -223,22 +361,27 @@
     justify-content: space-between;
     margin-bottom: 10px;
   }
-  .dp-month { font-weight: 600; font-size: 0.98rem; }
+  .dp-month {
+    font-family: var(--serif);
+    font-weight: 600;
+    font-size: 19px;
+    color: var(--emerald);
+  }
 
   .dp-nav {
     width: 32px; height: 32px;
     padding: 0;
     border: 0;
-    border-radius: 8px;
+    border-radius: var(--radius-btn);
     background: transparent;
-    color: var(--ice);
-    font-size: 1.25rem;
+    color: var(--ink-soft);
+    font-size: 20px;
     line-height: 1;
     cursor: pointer;
-    transition: background 0.15s ease;
+    transition: background .15s ease;
   }
-  .dp-nav:hover:not(:disabled) { background: rgba(255, 255, 255, 0.12); }
-  .dp-nav:disabled { opacity: 0.25; cursor: default; }
+  .dp-nav:hover:not(:disabled) { background: var(--cream); }
+  .dp-nav:disabled { opacity: .25; cursor: default; }
 
   .dp-dow {
     display: grid;
@@ -247,10 +390,10 @@
   }
   .dp-dow span {
     text-align: center;
-    font-size: 0.68rem;
+    font-size: 10px;
     text-transform: uppercase;
-    letter-spacing: 0.03em;
-    opacity: 0.5;
+    letter-spacing: .12em;
+    color: var(--sage);
     padding: 4px 0;
   }
 
@@ -265,165 +408,134 @@
     border: 0;
     border-radius: 50%;
     background: transparent;
-    color: var(--ice);
-    font-size: 0.9rem;
+    color: var(--ink);
+    font-size: 14px;
     font-family: inherit;
     cursor: pointer;
-    transition: background 0.12s ease;
+    transition: background .12s ease;
   }
-  .dp-day:hover:not(:disabled):not(.selected) { background: rgba(255, 255, 255, 0.12); }
-  .dp-day.muted { color: rgba(232, 243, 251, 0.3); }
-  .dp-day:disabled { color: rgba(232, 243, 251, 0.18); cursor: default; }
-  .dp-day.today:not(.selected) { box-shadow: inset 0 0 0 1px var(--accent); }
+  .dp-day:hover:not(:disabled):not(.selected) { background: var(--cream); }
+  .dp-day.muted { color: #b9b4a8; }
+  .dp-day:disabled { color: #d6d2c6; cursor: default; }
+  .dp-day.today:not(.selected) { box-shadow: inset 0 0 0 1px var(--emerald); }
   .dp-day.selected {
-    background: var(--accent);
-    color: var(--ink);
-    font-weight: 700;
+    background: var(--emerald);
+    color: #F1EEE4;
+    font-weight: 600;
   }
 
   .dp-flex {
-    margin-top: 12px;
-    padding-top: 12px;
-    border-top: 1px solid rgba(255, 255, 255, 0.12);
+    margin-top: 14px;
+    padding-top: 14px;
+    border-top: 1px solid var(--line);
   }
   .dp-flex-label {
     display: block;
-    font-size: 0.72rem;
+    font-size: 10px;
     text-transform: uppercase;
-    letter-spacing: 0.05em;
-    opacity: 0.6;
+    letter-spacing: .14em;
+    color: var(--meta);
+    font-weight: 600;
     margin-bottom: 8px;
   }
   .dp-flex-row { display: flex; gap: 8px; }
   .dp-flex-btn {
     flex: 1;
-    border: 1px solid rgba(255, 255, 255, 0.25);
-    border-radius: 999px;
-    background: transparent;
-    color: var(--ice);
-    padding: 8px 4px;
-    font-size: 0.85rem;
+    border: 1px solid var(--field-line);
+    border-radius: var(--radius-pill);
+    background: #fff;
+    color: var(--ink-soft);
+    padding: 9px 4px;
+    font-size: 13px;
     font-family: inherit;
     cursor: pointer;
-    transition: background 0.12s ease, color 0.12s ease, border-color 0.12s ease;
+    transition: background .12s ease, color .12s ease, border-color .12s ease;
   }
-  .dp-flex-btn:hover { border-color: var(--accent); }
+  .dp-flex-btn:hover { border-color: var(--emerald); }
   .dp-flex-btn.active {
-    background: var(--accent);
-    border-color: var(--accent);
-    color: var(--ink);
-    font-weight: 700;
-  }
-
-  .field-error {
-    font-size: 0.78rem;
-    color: #ffb4b4;
-    margin-top: 6px;
-    line-height: 1.3;
-  }
-  .field-error[hidden] { display: none; }
-
-  .chips {
-    display: grid;
-    grid-template-columns: repeat(2, 1fr);
-    gap: 8px;
-  }
-  .chip { position: relative; cursor: pointer; }
-  .chip input {
-    position: absolute;
-    opacity: 0;
-    pointer-events: none;
-  }
-  .chip-label {
-    display: block;
-    padding: 10px 12px;
-    border: 1px solid rgba(255, 255, 255, 0.2);
-    border-radius: 10px;
-    font-size: 0.88rem;
-    background: rgba(255, 255, 255, 0.05);
-    text-align: center;
-    transition: background 0.15s ease, border-color 0.15s ease, color 0.15s ease;
-  }
-  .chip:hover .chip-label { border-color: var(--accent); }
-  .chip input:checked + .chip-label {
-    background: var(--accent);
-    border-color: var(--accent);
-    color: var(--ink);
+    background: var(--emerald);
+    border-color: var(--emerald);
+    color: #F1EEE4;
     font-weight: 600;
   }
-  .chip input:disabled + .chip-label {
-    opacity: 0.35;
-    cursor: not-allowed;
-  }
-  .chip input:focus-visible + .chip-label {
-    outline: 2px solid rgba(255, 210, 122, 0.4);
-    outline-offset: 1px;
-  }
-  @media (max-width: 460px) {
-    .chips { grid-template-columns: 1fr; }
-  }
 
-  label.check-inline {
-    display: flex;
-    align-items: center;
-    gap: 10px;
-    cursor: pointer;
-    font-size: 0.95rem;
-    font-weight: 400;
-    letter-spacing: 0;
-    text-transform: none;
-    opacity: 1;
-    margin-bottom: 0;
-  }
-  .check-inline input[type="checkbox"] {
-    width: 18px;
-    height: 18px;
-    padding: 0;
-    margin: 0;
-    background: transparent;
+  /* ── Submit (Accent · gold button) ──────────────────────────────────── */
+  #submit-btn {
+    width: 100%;
+    background: var(--gold);
+    color: var(--emerald);
     border: 0;
-    flex-shrink: 0;
-    accent-color: var(--accent);
+    border-radius: var(--radius-btn);
+    padding: 17px 28px;
+    font-family: var(--sans);
+    font-size: 12px;
+    font-weight: 600;
+    letter-spacing: .14em;
+    text-transform: uppercase;
     cursor: pointer;
+    margin-top: 10px;
+    transition: background .15s ease, transform .15s ease, box-shadow .15s ease;
   }
-  input:disabled { opacity: 0.4; cursor: not-allowed; }
+  #submit-btn:hover:not(:disabled) {
+    background: #dcb95e;
+    transform: translateY(-1px);
+    box-shadow: 0 8px 24px rgba(176,134,43,.28);
+  }
+  #submit-btn:disabled { opacity: .6; cursor: default; transform: none; box-shadow: none; }
 
+  /* ── Messages ────────────────────────────────────────────────────────── */
   .message {
     margin-top: 18px;
     padding: 14px 16px;
-    border-radius: 12px;
-    font-size: 0.95rem;
-    line-height: 1.45;
+    border-radius: var(--radius-btn);
+    font-size: 14px;
+    line-height: 1.5;
   }
   .message[hidden] { display: none; }
   .message.ok {
-    background: rgba(120, 210, 170, 0.15);
-    border: 1px solid rgba(120, 210, 170, 0.4);
-    color: #d6f6e8;
+    background: rgba(31,94,75,.08);
+    border: 1px solid rgba(31,94,75,.25);
+    color: var(--verde);
   }
   .message.err {
-    background: rgba(230, 130, 130, 0.15);
-    border: 1px solid rgba(230, 130, 130, 0.4);
-    color: #f6dada;
+    background: rgba(156,58,46,.07);
+    border: 1px solid rgba(156,58,46,.3);
+    color: #8a2f2b;
   }
 
   footer {
     text-align: center;
-    margin-top: 2rem;
-    font-size: 0.78rem;
-    opacity: 0.5;
+    margin-top: 32px;
+    font-size: 12px;
+    color: var(--sage);
   }
 
-  @media (max-width: 460px) {
+  @media (max-width: 520px) {
+    .wrap { padding: 32px 16px 56px; }
+    .display { font-size: 34px; }
+    .card { padding: 30px 22px; }
+    .card-frame { inset: 8px; }
     .row { flex-direction: column; gap: 0; }
-    .card { padding: 22px; }
+    .chips { grid-template-columns: 1fr; }
+    .topbar-inner { padding: 14px 20px; }
   }
+
 </style>
 </head>
 <body>
+  <nav class="topbar">
+    <div class="topbar-inner">
+      <a class="topbar-brand" href="https://myjetset.life">
+        <svg class="topbar-mark" viewBox="0 0 30 30" aria-hidden="true"><path d="M15 2 L17.4 12.6 L28 15 L17.4 17.4 L15 28 L12.6 17.4 L2 15 L12.6 12.6 Z"/></svg>
+        <span>My Jet Set Life</span>
+      </a>
+    </div>
+  </nav>
+
   <div class="wrap">
     <header>
-      <h1 class="brand">myjetset<span class="dot">.</span>life</h1>
+      <p class="eyebrow">Award Search</p>
+      <h1 class="display">Find award flights with your points</h1>
       <p class="lead">
         Tell us how many points you have and where you'd like to go.
         We'll search award availability and email you the options.
@@ -431,6 +543,7 @@
     </header>
 
     <form class="card" id="search-form" novalidate>
+      <div class="card-frame" aria-hidden="true"></div>
       <div class="field">
         <label>Mileage programs <span class="hint">pick up to 3</span></label>
         <div class="chips" id="programs-chips">
@@ -488,7 +601,8 @@
       <div class="field">
         <label class="check-inline">
           <input type="checkbox" id="surprise" />
-          <span>✨ Surprise me — search every destination from my origin</span>
+          <svg class="star-bullet" viewBox="0 0 30 30" aria-hidden="true"><path d="M15 2 L17.4 12.6 L28 15 L17.4 17.4 L15 28 L12.6 17.4 L2 15 L12.6 12.6 Z"/></svg>
+          <span>Surprise me — search every destination from my origin</span>
         </label>
       </div>
 
