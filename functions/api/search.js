@@ -45,6 +45,24 @@ const PROGRAM_SHORT = {
   virginatlantic: "Virgin Atlantic",
 };
 
+// Transferable credit-card currencies → the supported airline programs each
+// one can transfer to (usually ~1:1). Approximate and easy to edit as
+// transfer partners change; only lists partners we actually search.
+const CARD_NAMES = {
+  amex: "Amex Membership Rewards",
+  chase: "Chase Ultimate Rewards",
+  capitalone: "Capital One Miles",
+  citi: "Citi ThankYou Points",
+  bilt: "Bilt Rewards",
+};
+const CARD_TRANSFER_PARTNERS = {
+  amex: ["aeroplan", "aeromexico", "british", "delta", "etihad", "flyingblue", "jetblue", "qantas", "virginatlantic"],
+  chase: ["aeroplan", "british", "flyingblue", "jetblue", "united", "virginatlantic"],
+  capitalone: ["aeroplan", "aeromexico", "british", "etihad", "finnair", "flyingblue", "qantas"],
+  citi: ["aeromexico", "etihad", "flyingblue", "jetblue", "qantas", "qatar", "virginatlantic"],
+  bilt: ["aeroplan", "alaska", "american", "british", "flyingblue", "virginatlantic"],
+};
+
 // seats.aero encodes cabins as Y / W / J / F
 const CABIN_KEYS = { economy: "Y", premium: "W", business: "J", first: "F" };
 const CABIN_LABEL = { Y: "Economy", W: "Premium economy", J: "Business", F: "First" };
@@ -194,6 +212,16 @@ export async function onRequestPost(context) {
   const programs = Array.isArray(body.programs)
     ? body.programs.map((p) => String(p).trim())
     : [];
+  const cardPoints = Array.isArray(body.cardPoints)
+    ? body.cardPoints.map((c) => String(c).trim()).filter((c) => CARD_TRANSFER_PARTNERS[c])
+    : [];
+  // Expand each selected card currency into its airline transfer partners,
+  // then union with directly-picked airline programs (deduped).
+  const sourceSet = new Set(programs.filter((p) => PROGRAM_NAMES[p]));
+  for (const c of cardPoints) {
+    for (const p of CARD_TRANSFER_PARTNERS[c]) sourceSet.add(p);
+  }
+  const allSources = [...sourceSet];
   const balanceMin = parseInt(body.balanceMin, 10);
   const balanceMax = parseInt(body.balanceMax, 10);
   const MAX_POINTS = 500000;
@@ -216,13 +244,10 @@ export async function onRequestPost(context) {
   const errors = [];
   const dateRe = /^\d{4}-\d{2}-\d{2}$/;
 
-  if (programs.length < 1 || programs.length > 3) {
-    errors.push("Choose 1–3 mileage programs.");
-  } else {
-    for (const p of programs) {
-      if (!PROGRAM_NAMES[p]) { errors.push(`Unknown mileage program: ${p}.`); break; }
-    }
-  }
+  if (programs.length > 3)
+    errors.push("Pick at most 3 airline programs directly.");
+  if (allSources.length < 1)
+    errors.push("Pick at least one credit card or airline program.");
   if (!Number.isFinite(balanceMin) || !Number.isFinite(balanceMax))
     errors.push("Enter both min and max points budget.");
   else if (balanceMin < 0 || balanceMax > MAX_POINTS)
@@ -272,7 +297,7 @@ export async function onRequestPost(context) {
   );
   searchUrl.searchParams.set("start_date", startDate);
   searchUrl.searchParams.set("end_date", endDate);
-  searchUrl.searchParams.set("sources", programs.join(","));
+  searchUrl.searchParams.set("sources", allSources.join(","));
   searchUrl.searchParams.set("take", "1000");
   searchUrl.searchParams.set("order_by", "lowest_mileage");
   searchUrl.searchParams.set("include_trips", "true");
@@ -302,7 +327,7 @@ export async function onRequestPost(context) {
   // --- Filter to options the traveler can afford ---------------------------
   const options = [];
   for (const item of searchData.data || []) {
-    if (!programs.includes(item.Source)) continue;
+    if (!allSources.includes(item.Source)) continue;
     for (const key of cabinKeys) {
       if (!item[key + "Available"]) continue;
       const miles = item[key + "MileageCostRaw"];
@@ -334,7 +359,8 @@ export async function onRequestPost(context) {
   const shown = options.slice(0, MAX_RESULTS_IN_EMAIL);
 
   // --- Email the traveler --------------------------------------------------
-  const programNames = programs.map((p) => PROGRAM_NAMES[p]);
+  const programNames = allSources.map((p) => PROGRAM_NAMES[p]);
+  const cardNames = cardPoints.map((c) => CARD_NAMES[c]);
   const destinationText = surprise ? "Anywhere ✨" : destination;
   const subject =
     options.length > 0
@@ -344,6 +370,7 @@ export async function onRequestPost(context) {
   const html = renderEmail({
     name,
     programNames,
+    cardNames,
     balanceMin,
     balanceMax,
     origin,
@@ -533,7 +560,8 @@ function renderEmail(d) {
 
     <div style="margin-top:24px;padding:14px 16px;background:#fff;border-radius:10px;font-size:13px;color:#5d7a8c;line-height:1.5;">
       <strong style="color:${ink};">Your search</strong><br/>
-      ${d.programNames.join(", ")} · ${fmt(d.balanceMin)}–${fmt(d.balanceMax)} points · ${d.origin} → ${d.destinationText}<br/>
+      ${(d.cardNames && d.cardNames.length) ? `${d.cardNames.join(", ")} · ` : ""}${fmt(d.balanceMin)}–${fmt(d.balanceMax)} points · ${d.origin} → ${d.destinationText}<br/>
+      Searched: ${d.programNames.join(", ")}<br/>
       Departing ${d.startDate} to ${d.endDate} · ${d.cabinsText}
     </div>
 

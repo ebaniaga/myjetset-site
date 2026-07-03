@@ -658,7 +658,19 @@
     <form class="card" id="search-form" novalidate>
       <div class="card-frame" aria-hidden="true"></div>
       <div class="field">
-        <label>Airline miles <span class="hint">pick up to 3</span></label>
+        <label>Credit card points <span class="hint">transferable — pick any you hold</span></label>
+        <div class="chips" id="cards-chips">
+          <label class="chip"><input type="checkbox" name="cardPoints" value="amex" /><span class="chip-label">Amex Membership Rewards</span></label>
+          <label class="chip"><input type="checkbox" name="cardPoints" value="chase" /><span class="chip-label">Chase Ultimate Rewards</span></label>
+          <label class="chip"><input type="checkbox" name="cardPoints" value="capitalone" /><span class="chip-label">Capital One Miles</span></label>
+          <label class="chip"><input type="checkbox" name="cardPoints" value="citi" /><span class="chip-label">Citi ThankYou Points</span></label>
+          <label class="chip"><input type="checkbox" name="cardPoints" value="bilt" /><span class="chip-label">Bilt Rewards</span></label>
+        </div>
+        <p class="hint" style="margin-top:8px;display:block;">We search the airline partners each card transfers to.</p>
+      </div>
+
+      <div class="field">
+        <label>Airline miles <span class="hint">optional — pick up to 3 direct programs</span></label>
         <div class="ms" id="programs-ms">
           <div class="ms-trigger" id="programs-trigger" role="button" tabindex="0"
                aria-haspopup="listbox" aria-expanded="false">
@@ -1233,9 +1245,12 @@
 
         var selectedPrograms = [];
         programInputs.forEach(function (i) { if (i.checked) selectedPrograms.push(i.value); });
-        if (selectedPrograms.length === 0) {
-          programsErr.textContent = 'Pick at least one mileage program.';
+        var selectedCards = [];
+        document.querySelectorAll('input[name="cardPoints"]:checked').forEach(function (i) { selectedCards.push(i.value); });
+        if (selectedPrograms.length === 0 && selectedCards.length === 0) {
+          programsErr.textContent = 'Pick at least one credit card or airline program.';
           programsErr.hidden = false;
+          document.getElementById('cards-chips').scrollIntoView({ block: 'center' });
           return;
         }
 
@@ -1269,6 +1284,7 @@
         var payload = {
           name: form.name.value.trim(),
           programs: selectedPrograms,
+          cardPoints: selectedCards,
           balanceMin: balanceMinVal,
           balanceMax: balanceMaxVal,
           origin: form.origin.value.replace(/\s+/g, '').toUpperCase(),
