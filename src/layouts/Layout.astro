@@ -1,0 +1,51 @@
+---
+// Shared page shell: fonts, SEO/OG tags, header + footer.
+// Pages import their own stylesheet (global.css) — the search page deliberately
+// keeps its original CSS instead, so nothing here forces styles on it.
+import Header from "../components/Header.astro";
+import Footer from "../components/Footer.astro";
+
+interface Props {
+  title: string;
+  description?: string;
+  ogImage?: string;
+  /** Which nav item is active, e.g. "search" | "about" | "inquiry" */
+  active?: string;
+}
+
+const {
+  title,
+  description = "Travel advisory, miles & points optimization, and award flight search — by Fora travel advisor Erickson Baniaga.",
+  ogImage = "/images/travel-sunset-mountains.jpg",
+  active,
+} = Astro.props;
+
+const canonical = new URL(Astro.url.pathname, Astro.site);
+const ogUrl = new URL(ogImage, Astro.site);
+---
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8" />
+<meta name="viewport" content="width=device-width, initial-scale=1.0" />
+<title>{title}</title>
+<meta name="description" content={description} />
+<link rel="canonical" href={canonical} />
+<link rel="icon" href="/star-mark.svg" type="image/svg+xml" />
+<meta property="og:site_name" content="My Jet Set Life" />
+<meta property="og:type" content="website" />
+<meta property="og:title" content={title} />
+<meta property="og:description" content={description} />
+<meta property="og:url" content={canonical} />
+<meta property="og:image" content={ogUrl} />
+<meta name="twitter:card" content="summary_large_image" />
+<link rel="preconnect" href="https://fonts.googleapis.com" />
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
+<link href="https://fonts.googleapis.com/css2?family=Cormorant+Garamond:ital,wght@0,400;0,500;0,600;0,700;1,400;1,500;1,600&family=Hanken+Grotesk:wght@300;400;500;600;700&display=swap" rel="stylesheet" />
+</head>
+<body>
+<Header active={active} />
+<main id="main"><slot /></main>
+<Footer />
+</body>
+</html>

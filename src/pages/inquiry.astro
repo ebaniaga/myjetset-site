@@ -1,0 +1,149 @@
+---
+import Layout from "../layouts/Layout.astro";
+import "../styles/global.css";
+import { SITE } from "../lib/site.js";
+---
+<Layout
+  title="Plan a trip — My Jet Set Life"
+  description="Tell Erickson about the trip you have in mind — destinations, dates, travelers and budget — and he'll follow up within a day or two."
+  active="inquiry"
+>
+  <section class="section page">
+    <div class="container narrow">
+      <header class="page-head">
+        <p class="eyebrow">Plan a trip</p>
+        <h1 class="display-m">Tell me about the trip.</h1>
+        <p class="lead soft">A few details and I'll follow up within a day or two. Prefer to talk it through? <a class="btn btn--link" href={SITE.bookUrl} target="_blank" rel="noopener">Book a call →</a></p>
+      </header>
+
+      <form class="panel framed inquiry" id="inquiry-form" novalidate>
+        <div class="grid-2">
+          <div class="field">
+            <label class="field-label" for="name">Name</label>
+            <input class="input" id="name" name="name" type="text" autocomplete="name" required />
+          </div>
+          <div class="field">
+            <label class="field-label" for="email">Email</label>
+            <input class="input" id="email" name="email" type="email" autocomplete="email" placeholder="you@email.com" required />
+          </div>
+          <div class="field">
+            <label class="field-label" for="phone">Phone <span class="opt">optional</span></label>
+            <input class="input" id="phone" name="phone" type="tel" autocomplete="tel" />
+          </div>
+          <div class="field">
+            <label class="field-label" for="help">What can I help with?</label>
+            <select class="select" id="help" name="help">
+              <option>Trip planning &amp; booking</option>
+              <option>Miles &amp; points optimization</option>
+              <option>Travel protection</option>
+              <option>Not sure yet</option>
+            </select>
+          </div>
+          <div class="field span">
+            <label class="field-label" for="destinations">Where are you thinking?</label>
+            <input class="input" id="destinations" name="destinations" type="text" placeholder="Tokyo and Kyoto · Somewhere warm in February · Open to ideas" />
+          </div>
+          <div class="field">
+            <label class="field-label" for="dates">When</label>
+            <input class="input" id="dates" name="dates" type="text" placeholder="Late April, flexible" />
+          </div>
+          <div class="field">
+            <label class="field-label" for="travelers">Travelers</label>
+            <input class="input" id="travelers" name="travelers" type="number" min="1" max="20" placeholder="2" />
+          </div>
+          <div class="field span">
+            <label class="field-label" for="budget">Budget <span class="opt">rough is fine</span></label>
+            <select class="select" id="budget" name="budget">
+              <option value="">Not sure yet</option>
+              <option>Under $2,500</option>
+              <option>$2,500 – $5,000</option>
+              <option>$5,000 – $10,000</option>
+              <option>$10,000+</option>
+              <option>Mostly points &amp; miles</option>
+            </select>
+          </div>
+          <div class="field span">
+            <label class="field-label" for="notes">Anything else</label>
+            <textarea class="textarea" id="notes" name="notes" placeholder="Occasion, must-haves, points balances, how you like to travel…"></textarea>
+          </div>
+        </div>
+
+        <!-- Honeypot: hidden from people, tempting to bots -->
+        <div class="hp" aria-hidden="true">
+          <label for="website">Website</label>
+          <input id="website" name="website" type="text" tabindex="-1" autocomplete="off" />
+        </div>
+
+        <div class="row submit-row">
+          <button class="btn btn--accent btn--lg" type="submit" id="submit">Send inquiry</button>
+          <span class="body-s muted">Or email <a href={`mailto:${SITE.email}`}>{SITE.email}</a></span>
+        </div>
+        <div class="message" id="message" hidden></div>
+      </form>
+    </div>
+  </section>
+</Layout>
+
+<style>
+  .page { padding-top: 64px; }
+  .narrow { max-width: 760px; }
+  .page-head { margin-bottom: 28px; }
+  .page-head h1 { color: var(--emerald); margin-top: 12px; }
+  .lead { margin-top: 12px; max-width: 52ch; }
+  .lead .btn--link { font-size: 11px; }
+  .inquiry .grid-2 { gap: 18px 20px; }
+  .span { grid-column: 1 / -1; }
+  .opt { font-weight: 400; letter-spacing: .04em; text-transform: none; color: var(--sage); margin-left: 6px; }
+  .hp { position: absolute; left: -10000px; width: 1px; height: 1px; overflow: hidden; }
+  .submit-row { margin-top: 26px; gap: 18px; }
+  .submit-row a { color: var(--emerald); }
+  .message { margin-top: 18px; padding: 14px 16px; border-radius: var(--radius-btn); font-size: 14px; line-height: 1.5; }
+  .message.ok { background: rgba(31,94,75,.1); color: var(--verde); }
+  .message.err { background: rgba(154,59,46,.08); color: #9a3b2e; }
+  @media (max-width: 760px) { .span { grid-column: auto; } .page { padding-top: 40px; } }
+</style>
+
+<script>
+  const form = document.getElementById("inquiry-form") as HTMLFormElement;
+  const message = document.getElementById("message") as HTMLDivElement;
+  const submit = document.getElementById("submit") as HTMLButtonElement;
+
+  function show(kind: "ok" | "err", text: string) {
+    message.textContent = text;
+    message.className = `message ${kind}`;
+    message.hidden = false;
+  }
+
+  form.addEventListener("submit", async (e) => {
+    e.preventDefault();
+    message.hidden = true;
+
+    const data = Object.fromEntries(new FormData(form).entries());
+    if (!String(data.name || "").trim() || !/^[^\s@]+@[^\s@]+\.[^\s@]+$/.test(String(data.email || ""))) {
+      show("err", "Please add your name and a valid email so I can reach you.");
+      return;
+    }
+
+    submit.disabled = true;
+    submit.textContent = "Sending…";
+    try {
+      const res = await fetch("/api/inquiry", {
+        method: "POST",
+        headers: { "Content-Type": "application/json" },
+        body: JSON.stringify(data),
+      });
+      const out = await res.json().catch(() => ({}));
+      if (res.ok && out.ok) {
+        show("ok", "Got it — thank you. I'll follow up within a day or two, and a confirmation is on its way to your inbox.");
+        form.reset();
+      } else {
+        show("err", out.error || "Something went wrong sending that. Please try again.");
+      }
+    } catch {
+      show("err", "Couldn't reach the server. Please check your connection and try again.");
+    } finally {
+      submit.disabled = false;
+      submit.textContent = "Send inquiry";
+    }
+  });
+</script>

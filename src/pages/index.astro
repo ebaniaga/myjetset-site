@@ -1,0 +1,161 @@
+---
+import Layout from "../layouts/Layout.astro";
+import Star from "../components/Star.astro";
+import "../styles/global.css";
+import { SITE } from "../lib/site.js";
+---
+<Layout
+  title="My Jet Set Life — Travel advisory, miles & points optimization"
+  description="Attainable luxury, arranged quietly. Fora travel advisor Erickson Baniaga turns points and miles into premium cabins and partner-rate stays."
+  active="home"
+>
+
+  <!-- Hero -->
+  <section class="hero section--emerald">
+    <div class="container hero-grid">
+      <div class="hero-copy">
+        <p class="eyebrow eyebrow--gold">Fora Travel Advisor · {SITE.location}</p>
+        <h1 class="display-xl">Attainable luxury, <em>arranged quietly.</em></h1>
+        <p class="body-l hero-lead">Points and miles turned into premium cabins and partner-rate suites — planned by a travel advisor who has been to all seven continents and more than fifty countries.</p>
+        <div class="row hero-ctas">
+          <a class="btn btn--accent btn--lg" href={SITE.bookUrl} target="_blank" rel="noopener">Book a call</a>
+          <a class="btn btn--ghost-dark btn--lg" href="/search">Search award flights</a>
+        </div>
+      </div>
+      <div class="photo photo--4x5 hero-photo">
+        <img src="/images/travel-sunset-mountains.jpg" alt="Sunset over Rio de Janeiro from Sugarloaf Mountain" width="1600" height="2000" loading="eager" fetchpriority="high" />
+      </div>
+    </div>
+  </section>
+
+  <!-- Services -->
+  <section class="section">
+    <div class="container">
+      <p class="eyebrow">What I do</p>
+      <h2 class="display-m">Three ways to travel better.</h2>
+      <div class="grid-3 services">
+        <article class="card">
+          <Star size={26} />
+          <h3 class="card__title">Trip planning &amp; booking</h3>
+          <p class="card__body">Hotels, itineraries and the small details, booked through Fora. Partner properties come with perks — breakfast, upgrades when available, resort credits, early check-in and late checkout — at no extra cost to you.</p>
+          <a class="btn btn--link" href="/inquiry">Plan a trip →</a>
+        </article>
+        <article class="card">
+          <Star size={26} />
+          <h3 class="card__title">Miles &amp; points optimization</h3>
+          <p class="card__body">Sitting on a balance you're not sure how to use? I'll map the best redemptions for the trip you actually want — premium cabins, partner awards, transfer bonuses and sweet spots.</p>
+          <a class="btn btn--link" href="/search">Search award flights →</a>
+        </article>
+        <article class="card">
+          <Star size={26} />
+          <h3 class="card__title">Travel protection</h3>
+          <p class="card__body">The right coverage for the trip you're taking — medical, cancellation, and the fine print most people skip. I'll help you choose what actually fits.</p>
+          <a class="btn btn--link" href="/inquiry">Ask about protection →</a>
+        </article>
+      </div>
+    </div>
+  </section>
+
+  <!-- Award search teaser -->
+  <section class="section--tight">
+    <div class="container">
+      <div class="panel framed teaser">
+        <div class="teaser-copy">
+          <p class="eyebrow">Award search</p>
+          <h2 class="serif-l">See what your points can do.</h2>
+          <p class="soft">Enter your balance, programs and dates. I'll search award availability and email you the options — real seats, real prices in points.</p>
+        </div>
+        <a class="btn btn--accent btn--lg" href="/search">Search award flights</a>
+      </div>
+    </div>
+  </section>
+
+  <!-- About teaser -->
+  <section class="section section--emerald">
+    <div class="container about-grid">
+      <div class="photo photo--4x5 about-photo">
+        <img src="/images/erickson.jpg" alt="Erickson Baniaga" width="1200" height="1500" loading="lazy" />
+      </div>
+      <div>
+        <p class="eyebrow eyebrow--gold">About</p>
+        <h2 class="display-m">Digital nomad. Seven continents. Fifty-plus countries.</h2>
+        <p class="body-l about-lead">I'm Erickson — a Fora travel advisor based in {SITE.location}. I enjoy it all, from home stays to high-end hotels, adventure excursions to all-inclusives. What I'm really after is new experiences and connections everywhere I go, and I'd love to help you find yours.</p>
+        <a class="btn btn--link btn--link-light" href="/about">More about Erickson →</a>
+      </div>
+    </div>
+  </section>
+
+  <!-- From the road -->
+  <section class="section">
+    <div class="container">
+      <p class="eyebrow">From the road</p>
+      <div class="grid-3 road">
+        <div class="photo photo--3x2">
+          <img src="/images/travel-camel.jpg" alt="Erickson on a camel at the Pyramids of Giza" width="1600" height="1067" loading="lazy" />
+          <div class="overlay"><div class="kicker">Egypt</div><div class="caption">Pyramids of Giza</div></div>
+        </div>
+        <div class="photo photo--3x2">
+          <img src="/images/travel-taj-mahal.jpg" alt="Erickson in front of the Taj Mahal" width="1600" height="1067" loading="lazy" />
+          <div class="overlay"><div class="kicker">India</div><div class="caption">Taj Mahal</div></div>
+        </div>
+        <div class="photo photo--3x2">
+          <img src="/images/travel-snow.jpg" alt="Erickson in Antarctica" width="1600" height="1067" loading="lazy" />
+          <div class="overlay"><div class="kicker">Antarctica</div><div class="caption">The seventh continent</div></div>
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <!-- Closing CTA -->
+  <section class="section section--pine">
+    <div class="container cta">
+      <h2 class="display-m">Ready when you are.</h2>
+      <p class="body-l cta-lead">Tell me about the trip, or grab a few minutes on my calendar and we'll talk it through.</p>
+      <div class="row cta-row">
+        <a class="btn btn--accent btn--lg" href="/inquiry">Plan a trip</a>
+        <a class="btn btn--ghost-dark btn--lg" href={SITE.bookUrl} target="_blank" rel="noopener">Book a call</a>
+      </div>
+    </div>
+  </section>
+
+</Layout>
+
+<style>
+  .hero { padding: 88px 0; }
+  .hero-grid { display: grid; grid-template-columns: 1.1fr .9fr; gap: 56px; align-items: center; }
+  .hero h1 { color: var(--cream); margin-top: 18px; }
+  .hero h1 em { font-style: italic; font-weight: 400; color: var(--gold); }
+  .hero-lead { margin-top: 22px; max-width: 46ch; }
+  .hero-ctas { margin-top: 34px; }
+  .hero-photo { box-shadow: var(--shadow-raised); }
+
+  .services { margin-top: 40px; }
+  .services .card { display: flex; flex-direction: column; }
+  .services :global(.star) { margin-bottom: 14px; }
+  .services .card__body { flex: 1; }
+  .services .btn--link { align-self: flex-start; margin-top: 18px; }
+
+  .teaser { display: flex; align-items: center; justify-content: space-between; gap: 32px; }
+  .teaser-copy { max-width: 560px; }
+  .teaser .serif-l { color: var(--emerald); margin-top: 10px; }
+  .teaser .soft { margin-top: 10px; }
+
+  .about-grid { display: grid; grid-template-columns: .8fr 1.2fr; gap: 56px; align-items: center; }
+  .about-photo { max-width: 420px; box-shadow: var(--shadow-raised); }
+  .about-lead { margin-top: 18px; max-width: 52ch; }
+  .about-grid .btn--link { margin-top: 26px; }
+  .about-grid .display-m { margin-top: 14px; }
+
+  .road { margin-top: 24px; }
+
+  .cta { text-align: center; }
+  .cta-lead { margin: 14px auto 0; max-width: 46ch; }
+  .cta-row { justify-content: center; margin-top: 30px; }
+
+  @media (max-width: 860px) {
+    .hero { padding: 56px 0; }
+    .hero-grid, .about-grid { grid-template-columns: 1fr; gap: 32px; }
+    .hero-photo { max-width: 460px; }
+    .teaser { flex-direction: column; align-items: flex-start; }
+  }
+</style>

@@ -1,0 +1,148 @@
+---
+import Layout from "../layouts/Layout.astro";
+import "../styles/global.css";
+import { SITE } from "../lib/site.js";
+
+const askMeAbout = ["Hawaiʻi", "South America", "Solo travel", "Luxury travel"];
+const gallery = [
+  { src: "/images/travel-camel.jpg", alt: "Erickson on a camel at the Pyramids of Giza", kicker: "Egypt", caption: "Pyramids of Giza" },
+  { src: "/images/travel-taj-mahal.jpg", alt: "Erickson in front of the Taj Mahal", kicker: "India", caption: "Taj Mahal" },
+  { src: "/images/travel-view.jpg", alt: "Doha skyline at night, framed by stone arches", kicker: "Qatar", caption: "Doha" },
+  { src: "/images/travel-sunset-mountains.jpg", alt: "Sunset over Rio de Janeiro from Sugarloaf Mountain", kicker: "Rio de Janeiro", caption: "Sugarloaf Mountain" },
+  { src: "/images/travel-snow.jpg", alt: "Erickson in Antarctica", kicker: "Antarctica", caption: "The seventh continent" },
+];
+---
+<Layout
+  title="About Erickson Baniaga — My Jet Set Life"
+  description="Fora travel advisor based in New York City. Seven continents, fifty-plus countries, and a love of every kind of trip."
+  active="about"
+>
+
+  <section class="section intro">
+    <div class="container intro-grid">
+      <div class="photo photo--4x5 headshot">
+        <img src="/images/erickson.jpg" alt="Erickson Baniaga" width="1200" height="1500" loading="eager" fetchpriority="high" />
+      </div>
+      <div>
+        <p class="eyebrow">About</p>
+        <h1 class="display-l">{SITE.advisor}</h1>
+        <p class="serif-m italic role">Fora Travel Advisor · {SITE.location}</p>
+
+        <p class="body-l story">I'm a digital nomad gallivanting to the ends of the world. I've been to all seven continents and more than fifty countries — and I can't wait to help you see it too.</p>
+
+        <div class="row tags">
+          {askMeAbout.map((t) => <span class="tag tag--outline">{t}</span>)}
+        </div>
+
+        <dl class="facts">
+          <div><dt>Ask me about</dt><dd>{askMeAbout.join(" · ")}</dd></div>
+          <div><dt>Languages</dt><dd>English (fluent) · Spanish (intermediate) · Ilokano (beginner)</dd></div>
+          <div><dt>Based in</dt><dd>{SITE.location}</dd></div>
+        </dl>
+
+        <div class="row intro-ctas">
+          <a class="btn btn--primary" href={SITE.bookUrl} target="_blank" rel="noopener">Book a call</a>
+          <a class="btn btn--outline" href={SITE.foraUrl} target="_blank" rel="noopener">View my Fora profile</a>
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <section class="section section--emerald">
+    <div class="container style-grid">
+      <div>
+        <p class="eyebrow eyebrow--gold">Travel style</p>
+        <h2 class="display-m">I enjoy it all.</h2>
+      </div>
+      <div class="style-copy">
+        <p class="body-l">From home stays to high-end hotels, adventure excursions to relaxing at all-inclusives, cruises to road trips — I love every way there is to travel. At the end of the day, I'm here for new experiences and connections everywhere I go.</p>
+        <p class="body-l">That range is the point. Whether you want a splurge that's genuinely worth it or a smart way to stretch your points, I've probably done a version of it myself.</p>
+      </div>
+    </div>
+  </section>
+
+  <section class="section">
+    <div class="container">
+      <p class="eyebrow">Why book with me</p>
+      <div class="grid-3 why">
+        <div class="card">
+          <h3 class="card__title">Perks at partner hotels</h3>
+          <p class="card__body">Daily breakfast, room upgrades when available, resort credits, and early check-in or late checkout at thousands of partner properties.</p>
+        </div>
+        <div class="card">
+          <h3 class="card__title">No extra cost to you</h3>
+          <p class="card__body">Hotel bookings through Fora typically cost you nothing beyond the rate itself — you pay the same as booking direct, with a real person in your corner.</p>
+        </div>
+        <div class="card">
+          <h3 class="card__title">A real person, before and during</h3>
+          <p class="card__body">Someone who knows your trip, can call the property on your behalf, and answers when plans change.</p>
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <section class="section--tight gallery-section">
+    <div class="container">
+      <p class="eyebrow">Travel photos</p>
+      <div class="gallery">
+        {gallery.map((g) => (
+          <div class="photo photo--3x2">
+            <img src={g.src} alt={g.alt} width="1600" height="1067" loading="lazy" />
+            <div class="overlay"><div class="kicker">{g.kicker}</div><div class="caption">{g.caption}</div></div>
+          </div>
+        ))}
+      </div>
+    </div>
+  </section>
+
+  <section class="section section--pine">
+    <div class="container cta">
+      <h2 class="display-m">Let's plan something.</h2>
+      <div class="row cta-row">
+        <a class="btn btn--accent btn--lg" href="/inquiry">Plan a trip</a>
+        <a class="btn btn--ghost-dark btn--lg" href="/search">Search award flights</a>
+      </div>
+    </div>
+  </section>
+
+</Layout>
+
+<style>
+  .intro { padding-top: 72px; }
+  .intro-grid { display: grid; grid-template-columns: .75fr 1.25fr; gap: 56px; align-items: start; }
+  .headshot { max-width: 400px; box-shadow: var(--shadow-card); }
+  .intro h1 { color: var(--emerald); margin-top: 12px; }
+  .role { color: var(--sage); margin-top: 8px; }
+  .story { margin-top: 22px; max-width: 52ch; }
+  .tags { margin-top: 22px; gap: 10px; }
+  .facts { margin: 26px 0 0; padding: 0; display: grid; gap: 10px; max-width: 560px; }
+  .facts div { display: grid; grid-template-columns: 130px 1fr; gap: 12px; padding-top: 10px; border-top: 1px solid var(--line); }
+  .facts dt { font-size: 11px; letter-spacing: .14em; text-transform: uppercase; color: var(--meta); font-weight: 600; padding-top: 3px; }
+  .facts dd { margin: 0; font-size: 14px; color: var(--ink-soft); }
+  .intro-ctas { margin-top: 30px; }
+
+  .style-grid { display: grid; grid-template-columns: .8fr 1.2fr; gap: 56px; align-items: start; }
+  .style-grid .display-m { margin-top: 12px; }
+  .style-copy { display: grid; gap: 16px; }
+
+  .why { margin-top: 24px; }
+  .gallery { margin-top: 20px; display: grid; grid-template-columns: repeat(3, 1fr); gap: 16px; }
+  .gallery .photo:nth-child(1) { grid-column: span 2; }
+  .gallery .photo:nth-child(1) { aspect-ratio: auto; min-height: 100%; }
+
+  .cta { text-align: center; }
+  .cta-row { justify-content: center; margin-top: 28px; }
+
+  @media (max-width: 860px) {
+    .intro { padding-top: 48px; }
+    .intro-grid, .style-grid { grid-template-columns: 1fr; gap: 32px; }
+    .headshot { max-width: 320px; }
+    .gallery { grid-template-columns: 1fr 1fr; }
+    .gallery .photo:nth-child(1) { grid-column: span 2; aspect-ratio: 3 / 2; }
+  }
+  @media (max-width: 520px) {
+    .gallery { grid-template-columns: 1fr; }
+    .gallery .photo:nth-child(1) { grid-column: auto; }
+    .facts div { grid-template-columns: 1fr; gap: 4px; }
+  }
+</style>

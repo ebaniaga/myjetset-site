@@ -1,0 +1,7 @@
+---
+// The gold four-point star mark. Fill comes from `.star path` in global.css.
+const { size = 20, class: cls = "" } = Astro.props;
+---
+<svg class={`star ${cls}`.trim()} width={size} height={size} viewBox="0 0 30 30" aria-hidden="true">
+  <path d="M15 2 L17.4 12.6 L28 15 L17.4 17.4 L15 28 L12.6 17.4 L2 15 L12.6 12.6 Z"/>
+</svg>

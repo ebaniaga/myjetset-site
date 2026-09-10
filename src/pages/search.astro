@@ -1,14 +1,184 @@
-<!DOCTYPE html>
-<html lang="en">
-<head>
-<meta charset="UTF-8" />
-<meta name="viewport" content="width=device-width, initial-scale=1.0" />
-<title>My Jet Set Life — Find award flights with your points</title>
-<meta name="description" content="Tell us your points and where you want to go. We'll email you award flight options." />
-<link rel="preconnect" href="https://fonts.googleapis.com" />
-<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
-<link href="https://fonts.googleapis.com/css2?family=Cormorant+Garamond:ital,wght@0,400;0,500;0,600;0,700;1,400;1,500;1,600&family=Hanken+Grotesk:wght@300;400;500;600;700&display=swap" rel="stylesheet" />
-<style>
+---
+import Layout from "../layouts/Layout.astro";
+// The award-search UI is carried over verbatim from the original search.html.
+// Its CSS stays page-scoped (is:global here, but only loaded on this page) and
+// its backend is the unchanged Cloudflare Pages Function at /api/search.
+---
+<Layout title="Find award flights with your points — My Jet Set Life" description="Tell us your points and where you want to go. We will search award availability and email you the options." active="search">
+<div class="wrap">
+    <header>
+      <p class="eyebrow">Award Search</p>
+      <h1 class="display">Find award flights with your points</h1>
+      <p class="lead">
+        Tell us how many points you have and where you'd like to go.
+        We'll search award availability and email you the options.
+      </p>
+    </header>
+
+    <form class="card" id="search-form" novalidate>
+      <div class="card-frame" aria-hidden="true"></div>
+      <div class="field">
+        <label>Credit card points <span class="hint">transferable — pick any you hold</span></label>
+        <div class="chips" id="cards-chips">
+          <label class="chip"><input type="checkbox" name="cardPoints" value="amex" /><span class="chip-label">Amex Membership Rewards</span></label>
+          <label class="chip"><input type="checkbox" name="cardPoints" value="chase" /><span class="chip-label">Chase Ultimate Rewards</span></label>
+          <label class="chip"><input type="checkbox" name="cardPoints" value="capitalone" /><span class="chip-label">Capital One Miles</span></label>
+          <label class="chip"><input type="checkbox" name="cardPoints" value="citi" /><span class="chip-label">Citi ThankYou Points</span></label>
+          <label class="chip"><input type="checkbox" name="cardPoints" value="bilt" /><span class="chip-label">Bilt Rewards</span></label>
+        </div>
+        <p class="hint" style="margin-top:8px;display:block;">We search the airline partners each card transfers to.</p>
+      </div>
+
+      <div class="field">
+        <label>Airline miles <span class="hint">optional — pick up to 3 direct programs</span></label>
+        <div class="ms" id="programs-ms">
+          <div class="ms-trigger" id="programs-trigger" role="button" tabindex="0"
+               aria-haspopup="listbox" aria-expanded="false">
+            <span class="ms-summary placeholder" id="programs-summary">Select airline programs…</span>
+            <svg class="ms-caret" viewBox="0 0 24 24" aria-hidden="true"><polyline points="6 9 12 15 18 9"></polyline></svg>
+          </div>
+          <div class="ms-panel" id="programs-panel" hidden>
+            <input type="text" class="ms-search" id="programs-search" placeholder="Search airlines…" autocomplete="off" />
+            <div class="ms-list" id="programs-list">
+              <label class="ms-row"><input type="checkbox" name="programs" value="aeroplan" /><span class="ms-name">Air Canada Aeroplan</span><svg class="ms-check" viewBox="0 0 24 24"><polyline points="20 6 9 17 4 12"></polyline></svg></label>
+              <label class="ms-row"><input type="checkbox" name="programs" value="aeromexico" /><span class="ms-name">Aeroméxico Club Premier</span><svg class="ms-check" viewBox="0 0 24 24"><polyline points="20 6 9 17 4 12"></polyline></svg></label>
+              <label class="ms-row"><input type="checkbox" name="programs" value="alaska" /><span class="ms-name">Alaska Mileage Plan</span><svg class="ms-check" viewBox="0 0 24 24"><polyline points="20 6 9 17 4 12"></polyline></svg></label>
+              <label class="ms-row"><input type="checkbox" name="programs" value="american" /><span class="ms-name">American AAdvantage</span><svg class="ms-check" viewBox="0 0 24 24"><polyline points="20 6 9 17 4 12"></polyline></svg></label>
+              <label class="ms-row"><input type="checkbox" name="programs" value="azul" /><span class="ms-name">Azul TudoAzul</span><svg class="ms-check" viewBox="0 0 24 24"><polyline points="20 6 9 17 4 12"></polyline></svg></label>
+              <label class="ms-row"><input type="checkbox" name="programs" value="british" /><span class="ms-name">British Airways Club</span><svg class="ms-check" viewBox="0 0 24 24"><polyline points="20 6 9 17 4 12"></polyline></svg></label>
+              <label class="ms-row"><input type="checkbox" name="programs" value="delta" /><span class="ms-name">Delta SkyMiles</span><svg class="ms-check" viewBox="0 0 24 24"><polyline points="20 6 9 17 4 12"></polyline></svg></label>
+              <label class="ms-row"><input type="checkbox" name="programs" value="etihad" /><span class="ms-name">Etihad Guest</span><svg class="ms-check" viewBox="0 0 24 24"><polyline points="20 6 9 17 4 12"></polyline></svg></label>
+              <label class="ms-row"><input type="checkbox" name="programs" value="finnair" /><span class="ms-name">Finnair Plus</span><svg class="ms-check" viewBox="0 0 24 24"><polyline points="20 6 9 17 4 12"></polyline></svg></label>
+              <label class="ms-row"><input type="checkbox" name="programs" value="flyingblue" /><span class="ms-name">Air France-KLM Flying Blue</span><svg class="ms-check" viewBox="0 0 24 24"><polyline points="20 6 9 17 4 12"></polyline></svg></label>
+              <label class="ms-row"><input type="checkbox" name="programs" value="jetblue" /><span class="ms-name">JetBlue TrueBlue</span><svg class="ms-check" viewBox="0 0 24 24"><polyline points="20 6 9 17 4 12"></polyline></svg></label>
+              <label class="ms-row"><input type="checkbox" name="programs" value="qantas" /><span class="ms-name">Qantas Frequent Flyer</span><svg class="ms-check" viewBox="0 0 24 24"><polyline points="20 6 9 17 4 12"></polyline></svg></label>
+              <label class="ms-row"><input type="checkbox" name="programs" value="qatar" /><span class="ms-name">Qatar Privilege Club</span><svg class="ms-check" viewBox="0 0 24 24"><polyline points="20 6 9 17 4 12"></polyline></svg></label>
+              <label class="ms-row"><input type="checkbox" name="programs" value="saudia" /><span class="ms-name">Saudia AlFursan</span><svg class="ms-check" viewBox="0 0 24 24"><polyline points="20 6 9 17 4 12"></polyline></svg></label>
+              <label class="ms-row"><input type="checkbox" name="programs" value="smiles" /><span class="ms-name">GOL Smiles</span><svg class="ms-check" viewBox="0 0 24 24"><polyline points="20 6 9 17 4 12"></polyline></svg></label>
+              <label class="ms-row"><input type="checkbox" name="programs" value="united" /><span class="ms-name">United MileagePlus</span><svg class="ms-check" viewBox="0 0 24 24"><polyline points="20 6 9 17 4 12"></polyline></svg></label>
+              <label class="ms-row"><input type="checkbox" name="programs" value="velocity" /><span class="ms-name">Virgin Australia Velocity</span><svg class="ms-check" viewBox="0 0 24 24"><polyline points="20 6 9 17 4 12"></polyline></svg></label>
+              <label class="ms-row"><input type="checkbox" name="programs" value="virginatlantic" /><span class="ms-name">Virgin Atlantic Flying Club</span><svg class="ms-check" viewBox="0 0 24 24"><polyline points="20 6 9 17 4 12"></polyline></svg></label>
+            </div>
+            <div class="ms-empty" id="programs-empty" hidden>No airlines match your search.</div>
+          </div>
+        </div>
+        <div class="field-error" id="programs-error" hidden></div>
+      </div>
+
+      <div class="field">
+        <label>Points budget <span class="hint">per traveler · 5,000 steps</span></label>
+        <div class="range" id="range">
+          <div class="range-values">
+            <span id="rangeMinLabel">50,000</span>
+            <span id="rangeMaxLabel">150,000</span>
+          </div>
+          <div class="range-track"><div class="range-fill" id="rangeFill"></div></div>
+          <input type="range" id="rangeMin" min="15000" max="200000" step="5000" value="50000" aria-label="Minimum points" />
+          <input type="range" id="rangeMax" min="15000" max="200000" step="5000" value="150000" aria-label="Maximum points" />
+        </div>
+        <div class="field-error" id="balance-error" hidden></div>
+      </div>
+
+      <div class="row">
+        <div class="field">
+          <label for="origin">From <span class="hint">airport code</span></label>
+          <input type="text" id="origin" name="origin" placeholder="JFK"
+                 maxlength="23" autocapitalize="characters" required />
+          <div class="field-error" id="origin-error" hidden></div>
+        </div>
+        <div class="field">
+          <label for="destination">To <span class="hint">airport code</span></label>
+          <input type="text" id="destination" name="destination" placeholder="LHR"
+                 maxlength="23" autocapitalize="characters" required />
+          <div class="field-error" id="destination-error" hidden></div>
+        </div>
+      </div>
+
+      <div class="field">
+        <label class="check-inline">
+          <input type="checkbox" id="surprise" />
+          <svg class="star-bullet" viewBox="0 0 30 30" aria-hidden="true"><path d="M15 2 L17.4 12.6 L28 15 L17.4 17.4 L15 28 L12.6 17.4 L2 15 L12.6 12.6 Z"/></svg>
+          <span>Surprise me — search every destination from my origin</span>
+        </label>
+      </div>
+
+      <div class="field">
+        <label>Departure date <span class="hint">future dates only</span></label>
+        <div class="datepicker" id="datepicker">
+          <div class="dp-trigger" id="dp-trigger" role="button" tabindex="0"
+               aria-haspopup="dialog" aria-expanded="false">
+            <svg class="dp-cal-icon" viewBox="0 0 24 24" aria-hidden="true">
+              <rect x="3" y="5" width="18" height="16" rx="2"></rect>
+              <line x1="3" y1="10" x2="21" y2="10"></line>
+              <line x1="8" y1="3" x2="8" y2="7"></line>
+              <line x1="16" y1="3" x2="16" y2="7"></line>
+            </svg>
+            <span class="dp-text placeholder" id="dp-text">Select a departure date…</span>
+            <button type="button" class="dp-clear" id="dp-clear" aria-label="Clear date" hidden>×</button>
+          </div>
+          <div class="dp-panel" id="dp-panel" role="dialog" aria-label="Choose departure date" hidden>
+            <div class="dp-head">
+              <button type="button" class="dp-nav" id="dp-prev" aria-label="Previous month">‹</button>
+              <span class="dp-month" id="dp-month"></span>
+              <button type="button" class="dp-nav" id="dp-next" aria-label="Next month">›</button>
+            </div>
+            <div class="dp-dow">
+              <span>Sun</span><span>Mon</span><span>Tue</span><span>Wed</span><span>Thu</span><span>Fri</span><span>Sat</span>
+            </div>
+            <div class="dp-grid" id="dp-grid"></div>
+            <div class="dp-flex">
+              <span class="dp-flex-label">Date flexibility — search a window around this date</span>
+              <div class="dp-flex-row" id="dp-flex-row"></div>
+            </div>
+          </div>
+        </div>
+      </div>
+
+      <div class="field">
+        <label>Cabin <span class="hint">pick one or more</span></label>
+        <div class="chips" id="cabins-chips">
+          <label class="chip"><input type="checkbox" name="cabins" value="economy" /><span class="chip-label">Economy</span></label>
+          <label class="chip"><input type="checkbox" name="cabins" value="premium" /><span class="chip-label">Premium economy</span></label>
+          <label class="chip"><input type="checkbox" name="cabins" value="business" /><span class="chip-label">Business</span></label>
+          <label class="chip"><input type="checkbox" name="cabins" value="first" /><span class="chip-label">First</span></label>
+        </div>
+        <div class="field-error" id="cabins-error" hidden></div>
+      </div>
+
+      <div class="field">
+        <label>Need help booking anything else? <span class="hint">optional</span></label>
+        <div class="chips" id="help-chips">
+          <label class="chip"><input type="checkbox" name="helpWith" value="hotel" /><span class="chip-label">Hotel</span></label>
+          <label class="chip"><input type="checkbox" name="helpWith" value="car" /><span class="chip-label">Car rental</span></label>
+          <label class="chip"><input type="checkbox" name="helpWith" value="activities" /><span class="chip-label">Activities</span></label>
+          <label class="chip"><input type="checkbox" name="helpWith" value="insurance" /><span class="chip-label">Travel insurance</span></label>
+        </div>
+      </div>
+
+      <div class="field">
+        <label for="name">Your name</label>
+        <input type="text" id="name" name="name" placeholder="e.g. Erickson"
+               maxlength="80" autocomplete="given-name" required />
+      </div>
+
+      <div class="field">
+        <label for="email">Your email</label>
+        <input type="email" id="email" name="email" placeholder="your@email.com" required />
+      </div>
+
+      <div class="hp" aria-hidden="true">
+        <label for="company">Company</label>
+        <input type="text" id="company" name="company" tabindex="-1" autocomplete="off" />
+      </div>
+
+      <button type="submit" id="submit-btn">Find my options</button>
+
+      <div class="message" id="message" hidden></div>
+    </form>
+</div>
+</Layout>
+
+<style is:global>
   /* ── My Jet Set Life design tokens (Components.dc.html · guidelines/tokens.md)
      Defaults mirror the DC: gold #E3C36E · Soft corners · Full frame ─────── */
   :root {
@@ -49,34 +219,6 @@
     color: var(--ink);
     background: var(--cream);
     -webkit-font-smoothing: antialiased;
-  }
-
-  /* ── Top bar (Navigation component) ─────────────────────────────────── */
-  .topbar { background: var(--emerald); }
-
-  .topbar-inner {
-    max-width: 1120px;
-    margin: 0 auto;
-    padding: 16px 24px;
-    display: flex;
-    align-items: center;
-  }
-
-  .topbar-brand {
-    display: flex;
-    align-items: center;
-    gap: 10px;
-    text-decoration: none;
-  }
-
-  .topbar-mark { width: 20px; height: 20px; }
-  .topbar-mark path { fill: var(--gold); }
-
-  .topbar-brand span {
-    font-family: var(--serif);
-    font-style: italic;
-    font-size: 22px;
-    color: #F1EEE4;
   }
 
   /* ── Page scaffold ───────────────────────────────────────────────────── */
@@ -686,210 +828,9 @@
     color: #8a2f2b;
   }
 
-  footer {
-    text-align: center;
-    margin-top: 32px;
-    font-size: 12px;
-    color: var(--sage);
-  }
-
-  @media (max-width: 520px) {
-    .wrap { padding: 32px 16px 56px; }
-    .display { font-size: 34px; }
-    .card { padding: 30px 22px; }
-    .card-frame { inset: 8px; }
-    .row { flex-direction: column; gap: 0; }
-    .chips { grid-template-columns: 1fr; }
-    .topbar-inner { padding: 14px 20px; }
-  }
-
 </style>
-</head>
-<body>
-  <nav class="topbar">
-    <div class="topbar-inner">
-      <a class="topbar-brand" href="https://myjetset.life">
-        <svg class="topbar-mark" viewBox="0 0 30 30" aria-hidden="true"><path d="M15 2 L17.4 12.6 L28 15 L17.4 17.4 L15 28 L12.6 17.4 L2 15 L12.6 12.6 Z"/></svg>
-        <span>My Jet Set Life</span>
-      </a>
-    </div>
-  </nav>
 
-  <div class="wrap">
-    <header>
-      <p class="eyebrow">Award Search</p>
-      <h1 class="display">Find award flights with your points</h1>
-      <p class="lead">
-        Tell us how many points you have and where you'd like to go.
-        We'll search award availability and email you the options.
-      </p>
-    </header>
-
-    <form class="card" id="search-form" novalidate>
-      <div class="card-frame" aria-hidden="true"></div>
-      <div class="field">
-        <label>Credit card points <span class="hint">transferable — pick any you hold</span></label>
-        <div class="chips" id="cards-chips">
-          <label class="chip"><input type="checkbox" name="cardPoints" value="amex" /><span class="chip-label">Amex Membership Rewards</span></label>
-          <label class="chip"><input type="checkbox" name="cardPoints" value="chase" /><span class="chip-label">Chase Ultimate Rewards</span></label>
-          <label class="chip"><input type="checkbox" name="cardPoints" value="capitalone" /><span class="chip-label">Capital One Miles</span></label>
-          <label class="chip"><input type="checkbox" name="cardPoints" value="citi" /><span class="chip-label">Citi ThankYou Points</span></label>
-          <label class="chip"><input type="checkbox" name="cardPoints" value="bilt" /><span class="chip-label">Bilt Rewards</span></label>
-        </div>
-        <p class="hint" style="margin-top:8px;display:block;">We search the airline partners each card transfers to.</p>
-      </div>
-
-      <div class="field">
-        <label>Airline miles <span class="hint">optional — pick up to 3 direct programs</span></label>
-        <div class="ms" id="programs-ms">
-          <div class="ms-trigger" id="programs-trigger" role="button" tabindex="0"
-               aria-haspopup="listbox" aria-expanded="false">
-            <span class="ms-summary placeholder" id="programs-summary">Select airline programs…</span>
-            <svg class="ms-caret" viewBox="0 0 24 24" aria-hidden="true"><polyline points="6 9 12 15 18 9"></polyline></svg>
-          </div>
-          <div class="ms-panel" id="programs-panel" hidden>
-            <input type="text" class="ms-search" id="programs-search" placeholder="Search airlines…" autocomplete="off" />
-            <div class="ms-list" id="programs-list">
-              <label class="ms-row"><input type="checkbox" name="programs" value="aeroplan" /><span class="ms-name">Air Canada Aeroplan</span><svg class="ms-check" viewBox="0 0 24 24"><polyline points="20 6 9 17 4 12"></polyline></svg></label>
-              <label class="ms-row"><input type="checkbox" name="programs" value="aeromexico" /><span class="ms-name">Aeroméxico Club Premier</span><svg class="ms-check" viewBox="0 0 24 24"><polyline points="20 6 9 17 4 12"></polyline></svg></label>
-              <label class="ms-row"><input type="checkbox" name="programs" value="alaska" /><span class="ms-name">Alaska Mileage Plan</span><svg class="ms-check" viewBox="0 0 24 24"><polyline points="20 6 9 17 4 12"></polyline></svg></label>
-              <label class="ms-row"><input type="checkbox" name="programs" value="american" /><span class="ms-name">American AAdvantage</span><svg class="ms-check" viewBox="0 0 24 24"><polyline points="20 6 9 17 4 12"></polyline></svg></label>
-              <label class="ms-row"><input type="checkbox" name="programs" value="azul" /><span class="ms-name">Azul TudoAzul</span><svg class="ms-check" viewBox="0 0 24 24"><polyline points="20 6 9 17 4 12"></polyline></svg></label>
-              <label class="ms-row"><input type="checkbox" name="programs" value="british" /><span class="ms-name">British Airways Club</span><svg class="ms-check" viewBox="0 0 24 24"><polyline points="20 6 9 17 4 12"></polyline></svg></label>
-              <label class="ms-row"><input type="checkbox" name="programs" value="delta" /><span class="ms-name">Delta SkyMiles</span><svg class="ms-check" viewBox="0 0 24 24"><polyline points="20 6 9 17 4 12"></polyline></svg></label>
-              <label class="ms-row"><input type="checkbox" name="programs" value="etihad" /><span class="ms-name">Etihad Guest</span><svg class="ms-check" viewBox="0 0 24 24"><polyline points="20 6 9 17 4 12"></polyline></svg></label>
-              <label class="ms-row"><input type="checkbox" name="programs" value="finnair" /><span class="ms-name">Finnair Plus</span><svg class="ms-check" viewBox="0 0 24 24"><polyline points="20 6 9 17 4 12"></polyline></svg></label>
-              <label class="ms-row"><input type="checkbox" name="programs" value="flyingblue" /><span class="ms-name">Air France-KLM Flying Blue</span><svg class="ms-check" viewBox="0 0 24 24"><polyline points="20 6 9 17 4 12"></polyline></svg></label>
-              <label class="ms-row"><input type="checkbox" name="programs" value="jetblue" /><span class="ms-name">JetBlue TrueBlue</span><svg class="ms-check" viewBox="0 0 24 24"><polyline points="20 6 9 17 4 12"></polyline></svg></label>
-              <label class="ms-row"><input type="checkbox" name="programs" value="qantas" /><span class="ms-name">Qantas Frequent Flyer</span><svg class="ms-check" viewBox="0 0 24 24"><polyline points="20 6 9 17 4 12"></polyline></svg></label>
-              <label class="ms-row"><input type="checkbox" name="programs" value="qatar" /><span class="ms-name">Qatar Privilege Club</span><svg class="ms-check" viewBox="0 0 24 24"><polyline points="20 6 9 17 4 12"></polyline></svg></label>
-              <label class="ms-row"><input type="checkbox" name="programs" value="saudia" /><span class="ms-name">Saudia AlFursan</span><svg class="ms-check" viewBox="0 0 24 24"><polyline points="20 6 9 17 4 12"></polyline></svg></label>
-              <label class="ms-row"><input type="checkbox" name="programs" value="smiles" /><span class="ms-name">GOL Smiles</span><svg class="ms-check" viewBox="0 0 24 24"><polyline points="20 6 9 17 4 12"></polyline></svg></label>
-              <label class="ms-row"><input type="checkbox" name="programs" value="united" /><span class="ms-name">United MileagePlus</span><svg class="ms-check" viewBox="0 0 24 24"><polyline points="20 6 9 17 4 12"></polyline></svg></label>
-              <label class="ms-row"><input type="checkbox" name="programs" value="velocity" /><span class="ms-name">Virgin Australia Velocity</span><svg class="ms-check" viewBox="0 0 24 24"><polyline points="20 6 9 17 4 12"></polyline></svg></label>
-              <label class="ms-row"><input type="checkbox" name="programs" value="virginatlantic" /><span class="ms-name">Virgin Atlantic Flying Club</span><svg class="ms-check" viewBox="0 0 24 24"><polyline points="20 6 9 17 4 12"></polyline></svg></label>
-            </div>
-            <div class="ms-empty" id="programs-empty" hidden>No airlines match your search.</div>
-          </div>
-        </div>
-        <div class="field-error" id="programs-error" hidden></div>
-      </div>
-
-      <div class="field">
-        <label>Points budget <span class="hint">per traveler · 5,000 steps</span></label>
-        <div class="range" id="range">
-          <div class="range-values">
-            <span id="rangeMinLabel">50,000</span>
-            <span id="rangeMaxLabel">150,000</span>
-          </div>
-          <div class="range-track"><div class="range-fill" id="rangeFill"></div></div>
-          <input type="range" id="rangeMin" min="15000" max="200000" step="5000" value="50000" aria-label="Minimum points" />
-          <input type="range" id="rangeMax" min="15000" max="200000" step="5000" value="150000" aria-label="Maximum points" />
-        </div>
-        <div class="field-error" id="balance-error" hidden></div>
-      </div>
-
-      <div class="row">
-        <div class="field">
-          <label for="origin">From <span class="hint">airport code</span></label>
-          <input type="text" id="origin" name="origin" placeholder="JFK"
-                 maxlength="23" autocapitalize="characters" required />
-          <div class="field-error" id="origin-error" hidden></div>
-        </div>
-        <div class="field">
-          <label for="destination">To <span class="hint">airport code</span></label>
-          <input type="text" id="destination" name="destination" placeholder="LHR"
-                 maxlength="23" autocapitalize="characters" required />
-          <div class="field-error" id="destination-error" hidden></div>
-        </div>
-      </div>
-
-      <div class="field">
-        <label class="check-inline">
-          <input type="checkbox" id="surprise" />
-          <svg class="star-bullet" viewBox="0 0 30 30" aria-hidden="true"><path d="M15 2 L17.4 12.6 L28 15 L17.4 17.4 L15 28 L12.6 17.4 L2 15 L12.6 12.6 Z"/></svg>
-          <span>Surprise me — search every destination from my origin</span>
-        </label>
-      </div>
-
-      <div class="field">
-        <label>Departure date <span class="hint">future dates only</span></label>
-        <div class="datepicker" id="datepicker">
-          <div class="dp-trigger" id="dp-trigger" role="button" tabindex="0"
-               aria-haspopup="dialog" aria-expanded="false">
-            <svg class="dp-cal-icon" viewBox="0 0 24 24" aria-hidden="true">
-              <rect x="3" y="5" width="18" height="16" rx="2"></rect>
-              <line x1="3" y1="10" x2="21" y2="10"></line>
-              <line x1="8" y1="3" x2="8" y2="7"></line>
-              <line x1="16" y1="3" x2="16" y2="7"></line>
-            </svg>
-            <span class="dp-text placeholder" id="dp-text">Select a departure date…</span>
-            <button type="button" class="dp-clear" id="dp-clear" aria-label="Clear date" hidden>×</button>
-          </div>
-          <div class="dp-panel" id="dp-panel" role="dialog" aria-label="Choose departure date" hidden>
-            <div class="dp-head">
-              <button type="button" class="dp-nav" id="dp-prev" aria-label="Previous month">‹</button>
-              <span class="dp-month" id="dp-month"></span>
-              <button type="button" class="dp-nav" id="dp-next" aria-label="Next month">›</button>
-            </div>
-            <div class="dp-dow">
-              <span>Sun</span><span>Mon</span><span>Tue</span><span>Wed</span><span>Thu</span><span>Fri</span><span>Sat</span>
-            </div>
-            <div class="dp-grid" id="dp-grid"></div>
-            <div class="dp-flex">
-              <span class="dp-flex-label">Date flexibility — search a window around this date</span>
-              <div class="dp-flex-row" id="dp-flex-row"></div>
-            </div>
-          </div>
-        </div>
-      </div>
-
-      <div class="field">
-        <label>Cabin <span class="hint">pick one or more</span></label>
-        <div class="chips" id="cabins-chips">
-          <label class="chip"><input type="checkbox" name="cabins" value="economy" /><span class="chip-label">Economy</span></label>
-          <label class="chip"><input type="checkbox" name="cabins" value="premium" /><span class="chip-label">Premium economy</span></label>
-          <label class="chip"><input type="checkbox" name="cabins" value="business" /><span class="chip-label">Business</span></label>
-          <label class="chip"><input type="checkbox" name="cabins" value="first" /><span class="chip-label">First</span></label>
-        </div>
-        <div class="field-error" id="cabins-error" hidden></div>
-      </div>
-
-      <div class="field">
-        <label>Need help booking anything else? <span class="hint">optional</span></label>
-        <div class="chips" id="help-chips">
-          <label class="chip"><input type="checkbox" name="helpWith" value="hotel" /><span class="chip-label">Hotel</span></label>
-          <label class="chip"><input type="checkbox" name="helpWith" value="car" /><span class="chip-label">Car rental</span></label>
-          <label class="chip"><input type="checkbox" name="helpWith" value="activities" /><span class="chip-label">Activities</span></label>
-          <label class="chip"><input type="checkbox" name="helpWith" value="insurance" /><span class="chip-label">Travel insurance</span></label>
-        </div>
-      </div>
-
-      <div class="field">
-        <label for="name">Your name</label>
-        <input type="text" id="name" name="name" placeholder="e.g. Erickson"
-               maxlength="80" autocomplete="given-name" required />
-      </div>
-
-      <div class="field">
-        <label for="email">Your email</label>
-        <input type="email" id="email" name="email" placeholder="your@email.com" required />
-      </div>
-
-      <div class="hp" aria-hidden="true">
-        <label for="company">Company</label>
-        <input type="text" id="company" name="company" tabindex="-1" autocomplete="off" />
-      </div>
-
-      <button type="submit" id="submit-btn">Find my options</button>
-
-      <div class="message" id="message" hidden></div>
-    </form>
-
-    <footer>© myjetset.life</footer>
-  </div>
-
-  <script>
+<script is:inline>
     (function () {
       var form = document.getElementById('search-form');
       var btn = document.getElementById('submit-btn');
@@ -1383,6 +1324,4 @@
           });
       });
     })();
-  </script>
-</body>
-</html>
+</script>
