@@ -1,0 +1,27 @@
+---
+// Astro emits this as /404.html, which Cloudflare Pages serves for unmatched
+// routes (without it, Pages falls back to index.html with a 200).
+import Layout from "../layouts/Layout.astro";
+import "../styles/global.css";
+---
+<Layout title="Page not found — My Jet Set Life" description="That page has wandered off. Head home, or search award flights.">
+  <section class="section nf">
+    <div class="container">
+      <p class="eyebrow">404</p>
+      <h1 class="display-l">That page has wandered off.</h1>
+      <p class="body-l soft nf-lead">It happens to the best of us — usually somewhere between the lounge and the gate. Let's get you back on course.</p>
+      <div class="row nf-ctas">
+        <a class="btn btn--primary" href="/">Back home</a>
+        <a class="btn btn--outline" href="/search">Search award flights</a>
+      </div>
+    </div>
+  </section>
+</Layout>
+
+<style>
+  .nf { padding: 120px 0 140px; }
+  .nf h1 { color: var(--emerald); margin-top: 14px; }
+  .nf-lead { margin-top: 18px; max-width: 48ch; }
+  .nf-ctas { margin-top: 30px; }
+  @media (max-width: 760px) { .nf { padding: 64px 0 80px; } }
+</style>
