@@ -47,9 +47,9 @@ function groupByCountry(list) {
       </ul>
     </div>
     <dl class="globe-stats" aria-label="Travel stats">
-      <div><dt>Continents</dt><dd>{stats.continents}</dd></div>
-      <div><dt>Countries</dt><dd>{stats.countries}</dd></div>
-      <div><dt>Places</dt><dd>{stats.places}</dd></div>
+      <div><dt>Continents</dt><dd data-count={stats.continents}>{stats.continents}</dd></div>
+      <div><dt>Countries</dt><dd data-count={stats.countries}>{stats.countries}</dd></div>
+      <div><dt>Places</dt><dd data-count={stats.places}>{stats.places}</dd></div>
     </dl>
   </div>
 
@@ -368,6 +368,23 @@ function groupByCountry(list) {
     hint.textContent = "Drag to rotate · scroll to zoom";
   }
 
+  // Header stats count up from zero on load.
+  if (!reduceMotion) {
+    document.querySelectorAll<HTMLElement>("[data-count]").forEach((dd, i) => {
+      const target = Number(dd.dataset.count);
+      const dur = 1200 + i * 150;
+      const t0 = performance.now();
+      dd.textContent = "0";
+      const tick = (now: number) => {
+        const t = Math.min(1, (now - t0) / dur);
+        const eased = 1 - Math.pow(1 - t, 3);
+        dd.textContent = String(Math.round(target * eased));
+        if (t < 1) requestAnimationFrame(tick);
+      };
+      requestAnimationFrame(tick);
+    });
+  }
+
   spinBtn.addEventListener("click", spin);
   panelClose.addEventListener("click", hidePanel);
   // A tap on the globe (not a drag) or the space around it closes the card.
@@ -407,10 +424,9 @@ function groupByCountry(list) {
   .key--visit { width: 7px; height: 7px; border-radius: 50%; background: var(--pine); box-shadow: 0 0 0 1.5px rgba(241,238,228,.7); }
   .key--story { background: var(--gold); clip-path: polygon(50% 0, 58% 42%, 100% 50%, 58% 58%, 50% 100%, 42% 58%, 0 50%, 42% 42%); }
   .key--special { background: var(--cream); clip-path: polygon(50% 0, 58% 42%, 100% 50%, 58% 58%, 50% 100%, 42% 58%, 0 50%, 42% 42%); }
-  .globe-stats { margin: 0; display: flex; gap: 32px; justify-content: flex-end; }
-  .globe-stats div { text-align: right; }
+  .globe-stats { margin: 0; display: flex; gap: 36px; justify-content: flex-end; }
   .globe-stats dt { font-size: 11px; letter-spacing: .28em; text-transform: uppercase; color: var(--gold); }
-  .globe-stats dd { margin: 4px 0 0; font-family: var(--serif); font-size: 44px; line-height: 1; color: var(--cream); }
+  .globe-stats dd { margin: 2px 0 0; font-family: var(--serif); font-size: 44px; line-height: 1.1; color: var(--cream); font-variant-numeric: tabular-nums; }
 
   .globe-stage {
     position: relative; height: min(78vh, 760px); min-height: 480px;
@@ -524,7 +540,6 @@ function groupByCountry(list) {
   @media (max-width: 860px) {
     .globe-head { grid-template-columns: 1fr; gap: 28px; padding-top: 44px; padding-bottom: 36px; }
     .globe-stats { justify-content: flex-start; gap: 24px; }
-    .globe-stats div { text-align: left; }
     .globe-stats dd { font-size: 34px; }
     .globe-stage { height: 78vh; min-height: 520px; }
     .place-panel { top: auto; right: 12px; left: 12px; bottom: 12px; width: auto; max-height: 67%; }
