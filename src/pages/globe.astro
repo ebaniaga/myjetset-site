@@ -1,0 +1,548 @@
+---
+// The globe: every place I've been as a gold pin on a 3D globe, with photos,
+// a story, and (when there is one) a link to the blog post. "Spin the globe"
+// lands on a random pin. Pins come from src/data/places.js — edit that file
+// to add places; nothing here needs to change.
+import Layout from "../layouts/Layout.astro";
+import "../styles/global.css";
+import { PLACES, placeStats, markerType } from "../data/places.js";
+
+const stats = placeStats(PLACES);
+const continents = [...new Set(PLACES.map((p) => p.continent))].sort();
+const byContinent = continents.map((c) => {
+  const here = PLACES.filter((p) => p.continent === c);
+  return {
+    name: c,
+    cards: here.filter((p) => markerType(p) !== "visit"),
+    dots: groupByCountry(here.filter((p) => markerType(p) === "visit")),
+  };
+});
+/** [{ country, places }] — country label is the last comma-part of `place`. */
+function groupByCountry(list) {
+  const m = new Map();
+  for (const p of list) {
+    const k = p.place.split(", ").pop();
+    if (!m.has(k)) m.set(k, []);
+    m.get(k).push(p);
+  }
+  return [...m].map(([country, places]) => ({ country, places }));
+}
+---
+<Layout
+  title="The Globe — Where I've Been · My Jet Set Life"
+  description="Every pin is a place I've actually been — seven continents, fifty-plus countries. Spin the globe and land somewhere."
+  active="globe"
+>
+
+<section class="globe-hero">
+  <div class="globe-head container">
+    <div>
+      <p class="eyebrow eyebrow--gold">The globe</p>
+      <h1 class="display-l">Where I've been.</h1>
+      <p class="body-l globe-lead">Every dot is somewhere I've been. Gold pins have photos and stories; cream pins are the places that made me. Drag to explore, tap anything — or let the globe choose for you.</p>
+      <ul class="globe-key" aria-label="Map key">
+        <li><span class="key key--visit"></span>Been there</li>
+        <li><span class="key key--story"></span>Photos &amp; stories</li>
+        <li><span class="key key--special"></span>Home &amp; roots</li>
+      </ul>
+    </div>
+    <dl class="globe-stats" aria-label="Travel stats">
+      <div><dt>Continents</dt><dd>{stats.continents}</dd></div>
+      <div><dt>Countries</dt><dd>{stats.countries}</dd></div>
+      <div><dt>Places</dt><dd>{stats.places}</dd></div>
+    </dl>
+  </div>
+
+  <div class="globe-stage" id="globe-stage">
+    <div class="globe-canvas" id="globe" aria-label="Interactive 3D globe of places Erickson has visited" role="img"></div>
+
+    <div class="globe-controls">
+      <button class="btn btn--accent btn--lg spin-btn" id="spin" type="button">
+        <svg width="16" height="16" viewBox="0 0 30 30" aria-hidden="true"><path d="M15 2 L17.4 12.6 L28 15 L17.4 17.4 L15 28 L12.6 17.4 L2 15 L12.6 12.6 Z" fill="currentColor"/></svg>
+        Spin the globe
+      </button>
+      <p class="globe-hint" id="hint">Drag to rotate · scroll to zoom</p>
+    </div>
+
+    <!-- Place panel: filled by the script when a pin is chosen -->
+    <aside class="place-panel" id="panel" hidden aria-live="polite">
+      <div class="place-panel__inner framed">
+        <button class="panel-close sr-only" id="panel-close" type="button">Close</button>
+        <div class="place-photos" id="photos">
+          <figure class="place-photo photo" id="photo-frame">
+            <img id="photo" alt="" />
+          </figure>
+          <div class="place-thumbs" id="thumbs"></div>
+        </div>
+        <div class="place-body">
+          <p class="eyebrow eyebrow--gold" id="place-kicker"></p>
+          <h2 class="serif-l" id="place-name"></h2>
+          <p class="place-blurb" id="place-blurb"></p>
+          <div class="row place-actions">
+            <a class="btn btn--accent btn--sm" id="place-blog" href="#" hidden>Read the story →</a>
+            <a class="btn btn--ghost-dark btn--sm" id="place-plan" href="/inquiry">Plan a trip like this</a>
+          </div>
+          <p class="place-back">Tap the globe to go back</p>
+        </div>
+      </div>
+    </aside>
+
+    <noscript>
+      <p class="globe-noscript">The 3D globe needs JavaScript. The full list of places is just below.</p>
+    </noscript>
+  </div>
+</section>
+
+<!-- Every pin, as a plain list: the accessible fallback and the blog index. -->
+<section class="section pins">
+  <div class="container">
+    <p class="eyebrow">Every pin</p>
+    <h2 class="display-m">By continent.</h2>
+    {byContinent.map((c) => (
+      <div class="pin-group">
+        <h3 class="serif-m pin-continent">{c.name}</h3>
+        <ul class="pin-list">
+          {c.cards.map((p) => (
+            <li class="pin-item">
+              <button class="pin-card" type="button" data-place={p.id}>
+                {p.photos[0]
+                  ? <img class="pin-thumb" src={p.photos[0].src} alt="" width="160" height="107" loading="lazy" />
+                  : <span class="pin-thumb pin-thumb--empty" aria-hidden="true" />}
+                <span class="pin-text">
+                  <span class="pin-place">{p.place}{p.when ? ` · ${p.when}` : ""}</span>
+                  <span class="pin-name">{p.name}</span>
+                </span>
+              </button>
+              {p.blog && <a class="pin-blog" href={p.blog}>Read the story →</a>}
+            </li>
+          ))}
+        </ul>
+        {c.dots.length > 0 && (
+          <dl class="pin-dots">
+            {c.dots.map((g) => (
+              <div class="pin-dots__row">
+                <dt>{g.country}</dt>
+                <dd>{g.places.map((p) => <button class="dot-link" type="button" data-place={p.id}>{p.name}</button>)}</dd>
+              </div>
+            ))}
+          </dl>
+        )}
+      </div>
+    ))}
+  </div>
+</section>
+
+<section class="section section--pine">
+  <div class="container cta">
+    <h2 class="display-m">Want your own pin?</h2>
+    <p class="body-l cta-lead">Tell me where you've been dreaming about and I'll get you there — on points, in a premium cabin, with the good hotel.</p>
+    <div class="row cta-row">
+      <a class="btn btn--accent btn--lg" href="/inquiry">Plan a trip</a>
+      <a class="btn btn--ghost-dark btn--lg" href="/search">Search award flights</a>
+    </div>
+  </div>
+</section>
+
+</Layout>
+
+<script>
+  import Globe from "globe.gl";
+  import { PLACES, markerType } from "../data/places.js";
+
+  const GOLD = "#E3C36E";
+  const CREAM = "#F1EEE4";
+  const PINE = "#0E3329";
+
+  const stage = document.getElementById("globe-stage")!;
+  const el = document.getElementById("globe")!;
+  const spinBtn = document.getElementById("spin") as HTMLButtonElement;
+  const hint = document.getElementById("hint")!;
+  const panel = document.getElementById("panel")!;
+  const panelClose = document.getElementById("panel-close")!;
+  const photoFrame = document.getElementById("photo-frame")!;
+  const photo = document.getElementById("photo") as HTMLImageElement;
+  const thumbs = document.getElementById("thumbs")!;
+  const kicker = document.getElementById("place-kicker")!;
+  const nameEl = document.getElementById("place-name")!;
+  const blurb = document.getElementById("place-blurb")!;
+  const blogLink = document.getElementById("place-blog") as HTMLAnchorElement;
+
+  const reduceMotion = matchMedia("(prefers-reduced-motion: reduce)").matches;
+  const home = PLACES.find((p) => p.home) ?? PLACES[0];
+  const stories = PLACES.filter((p) => markerType(p) === "story");
+  const pinned = PLACES.filter((p) => markerType(p) !== "visit"); // gold + cream stars (DOM markers)
+  const visits = PLACES.filter((p) => markerType(p) === "visit");  // dots, drawn in WebGL
+  // Each dot is two tiny discs: a cream rim underneath and a dark core on top.
+  const dotData = visits.flatMap((p) => [
+    { place: p, lat: p.lat, lng: p.lng, r: 0.3, alt: 0.006, color: "rgba(241,238,228,.8)" },
+    { place: p, lat: p.lat, lng: p.lng, r: 0.19, alt: 0.008, color: PINE },
+  ]);
+  const visited = new Set(PLACES.map((p) => p.country));
+  const byId = new Map(PLACES.map((p) => [p.id, p]));
+
+  let current: any = null;
+  let spinning = false;
+
+  // ── Globe ────────────────────────────────────────────────────────────────
+  const world = Globe({ animateIn: !reduceMotion })(el)
+    .backgroundColor("rgba(0,0,0,0)")
+    .showAtmosphere(true)
+    .atmosphereColor(GOLD)
+    .atmosphereAltitude(0.16)
+    .showGraticules(false)
+    // Countries as a stylised dot pattern; visited ones glow gold.
+    .hexPolygonResolution(3)
+    .hexPolygonMargin(0.4)
+    .hexPolygonUseDots(true)
+    .hexPolygonAltitude(0.004)
+    .hexPolygonColor((f: any) => (visited.has(f.properties.iso) ? "rgba(227,195,110,.95)" : "rgba(241,238,228,.42)"))
+    // Flight arcs from home to every pin.
+    .arcsData(stories.map((p) => ({ startLat: home.lat, startLng: home.lng, endLat: p.lat, endLng: p.lng })))
+    .arcColor(() => ["rgba(227,195,110,.05)", "rgba(227,195,110,.7)"])
+    .arcAltitudeAutoScale(0.35)
+    .arcStroke(0.32)
+    .arcDashLength(0.45)
+    .arcDashGap(0.6)
+    .arcDashAnimateTime(reduceMotion ? 0 : 6000)
+    // "Been there" dots live in the WebGL scene so they stay locked to the globe.
+    .pointsData(dotData)
+    .pointLat("lat").pointLng("lng")
+    .pointAltitude("alt")
+    .pointRadius("r")
+    .pointColor("color")
+    .pointResolution(10)
+    .pointsMerge(false)
+    .pointLabel((d: any) => `<span class="dot-tip">${d.place.name}</span>`)
+    .onPointHover((d: any) => { el.style.cursor = d ? "pointer" : "grab"; })
+    .onPointClick((d: any) => goTo(d.place, true))
+    // Gold + cream stars as DOM markers so they're crisp and can pulse.
+    .htmlElementsData(pinned)
+    .htmlLat("lat")
+    .htmlLng("lng")
+    .htmlAltitude(0.01)
+    .htmlElement((p: any) => {
+      const b = document.createElement("button");
+      b.type = "button";
+      b.className = `pin pin--${markerType(p)}` + (current?.id === p.id ? " is-active" : "");
+      b.dataset.id = p.id;
+      b.title = p.name;
+      b.setAttribute("aria-label", p.name);
+      b.innerHTML =
+        `<svg viewBox="0 0 30 30" aria-hidden="true"><path d="M15 2 L17.4 12.6 L28 15 L17.4 17.4 L15 28 L12.6 17.4 L2 15 L12.6 12.6 Z"/></svg>` +
+        `<span class="pin__label">${p.name}</span>`;
+      b.addEventListener("click", (e) => { e.stopPropagation(); goTo(p, true); });
+      return b;
+    });
+
+  // Deep emerald sphere with a faint gold rim light.
+  const mat: any = world.globeMaterial();
+  mat.color.set(PINE);
+  mat.emissive.set("#0b2a21");
+  mat.emissiveIntensity = 0.35;
+  mat.shininess = 6;
+
+  fetch("/globe/countries.geojson")
+    .then((r) => r.json())
+    .then((geo) => world.hexPolygonsData(geo.features))
+    .catch(() => { /* the globe still works without country dots */ });
+
+  const controls: any = world.controls();
+  controls.autoRotate = !reduceMotion;
+  controls.autoRotateSpeed = 0.55;
+  controls.enablePan = false;
+  controls.minDistance = 140;
+  controls.maxDistance = 520;
+  controls.addEventListener("start", () => { controls.autoRotate = false; });
+
+  // Narrow (phone) canvases need the camera further back to fit the sphere,
+  // and the landed pin nudged up so the bottom-sheet panel doesn't cover it.
+  const narrow = () => el.clientWidth < el.clientHeight;
+  const fit = (alt: number) => alt * (narrow() ? Math.min(1.9, el.clientHeight / el.clientWidth) : 1);
+  // Landing = a close-up of the region, with the pin kept clear of the panel:
+  // on desktop the panel sits right, so the camera looks a little east of the
+  // pin (pushing it left); on phones the panel is a bottom sheet, so the
+  // camera looks a little south (pushing the pin up).
+  const landView = (p: any) => narrow()
+    ? { lat: p.lat - 22, lng: p.lng, altitude: 1.2 }
+    : { lat: p.lat, lng: p.lng + 16, altitude: 1.05 };
+
+  world.pointOfView({ lat: home.lat + 8, lng: home.lng + 10, altitude: fit(2.1) }, 0);
+
+  // Keep the canvas sized to its container.
+  const size = () => world.width(el.clientWidth).height(el.clientHeight);
+  size();
+  new ResizeObserver(size).observe(el);
+
+  // Pause rendering while the globe is off-screen (saves battery on the list).
+  new IntersectionObserver(([e]) => world.pauseAnimation && (e.isIntersecting ? world.resumeAnimation() : world.pauseAnimation()), { threshold: 0.05 }).observe(el);
+
+  // ── Place panel ──────────────────────────────────────────────────────────
+  function showPanel(p: any) {
+    current = p;
+    document.querySelectorAll(".pin.is-active").forEach((n) => n.classList.remove("is-active"));
+    document.querySelector(`.pin[data-id="${CSS.escape(p.id)}"]`)?.classList.add("is-active");
+    // Dots have no DOM marker: highlight the active one in the scene instead.
+    world.pointColor((d: any) => (d.place.id === p.id ? GOLD : d.color));
+
+    kicker.textContent = p.place + (p.when ? ` · ${p.when}` : "");
+    nameEl.textContent = p.name;
+    blurb.textContent = p.blurb || "";
+    if (p.blog) { blogLink.href = p.blog; blogLink.hidden = false; } else { blogLink.hidden = true; }
+
+    thumbs.innerHTML = "";
+    if (p.photos?.length) {
+      photoFrame.hidden = false;
+      setPhoto(p.photos[0]);
+      if (p.photos.length > 1) {
+        p.photos.forEach((ph: any, i: number) => {
+          const t = document.createElement("button");
+          t.type = "button";
+          t.className = "thumb" + (i === 0 ? " is-on" : "");
+          t.innerHTML = `<img src="${ph.src}" alt="" loading="lazy" />`;
+          t.setAttribute("aria-label", `Photo ${i + 1} of ${p.photos.length}`);
+          t.addEventListener("click", () => {
+            thumbs.querySelectorAll(".thumb").forEach((n) => n.classList.remove("is-on"));
+            t.classList.add("is-on");
+            setPhoto(ph);
+          });
+          thumbs.appendChild(t);
+        });
+      }
+    } else {
+      photoFrame.hidden = true;
+    }
+    panel.hidden = false;
+    stage.classList.add("has-panel");
+  }
+
+  function setPhoto(ph: any) { photo.src = ph.src; photo.alt = ph.alt || ""; }
+
+  function hidePanel() {
+    panel.hidden = true;
+    stage.classList.remove("has-panel");
+    document.querySelectorAll(".pin.is-active").forEach((n) => n.classList.remove("is-active"));
+    current = null;
+    world.pointColor("color");
+    if (!reduceMotion) controls.autoRotate = true;
+  }
+
+  // Fly the camera to a place and open its panel.
+  function goTo(p: any, fromPin = false) {
+    controls.autoRotate = false;
+    const ms = reduceMotion ? 0 : fromPin ? 900 : 0;
+    world.pointOfView(landView(p), ms);
+    setTimeout(() => showPanel(p), ms);
+  }
+
+  // ── Spin the globe ───────────────────────────────────────────────────────
+  function spin() {
+    if (spinning || !stories.length) return;
+    const pool = stories.length > 1 ? stories.filter((p) => p !== current) : stories;
+    const pick = pool[Math.floor(Math.random() * pool.length)];
+    spinning = true;
+    spinBtn.disabled = true;
+    hidePanel();
+    controls.autoRotate = false;
+    hint.textContent = "Spinning…";
+
+    if (reduceMotion) {
+      world.pointOfView(landView(pick), 0);
+      land(pick);
+      return;
+    }
+    // Two full turns east, easing out onto the pick.
+    const cur = world.pointOfView();
+    const target = landView(pick);
+    const delta = ((target.lng - cur.lng) % 360 + 360) % 360;
+    const ms = 3200;
+    world.pointOfView({ ...target, lng: cur.lng + delta + 720 }, ms);
+    setTimeout(() => land(pick), ms + 80);
+  }
+
+  function land(p: any) {
+    // Normalise the camera longitude after the extra turns.
+    world.pointOfView(landView(p), 0);
+    showPanel(p);
+    spinning = false;
+    spinBtn.disabled = false;
+    hint.textContent = "Drag to rotate · scroll to zoom";
+  }
+
+  spinBtn.addEventListener("click", spin);
+  panelClose.addEventListener("click", hidePanel);
+  // A tap on the globe (not a drag) or the space around it closes the card.
+  world.onGlobeClick(() => { if (!panel.hidden && !spinning) hidePanel(); });
+  stage.addEventListener("click", (e) => {
+    if (panel.hidden || spinning) return;
+    const t = e.target as HTMLElement;
+    if (panel.contains(t) || t.closest(".globe-controls") || t.closest(".pin")) return;
+    hidePanel();
+  });
+  document.addEventListener("keydown", (e) => { if (e.key === "Escape" && !panel.hidden) hidePanel(); });
+
+  // The list below the globe doubles as an index: click a card to fly there.
+  document.querySelectorAll<HTMLButtonElement>("[data-place]").forEach((b) => {
+    b.addEventListener("click", () => {
+      const p = byId.get(b.dataset.place!);
+      if (!p) return;
+      stage.scrollIntoView({ behavior: reduceMotion ? "auto" : "smooth", block: "start" });
+      goTo(p, true);
+    });
+  });
+</script>
+
+<style is:global>
+  /* ── Hero + stage ─────────────────────────────────────────────────────── */
+  .globe-hero [hidden] { display: none !important; }
+  .globe-hero { background: var(--emerald); color: var(--cream-90); overflow: hidden; }
+  .globe-head {
+    display: grid; grid-template-columns: 1.3fr .7fr; gap: 40px; align-items: center;
+    padding-top: 64px; padding-bottom: 48px;
+  }
+  .globe-head h1 { color: var(--cream); margin-top: 12px; }
+  .globe-lead { margin-top: 18px; max-width: 52ch; }
+  .globe-key { list-style: none; margin: 18px 0 0; padding: 0; display: flex; gap: 22px; flex-wrap: wrap; font-size: 12px; letter-spacing: .08em; text-transform: uppercase; color: rgba(241,238,228,.7); }
+  .globe-key li { display: inline-flex; align-items: center; gap: 8px; }
+  .key { display: inline-block; width: 12px; height: 12px; }
+  .key--visit { width: 7px; height: 7px; border-radius: 50%; background: var(--pine); box-shadow: 0 0 0 1.5px rgba(241,238,228,.7); }
+  .key--story { background: var(--gold); clip-path: polygon(50% 0, 58% 42%, 100% 50%, 58% 58%, 50% 100%, 42% 58%, 0 50%, 42% 42%); }
+  .key--special { background: var(--cream); clip-path: polygon(50% 0, 58% 42%, 100% 50%, 58% 58%, 50% 100%, 42% 58%, 0 50%, 42% 42%); }
+  .globe-stats { margin: 0; display: flex; gap: 32px; justify-content: flex-end; }
+  .globe-stats div { text-align: right; }
+  .globe-stats dt { font-size: 11px; letter-spacing: .28em; text-transform: uppercase; color: var(--gold); }
+  .globe-stats dd { margin: 4px 0 0; font-family: var(--serif); font-size: 44px; line-height: 1; color: var(--cream); }
+
+  .globe-stage {
+    position: relative; height: min(78vh, 760px); min-height: 480px;
+    background: radial-gradient(ellipse at 50% 60%, #1a4f41 0%, var(--emerald) 45%, var(--pine) 100%);
+  }
+  .globe-canvas { position: absolute; inset: 0; cursor: grab; }
+  .globe-canvas:active { cursor: grabbing; }
+  .globe-canvas canvas { outline: none; }
+
+  .globe-controls {
+    position: absolute; left: 0; right: 0; bottom: 28px; z-index: 3;
+    display: flex; flex-direction: column; align-items: center; gap: 12px; pointer-events: none;
+  }
+  .globe-controls .spin-btn { pointer-events: auto; box-shadow: 0 10px 34px rgba(8,30,24,.45); }
+  /* With a card open (desktop), centre the controls in the space left of it. */
+  @media (min-width: 861px) { .has-panel .globe-controls { right: 448px; } }
+  .globe-hint { font-size: 12px; letter-spacing: .1em; text-transform: uppercase; color: rgba(241,238,228,.55); }
+  .globe-noscript { position: absolute; inset: auto 0 50%; text-align: center; color: var(--cream); padding: 0 20px; }
+
+  /* ── Pins (DOM markers on the globe) ──────────────────────────────────── */
+  .pin {
+    position: relative; width: 28px; height: 28px; padding: 0; margin: 0;
+    background: none; border: 0; cursor: pointer; pointer-events: auto;
+    display: grid; place-items: center; color: var(--gold);
+    filter: drop-shadow(0 0 6px rgba(227,195,110,.7));
+    transition: transform .18s ease;
+  }
+  .pin svg { width: 16px; height: 16px; }
+  .pin svg path { fill: currentColor; }
+  .pin::before {
+    content: ""; position: absolute; width: 28px; height: 28px; border-radius: 50%;
+    border: 1px solid rgba(227,195,110,.55); animation: pin-pulse 2.6s ease-out infinite;
+  }
+  .pin:hover, .pin:focus-visible, .pin.is-active { transform: scale(1.25); }
+  .pin:focus-visible { outline: 2px solid var(--cream); outline-offset: 4px; border-radius: 50%; }
+  .pin--special { color: var(--cream); filter: drop-shadow(0 0 6px rgba(241,238,228,.6)); }
+  .pin--special svg { width: 18px; height: 18px; }
+  .pin--special::before { border-color: rgba(241,238,228,.5); animation: none; }
+  /* Hover tooltip for the WebGL dots (globe.gl's built-in tooltip element). */
+  .globe-canvas .scene-tooltip { font-family: var(--serif) !important; font-size: 15px !important; color: var(--cream) !important; text-shadow: 0 1px 6px rgba(8,30,24,.9); }
+  .pin__label {
+    position: absolute; top: 100%; left: 50%; transform: translate(-50%, 4px);
+    font-family: var(--serif); font-size: 15px; white-space: nowrap; color: var(--cream);
+    opacity: 0; pointer-events: none; transition: opacity .15s ease;
+    text-shadow: 0 1px 6px rgba(8,30,24,.9);
+  }
+  .pin:hover .pin__label, .pin:focus-visible .pin__label { opacity: 1; }
+  @keyframes pin-pulse { 0% { transform: scale(.6); opacity: .9; } 100% { transform: scale(1.9); opacity: 0; } }
+
+  /* ── Place panel ──────────────────────────────────────────────────────── */
+  .place-panel {
+    position: absolute; top: 24px; right: 24px; bottom: 24px; width: min(400px, calc(100% - 48px)); z-index: 4;
+    display: flex; align-items: flex-start;
+  }
+  .place-panel__inner {
+    position: relative; width: 100%; max-height: 100%; overflow: auto;
+    background: var(--pine); color: var(--cream-90);
+    border-radius: var(--radius-card); box-shadow: var(--shadow-raised);
+    padding: 24px; animation: panel-in .35s ease;
+  }
+  .place-panel__inner::before { inset: 10px; }
+  @keyframes panel-in { from { opacity: 0; transform: translateX(16px); } to { opacity: 1; transform: none; } }
+  .sr-only { position: absolute; width: 1px; height: 1px; padding: 0; margin: -1px; overflow: hidden; clip: rect(0 0 0 0); white-space: nowrap; border: 0; }
+  .panel-close:focus-visible { position: absolute; top: 12px; right: 12px; width: auto; height: auto; margin: 0; padding: 8px 12px; clip: auto; z-index: 2; background: var(--gold); color: var(--emerald); border-radius: 4px; font-size: 12px; }
+  .place-back { margin-top: 18px; font-size: 11px; letter-spacing: .14em; text-transform: uppercase; color: rgba(241,238,228,.45); }
+  .place-photo { aspect-ratio: 3 / 2; margin: 0; }
+  .place-photo[hidden] { display: none; }
+  .place-thumbs { display: flex; gap: 8px; margin-top: 8px; }
+  .place-thumbs:empty { display: none; }
+  .thumb {
+    width: 56px; height: 40px; padding: 0; border: 1px solid transparent; border-radius: 4px;
+    overflow: hidden; background: none; cursor: pointer; opacity: .6;
+  }
+  .thumb img { width: 100%; height: 100%; object-fit: cover; }
+  .thumb.is-on, .thumb:hover { opacity: 1; border-color: var(--gold); }
+  .place-body { margin-top: 18px; }
+  .place-body .serif-l { color: var(--cream); margin-top: 8px; }
+  .place-blurb { margin-top: 12px; font-size: 14px; line-height: 1.65; }
+  .place-actions { margin-top: 20px; gap: 10px; }
+
+  /* ── Pin index ────────────────────────────────────────────────────────── */
+  .pins .display-m { color: var(--emerald); margin-top: 10px; }
+  .pin-group { margin-top: 40px; }
+  .pin-continent { color: var(--emerald); padding-bottom: 12px; border-bottom: 1px solid var(--line); }
+  .pin-list { list-style: none; margin: 16px 0 0; padding: 0; display: grid; grid-template-columns: repeat(3, 1fr); gap: 16px; }
+  .pin-item { display: flex; flex-direction: column; }
+  .pin-card {
+    display: flex; gap: 14px; align-items: center; text-align: left; width: 100%;
+    padding: 12px; background: #fff; border: 1px solid var(--line); border-radius: var(--radius-card);
+    cursor: pointer; transition: border-color .15s ease, box-shadow .15s ease;
+  }
+  .pin-card:hover { border-color: var(--gold); box-shadow: var(--shadow-card); }
+  .pin-thumb { width: 80px; height: 54px; object-fit: cover; border-radius: var(--radius-inner); flex: none; }
+  .pin-thumb--empty { display: block; background: linear-gradient(200deg, var(--verde), var(--pine) 78%); }
+  .pin-text { display: flex; flex-direction: column; gap: 2px; min-width: 0; }
+  .pin-place { font-size: 11px; letter-spacing: .14em; text-transform: uppercase; color: var(--meta); }
+  .pin-name { font-family: var(--serif); font-size: 20px; color: var(--emerald); line-height: 1.15; }
+  .pin-dots { margin: 20px 0 0; display: grid; gap: 8px; }
+  .pin-dots__row { display: grid; grid-template-columns: 150px 1fr; gap: 12px; padding-top: 8px; border-top: 1px solid var(--line); font-size: 14px; line-height: 1.9; }
+  .pin-dots__row dt { font-size: 11px; letter-spacing: .14em; text-transform: uppercase; color: var(--meta); font-weight: 600; padding-top: 5px; }
+  .pin-dots__row dd { margin: 0; color: var(--ink-soft); }
+  .dot-link { font: inherit; background: none; border: 0; padding: 0 0 1px; margin-right: 14px; color: var(--emerald); cursor: pointer; border-bottom: 1px solid var(--line); }
+  .dot-link:hover { border-color: var(--gold); }
+  .pin-blog { align-self: flex-start; margin: 8px 0 0 12px; font-size: 13px; color: var(--emerald); text-decoration: none; border-bottom: 1px solid var(--emerald); }
+  .pin-blog:hover { color: var(--verde); border-color: var(--verde); }
+
+  .cta { text-align: center; }
+  .cta-lead { margin: 14px auto 0; max-width: 52ch; }
+  .cta-row { justify-content: center; margin-top: 28px; }
+
+  @media (max-width: 860px) {
+    .globe-head { grid-template-columns: 1fr; gap: 28px; padding-top: 44px; padding-bottom: 36px; }
+    .globe-stats { justify-content: flex-start; gap: 24px; }
+    .globe-stats div { text-align: left; }
+    .globe-stats dd { font-size: 34px; }
+    .globe-stage { height: 78vh; min-height: 520px; }
+    .place-panel { top: auto; right: 12px; left: 12px; bottom: 12px; width: auto; max-height: 67%; }
+    .place-photo { aspect-ratio: 2 / 1; }
+    .place-panel__inner { padding: 16px; }
+    .place-panel__inner::before { inset: 7px; }
+    .place-body { margin-top: 12px; }
+    .place-body .serif-l { font-size: 24px; }
+    .place-blurb { margin-top: 8px; font-size: 13px; }
+    .place-actions { margin-top: 14px; }
+    .place-back { margin-top: 10px; }
+    .place-panel__inner { animation-name: panel-up; }
+    @keyframes panel-up { from { opacity: 0; transform: translateY(16px); } to { opacity: 1; transform: none; } }
+    .has-panel .globe-controls { display: none; }
+    .pin-list { grid-template-columns: 1fr 1fr; }
+  }
+  @media (max-width: 560px) {
+    .pin-list { grid-template-columns: 1fr; }
+    .pin-dots__row { grid-template-columns: 1fr; gap: 2px; }
+  }
+</style>
