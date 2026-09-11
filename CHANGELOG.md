@@ -6,7 +6,7 @@ it was planned.
 
 ## 2026-09-11 — The whole library, not just favorites
 
-**Phones** (hash to follow)
+**Phones** (`e713ca6`)
 - The globe was laggy on a handset once it had 159 story pins: every pin was an
   animated DOM star with a pulsing ring, plus an animated flight arc, rendered
   at 3× pixel density. On phones it now draws the 40 richest story pins as
