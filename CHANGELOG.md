@@ -6,6 +6,23 @@ it was planned.
 
 ## 2026-09-10 — Globe, new nav, full Astro rebuild goes live
 
+**"What your points can do"** (`64df88b`)
+- New strip on the home page, under the services: nine cabins I've flown on
+  points, captioned by airline — ANA First on the A380 Flying Honu (the suite,
+  Krug before pushback, me settled in), Qatar A380 First (the suite, the onboard
+  bar, me at the bar with a tasting flight), the Qsuite made up as a bed,
+  Singapore business, and British Airways' Club Suite. Twelve flight photos
+  added to `public/images/` (United over the Arctic and Qantas business are in
+  reserve); a "Website picks — flights" album in Photos holds the originals.
+- Found with the same pipeline as the globe photos: Apple's labels, captions
+  and aesthetic score, then Photos' People tag for shots of me, then flight
+  dates from Flighty for the ANA and JAL trips. JAL is parked until I have
+  cabin shots.
+
+**Home and About refresh** (`8a5646d`)
+- Antarctica iceberg as the home hero; "From the road" is Budapest, Leh and
+  Makapuʻu; the About gallery rebuilt from the new photos with a link to the globe.
+
 **Photos from my own library** (`0a5cb97`)
 - Went through my Photos library for the site instead of relying on the five
   shots from my Fora profile. Every favorite (629) plus the top-scored
