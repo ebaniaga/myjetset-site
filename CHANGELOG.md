@@ -18,6 +18,9 @@ it was planned.
   card past the globe on phones.
 - The "What your points can do" strip is a swipe carousel on phones instead of
   nine stacked squares.
+- The globe now keeps its gentle idle spin even when a phone has Reduce Motion
+  turned on (it used to freeze completely); only the dramatic fly-in and the
+  animated flight arcs still respect that setting. Spin is a little faster too.
 
 
 **Best photos from all 82,304** (`8d13de7`)

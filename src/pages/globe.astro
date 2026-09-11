@@ -340,8 +340,8 @@ function groupByCountry(list) {
     .catch(() => { /* the globe still works without country dots */ });
 
   const controls: any = world.controls();
-  controls.autoRotate = !reduceMotion;
-  controls.autoRotateSpeed = 0.55;
+  controls.autoRotate = true;
+  controls.autoRotateSpeed = 0.9;
   controls.enablePan = false;
   controls.minDistance = 140;
   controls.maxDistance = 520;
@@ -409,7 +409,7 @@ function groupByCountry(list) {
     document.querySelectorAll(".pin.is-active").forEach((n) => n.classList.remove("is-active"));
     current = null;
     world.pointColor("color");
-    if (!reduceMotion) controls.autoRotate = true;
+    controls.autoRotate = true;
   }
 
   // Fly the camera to a place and open its panel.
