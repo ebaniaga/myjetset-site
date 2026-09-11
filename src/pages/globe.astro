@@ -30,7 +30,7 @@ function groupByCountry(list) {
 ---
 <Layout
   title="The Globe — Where I've Been · My Jet Set Life"
-  description="Every pin is a place I've actually been — seven continents, fifty-plus countries. Spin the globe and land somewhere."
+  description="Every pin is a place I've actually been — seven continents, fifty-plus countries. Give it a spin and land somewhere new."
   ogImage="/images/og-globe.jpg"
   active="globe"
 >
@@ -57,13 +57,11 @@ function groupByCountry(list) {
   <div class="globe-stage" id="globe-stage">
     <div class="globe-canvas" id="globe" aria-label="Interactive 3D globe of places Erickson has visited" role="img"></div>
 
-    <div class="globe-controls">
-      <button class="btn btn--accent btn--lg spin-btn" id="spin" type="button">
-        <svg width="16" height="16" viewBox="0 0 30 30" aria-hidden="true"><path d="M15 2 L17.4 12.6 L28 15 L17.4 17.4 L15 28 L12.6 17.4 L2 15 L12.6 12.6 Z" fill="currentColor"/></svg>
-        Spin the globe
-      </button>
-      <p class="globe-hint" id="hint">Drag to rotate · scroll to zoom</p>
-    </div>
+    <button class="btn btn--accent spin-btn" id="spin" type="button">
+      <svg width="14" height="14" viewBox="0 0 30 30" aria-hidden="true"><path d="M15 2 L17.4 12.6 L28 15 L17.4 17.4 L15 28 L12.6 17.4 L2 15 L12.6 12.6 Z" fill="currentColor"/></svg>
+      Inspire me
+    </button>
+    <p class="globe-hint" id="hint">Drag to rotate · scroll to zoom</p>
 
     <!-- Place panel: filled by the script when a pin is chosen -->
     <aside class="place-panel" id="panel" hidden aria-live="polite">
@@ -189,10 +187,19 @@ function groupByCountry(list) {
     ]),
   ];
   const visited = new Set(PLACES.map((p) => p.country));
+  // Only a handful of flight arcs at once (all 159 was a cobweb). A random subset,
+  // each with its own dash offset so they leave NYC at different moments.
+  const ARC_COUNT = lite ? 8 : 14;
+  const pickArcs = () =>
+    [...stories]
+      .sort(() => Math.random() - 0.5)
+      .slice(0, ARC_COUNT)
+      .map((p) => ({ startLat: home.lat, startLng: home.lng, endLat: p.lat, endLng: p.lng, gap: Math.random() }));
   const byId = new Map(PLACES.map((p) => [p.id, p]));
 
   let current: any = null;
   let spinning = false;
+  let spinFlick = false; // true only during the free momentum spin
 
   // ── Globe ────────────────────────────────────────────────────────────────
   const STYLES = ["hex", "solid", "outline", "dark", "night", "sun"];
@@ -211,14 +218,15 @@ function groupByCountry(list) {
     .hexPolygonUseDots(true)
     .hexPolygonAltitude(0.004)
     .hexPolygonColor((f: any) => (visited.has(f.properties.iso) ? "rgba(227,195,110,.95)" : "rgba(241,238,228,.42)"))
-    // Flight arcs from home to every pin.
-    .arcsData(starStories.map((p) => ({ startLat: home.lat, startLng: home.lng, endLat: p.lat, endLng: p.lng })))
+    // A rotating handful of flight arcs, staggered departures.
+    .arcsData(pickArcs())
     .arcColor(() => ["rgba(227,195,110,.05)", "rgba(227,195,110,.7)"])
     .arcAltitudeAutoScale(0.35)
     .arcStroke(0.32)
-    .arcDashLength(0.45)
-    .arcDashGap(0.6)
-    .arcDashAnimateTime(reduceMotion || lite ? 0 : 6000)
+    .arcDashLength(0.4)
+    .arcDashGap(0.9)
+    .arcDashInitialGap((d: any) => d.gap)
+    .arcDashAnimateTime(reduceMotion || lite ? 0 : 4200)
     // "Been there" dots live in the WebGL scene so they stay locked to the globe.
     .pointsData(dotData)
     .pointLat("lat").pointLng("lng")
@@ -345,7 +353,11 @@ function groupByCountry(list) {
   controls.enablePan = false;
   controls.minDistance = 140;
   controls.maxDistance = 520;
-  controls.addEventListener("start", () => { controls.autoRotate = false; });
+  controls.addEventListener("start", () => {
+    controls.autoRotate = false;
+    // Grabbing the globe mid-flick stops it dead, like a hand on a spinning globe.
+    if (spinFlick) { spinFlick = false; spinning = false; spinBtn.disabled = false; hint.textContent = "Drag to rotate · scroll to zoom"; }
+  });
 
   // Narrow (phone) canvases need the camera further back to fit the sphere,
   // and the landed pin nudged up so the bottom-sheet panel doesn't cover it.
@@ -367,7 +379,10 @@ function groupByCountry(list) {
   new ResizeObserver(size).observe(el);
 
   // Pause rendering while the globe is off-screen (saves battery on the list).
-  new IntersectionObserver(([e]) => world.pauseAnimation && (e.isIntersecting ? world.resumeAnimation() : world.pauseAnimation()), { threshold: 0.05 }).observe(el);
+  let onScreen = true;
+  new IntersectionObserver(([e]) => { onScreen = e.isIntersecting; e.isIntersecting ? world.resumeAnimation() : world.pauseAnimation(); }, { threshold: 0.05 }).observe(el);
+  // Swap the visible routes every several seconds so they vary over time.
+  if (!reduceMotion) setInterval(() => { if (onScreen && !document.hidden) world.arcsData(pickArcs()); }, 7000);
 
   // ── Place panel ──────────────────────────────────────────────────────────
   function showPanel(p: any) {
@@ -437,30 +452,66 @@ function groupByCountry(list) {
   // ── Spin the globe ───────────────────────────────────────────────────────
   function spin() {
     if (spinning || !stories.length) return;
-    const pool = stories.length > 1 ? stories.filter((p) => p !== current) : stories;
-    const pick = pool[Math.floor(Math.random() * pool.length)];
     spinning = true;
     spinBtn.disabled = true;
     hidePanel();
     controls.autoRotate = false;
+    if (!reduceMotion) world.arcsData(pickArcs());
     hint.textContent = "Spinning…";
 
     if (reduceMotion) {
+      const pick = stories[Math.floor(Math.random() * stories.length)];
       world.pointOfView(landView(pick), 0);
       land(pick);
       return;
     }
-    // Two full turns east, easing out onto the pick.
+
+    // A globe on a table: pull back to the whole sphere, flick it hard, then let
+    // friction bleed the momentum off over a few turns until it rolls to a stop.
+    const start = world.pointOfView();
+    const spinLat = Math.max(-28, Math.min(28, start.lat));
+    const spinAlt = fit(2.2);
+    world.pointOfView({ lat: spinLat, lng: start.lng, altitude: spinAlt }, 260);
+
+    setTimeout(() => {
+      let lng = start.lng;
+      let vel = 780 + Math.random() * 340;             // degrees/second — the flick
+      const k = 1.15 + Math.random() * 0.35;           // friction rate (per second)
+      let last = performance.now();
+      spinFlick = true;
+      // Time-based so the feel is identical whatever the frame rate (the globe
+      // renders well under 60fps). ~2.5-3.5 turns, rolling to a stop in ~4s.
+      const step = (now: number) => {
+        if (!spinFlick) return;                        // user grabbed it → stop
+        const dt = Math.min(0.08, (now - last) / 1000); last = now;
+        lng += vel * dt;
+        vel *= Math.exp(-k * dt);
+        world.pointOfView({ lat: spinLat, lng, altitude: spinAlt }, 0);
+        if (vel < 12) { spinFlick = false; settle(lng, spinLat); return; }
+        requestAnimationFrame(step);
+      };
+      requestAnimationFrame((t) => { last = t; step(t); });
+    }, 280);
+  }
+
+  // Roll to a stop on the story pin nearest the front, then dive in and open it.
+  function settle(lng: number, lat: number) {
+    const norm = (a: number) => ((a % 360) + 360) % 360;
+    const front = norm(lng);
+    let best = stories[0], bd = Infinity;
+    for (const p of stories) {
+      const dl = Math.abs(((norm(p.lng) - front + 540) % 360) - 180); // 0..180 lng gap
+      const d = dl + Math.abs(p.lat - lat) * 0.7;
+      if (d < bd) { bd = d; best = p; }
+    }
     const cur = world.pointOfView();
-    const target = landView(pick);
-    const delta = ((target.lng - cur.lng) % 360 + 360) % 360;
-    const ms = 3200;
-    world.pointOfView({ ...target, lng: cur.lng + delta + 720 }, ms);
-    setTimeout(() => land(pick), ms + 80);
+    const t = landView(best);
+    const delta = ((t.lng - cur.lng + 540) % 360) - 180; // shortest way round, no backspin
+    world.pointOfView({ lat: t.lat, lng: cur.lng + delta, altitude: t.altitude }, 700);
+    setTimeout(() => land(best), 720);
   }
 
   function land(p: any) {
-    // Normalise the camera longitude after the extra turns.
     world.pointOfView(landView(p), 0);
     showPanel(p);
     spinning = false;
@@ -492,7 +543,7 @@ function groupByCountry(list) {
   stage.addEventListener("click", (e) => {
     if (panel.hidden || spinning) return;
     const t = e.target as HTMLElement;
-    if (panel.contains(t) || t.closest(".globe-controls") || t.closest(".pin")) return;
+    if (panel.contains(t) || t.closest(".spin-btn") || t.closest(".pin")) return;
     hidePanel();
   });
   document.addEventListener("keydown", (e) => { if (e.key === "Escape" && !panel.hidden) hidePanel(); });
@@ -536,14 +587,16 @@ function groupByCountry(list) {
   .globe-canvas:active { cursor: grabbing; }
   .globe-canvas canvas { outline: none; }
 
-  .globe-controls {
-    position: absolute; left: 0; right: 0; bottom: 28px; z-index: 3;
-    display: flex; flex-direction: column; align-items: center; gap: 12px; pointer-events: none;
+  .spin-btn {
+    position: absolute; top: 20px; right: 20px; z-index: 3;
+    pointer-events: auto; box-shadow: 0 10px 34px rgba(8,30,24,.45);
   }
-  .globe-controls .spin-btn { pointer-events: auto; box-shadow: 0 10px 34px rgba(8,30,24,.45); }
-  /* With a card open (desktop), centre the controls in the space left of it. */
-  @media (min-width: 861px) { .has-panel .globe-controls { right: 448px; } }
-  .globe-hint { font-size: 12px; letter-spacing: .1em; text-transform: uppercase; color: rgba(241,238,228,.55); }
+  .globe-hint {
+    position: absolute; left: 0; right: 0; bottom: 24px; z-index: 3; text-align: center;
+    pointer-events: none; font-size: 12px; letter-spacing: .1em; text-transform: uppercase; color: rgba(241,238,228,.55);
+  }
+  /* When a place card is open, the corner button and hint step aside. */
+  .has-panel .spin-btn, .has-panel .globe-hint { display: none; }
   .globe-noscript { position: absolute; inset: auto 0 50%; text-align: center; color: var(--cream); padding: 0 20px; }
 
   /* ── Pins (DOM markers on the globe) ──────────────────────────────────── */
@@ -560,8 +613,10 @@ function groupByCountry(list) {
   .pin svg path { fill: currentColor; }
   .pin::before {
     content: ""; position: absolute; width: 28px; height: 28px; border-radius: 50%;
-    border: 1px solid rgba(227,195,110,.55); animation: pin-pulse 2.6s ease-out infinite;
+    border: 1px solid rgba(227,195,110,.55); opacity: 0;
   }
+  /* Only the pin you land on radiates; every other star just sits there. */
+  .pin.is-active::before { opacity: 1; animation: pin-pulse 2.6s ease-out infinite; }
   .pin:hover, .pin:focus-visible, .pin.is-active { transform: scale(1.25); }
   .pin:focus-visible { outline: 2px solid var(--cream); outline-offset: 4px; border-radius: 50%; }
   .pin--special { color: var(--cream); filter: drop-shadow(0 0 6px rgba(241,238,228,.6)); }
@@ -576,11 +631,6 @@ function groupByCountry(list) {
     text-shadow: 0 1px 6px rgba(8,30,24,.9);
   }
   .pin:hover .pin__label, .pin:focus-visible .pin__label { opacity: 1; }
-  /* Phones: pulse only the active pin — 150 concurrent ring animations stutter on a handset. */
-  @media (max-width: 760px), (pointer: coarse) {
-    .pin::before { animation: none; opacity: 0; }
-    .pin.is-active::before { animation: pin-pulse 2.6s ease-out infinite; opacity: 1; }
-  }
   @keyframes pin-pulse { 0% { transform: scale(.6); opacity: .9; } 100% { transform: scale(1.9); opacity: 0; } }
 
   /* ── Place panel ──────────────────────────────────────────────────────── */
@@ -665,7 +715,6 @@ function groupByCountry(list) {
     .place-back { margin-top: 10px; }
     .place-panel__inner { animation-name: panel-up; }
     @keyframes panel-up { from { opacity: 0; transform: translateY(16px); } to { opacity: 1; transform: none; } }
-    .has-panel .globe-controls { display: none; }
     .pin-list { grid-template-columns: 1fr 1fr; }
   }
   @media (max-width: 560px) {

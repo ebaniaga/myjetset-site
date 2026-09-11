@@ -4,6 +4,19 @@ How myjetset.life has evolved, newest first. Each entry is a day's worth of
 changes with the commits behind it. Dates are when the work shipped, not when
 it was planned.
 
+## 2026-09-11 — Globe feels like a real globe
+
+- **"Inspire me"** replaces "Spin the globe" and moves to the top-right corner.
+  It now spins with real momentum — a hard flick that coasts and decelerates
+  under friction over a few turns, then rolls to a stop on whichever place ends
+  up at the front and opens it. Grab the globe mid-spin and it stops under your
+  finger. The physics are time-based, so the feel is the same at any frame rate.
+- Flight arcs went from one-per-pin (a cobweb of 159) to a rotating handful of
+  ~14, each leaving New York at its own moment, with the set cycling every few
+  seconds and refreshing on every spin.
+- Pins no longer all pulse at once — the stars sit still, and only the pin you
+  land on radiates. Much calmer.
+
 ## 2026-09-11 — The whole library, not just favorites
 
 **Phones** (`e713ca6`)
