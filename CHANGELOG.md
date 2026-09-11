@@ -12,8 +12,10 @@ it was planned.
   at 3× pixel density. On phones it now draws the 40 richest story pins as
   stars (the rest as tappable gold dots), keeps arcs static, pulses only the
   active pin, and renders at 1.5×. Desktop is unchanged.
-- Place cards no longer crop portrait photos into a landscape box — the frame
-  takes each photo's own shape, from 4:5 up to 16:10.
+- Place cards show their photos as a swipeable filmstrip — fixed height, every
+  photo at its own shape, portraits included — instead of a cropped cover and
+  thumbnails. Cards keep a constant height, so tall photos no longer push the
+  card past the globe on phones.
 - The "What your points can do" strip is a swipe carousel on phones instead of
   nine stacked squares.
 
