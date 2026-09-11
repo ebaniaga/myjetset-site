@@ -100,6 +100,7 @@ import { SITE } from "../lib/site.js";
           <div class="overlay"><div class="kicker">British Airways · Club Suite</div><div class="caption">Made up for the night</div></div>
         </div>
       </div>
+      <p class="points-hint">Swipe →</p>
       <div class="row points-ctas">
         <a class="btn btn--primary" href="/search">Search award flights</a>
         <a class="btn btn--link" href="/inquiry">Ask me how →</a>
@@ -204,6 +205,18 @@ import { SITE } from "../lib/site.js";
   .points-lead { margin-top: 10px; max-width: 52ch; }
   .points-grid { margin-top: 28px; }
   .points-ctas { margin-top: 28px; gap: 22px; }
+  .points-hint { display: none; margin-top: 12px; font-size: 11px; letter-spacing: .14em; text-transform: uppercase; color: var(--sage); }
+  /* Phones: a swipe carousel instead of nine stacked squares. Desktop keeps the grid. */
+  @media (max-width: 760px) {
+    .points-grid {
+      display: flex; gap: 12px; margin: 24px -20px 0; padding: 0 20px 6px;
+      overflow-x: auto; scroll-snap-type: x mandatory; scroll-padding: 0 20px;
+      -webkit-overflow-scrolling: touch; scrollbar-width: none;
+    }
+    .points-grid::-webkit-scrollbar { display: none; }
+    .points-grid > .photo { flex: 0 0 78%; scroll-snap-align: start; }
+    .points-hint { display: block; }
+  }
 
   .cta { text-align: center; }
   .cta-lead { margin: 14px auto 0; max-width: 46ch; }
