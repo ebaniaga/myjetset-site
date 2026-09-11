@@ -4,6 +4,25 @@ How myjetset.life has evolved, newest first. Each entry is a day's worth of
 changes with the commits behind it. Dates are when the work shipped, not when
 it was planned.
 
+## 2026-09-11 — The whole library, not just favorites
+
+**Best photos from all 82,304** (`8d13de7`)
+- The first photo pass only looked at favorites and high-scoring shots, which is
+  why Niseko, Lake Tōya and better frames of Kyoto never surfaced. This pass
+  indexed the entire library: dropped screenshots, documents, food close-ups,
+  other people and home-turf snapshots, collapsed bursts, and clustered the rest
+  by place — 6,549 candidates on 332 contact sheets, reviewed by thirteen
+  parallel agents, then approved and pruned by me.
+- Result on the globe: **205 places, 159 of them story pins with photos** (up
+  from 21), 61 countries, 518 photos. 104 dots promoted to story pins, 38 new
+  places added (Lisbon, Sintra, Évora, Hydra, Vis, the Rila lakes, three stops
+  in Iceland, Fiordland, Lake Tekapo, Mount Batur, Phi Phi, Melaka, Niagara,
+  the Grand Canyon, Chicago, Uyuni, El Tatio, Florianópolis, Monteverde and
+  more), and 20 existing story pins re-photographed with stronger frames.
+- Photos: "Website — best of <continent>" albums (676 photos) plus a
+  "Website — globe" album holding the 524 originals used on the site. Web copies
+  are 1600 px, EXIF stripped, in `public/images/best/`.
+
 ## 2026-09-10 — Globe, new nav, full Astro rebuild goes live
 
 **"What your points can do"** (`64df88b`)
