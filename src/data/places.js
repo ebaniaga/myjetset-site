@@ -18,6 +18,17 @@
 // into public/images/, and optionally a blog post URL in `blog`. Leave `when`
 // as "" to hide the date.
 
+// How the countries are drawn on the globe. Override on any URL with
+// ?style=hex | solid | outline | dark | night | sun to preview without editing this file.
+//   hex     — dot-matrix countries, visited ones lit gold (the current look)
+//   solid   — visited countries solid gold, the rest muted cream
+//   outline — thin cream borders, visited countries filled gold
+//   dark    — dark relief map lifted toward emerald, visited countries as gold dots
+//   night   — NASA night-lights photo, visited countries as gold dots
+//   sun     — live day/night: sunlit side shows the day photo, the dark side the
+//             night lights, with the terminator placed by the current UTC time
+export const GLOBE_STYLE = "hex";
+
 const slug = (s) => s.toLowerCase().normalize("NFD").replace(/[^a-z0-9]+/g, "-").replace(/(^-|-$)/g, "");
 
 /** One-liner for a cream "lived here" pin. */

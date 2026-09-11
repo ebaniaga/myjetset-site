@@ -31,6 +31,7 @@ function groupByCountry(list) {
 <Layout
   title="The Globe — Where I've Been · My Jet Set Life"
   description="Every pin is a place I've actually been — seven continents, fifty-plus countries. Spin the globe and land somewhere."
+  ogImage="/images/og-globe.jpg"
   active="globe"
 >
 
@@ -147,7 +148,8 @@ function groupByCountry(list) {
 
 <script>
   import Globe from "globe.gl";
-  import { PLACES, markerType } from "../data/places.js";
+  import { ShaderMaterial, TextureLoader, SRGBColorSpace, Vector3 } from "three";
+  import { PLACES, markerType, GLOBE_STYLE } from "../data/places.js";
 
   const GOLD = "#E3C36E";
   const CREAM = "#F1EEE4";
@@ -184,6 +186,10 @@ function groupByCountry(list) {
   let spinning = false;
 
   // ── Globe ────────────────────────────────────────────────────────────────
+  const STYLES = ["hex", "solid", "outline", "dark", "night", "sun"];
+  const param = new URLSearchParams(location.search).get("style") || "";
+  const style = STYLES.includes(param) ? param : STYLES.includes(GLOBE_STYLE) ? GLOBE_STYLE : "hex";
+
   const world = Globe({ animateIn: !reduceMotion })(el)
     .backgroundColor("rgba(0,0,0,0)")
     .showAtmosphere(true)
@@ -220,11 +226,17 @@ function groupByCountry(list) {
     .htmlLat("lat")
     .htmlLng("lng")
     .htmlAltitude(0.01)
+    // Markers on the far side aren't positioned by the renderer and would sit
+    // at the page origin, so hide anything the globe hasn't placed or has occluded.
+    .htmlElementVisibilityModifier((el: HTMLElement, isVisible: boolean) => {
+      el.style.visibility = isVisible && el.style.transform ? "visible" : "hidden";
+    })
     .htmlElement((p: any) => {
       const b = document.createElement("button");
       b.type = "button";
       b.className = `pin pin--${markerType(p)}` + (current?.id === p.id ? " is-active" : "");
       b.dataset.id = p.id;
+      b.style.visibility = "hidden"; // until the globe positions it
       b.title = p.name;
       b.setAttribute("aria-label", p.name);
       b.innerHTML =
@@ -234,16 +246,85 @@ function groupByCountry(list) {
       return b;
     });
 
-  // Deep emerald sphere with a faint gold rim light.
-  const mat: any = world.globeMaterial();
-  mat.color.set(PINE);
-  mat.emissive.set("#0b2a21");
-  mat.emissiveIntensity = 0.35;
-  mat.shininess = 6;
+  if (style === "sun") {
+    // Live day/night. World-space normals vs. the sub-solar direction decide
+    // how much of the day photo vs. the night lights each pixel shows.
+    const loader = new TextureLoader();
+    Promise.all([loader.loadAsync("/globe/earth-day.jpg"), loader.loadAsync("/globe/earth-night.jpg")]).then(([day, night]) => {
+      day.colorSpace = SRGBColorSpace; night.colorSpace = SRGBColorSpace;
+      const mat = new ShaderMaterial({
+        uniforms: { dayTexture: { value: day }, nightTexture: { value: night }, sunDir: { value: new Vector3(1, 0, 0) } },
+        vertexShader: `
+          varying vec3 vNormal; varying vec2 vUv;
+          void main() {
+            vUv = uv;
+            vNormal = normalize(mat3(modelMatrix) * normal);
+            gl_Position = projectionMatrix * modelViewMatrix * vec4(position, 1.0);
+          }`,
+        fragmentShader: `
+          uniform sampler2D dayTexture; uniform sampler2D nightTexture; uniform vec3 sunDir;
+          varying vec3 vNormal; varying vec2 vUv;
+          void main() {
+            float i = dot(normalize(vNormal), normalize(sunDir));
+            vec3 day = texture2D(dayTexture, vUv).rgb * (0.6 + 0.4 * max(i, 0.0));
+            vec3 night = texture2D(nightTexture, vUv).rgb;
+            float f = smoothstep(-0.12, 0.12, i);   // soft terminator
+            gl_FragColor = vec4(mix(night, day, f), 1.0);
+            #include <tonemapping_fragment>
+            #include <colorspace_fragment>
+          }`,
+      });
+      world.globeMaterial(mat);
+      const aim = () => {
+        const { lat, lng } = subsolarPoint(new Date());
+        const c = world.getCoords(lat, lng, 0);
+        mat.uniforms.sunDir.value.set(c.x, c.y, c.z).normalize();
+      };
+      aim();
+      setInterval(aim, 60_000);
+    });
+  } else if (style === "dark" || style === "night") {
+    // Photo textures. globe.gl swaps the material in when the image loads,
+    // so the emerald lift is applied in onGlobeReady, not up front.
+    world.globeImageUrl(style === "dark" ? "/globe/earth-dark.jpg" : "/globe/earth-night.jpg");
+    if (style === "dark") world.bumpImageUrl("/globe/earth-topology.png");
+    world.onGlobeReady(() => {
+      const m: any = world.globeMaterial();
+      m.emissive.set(style === "dark" ? "#16463A" : PINE);
+      m.emissiveIntensity = style === "dark" ? 0.55 : 0.35;
+      if (style === "dark") m.bumpScale = 14;
+    });
+  } else {
+    // Deep emerald sphere with a faint gold rim light.
+    const mat: any = world.globeMaterial();
+    mat.color.set(PINE);
+    mat.emissive.set("#0b2a21");
+    mat.emissiveIntensity = 0.35;
+    mat.shininess = 6;
+  }
 
+  const isVisited = (f: any) => visited.has(f.properties.iso);
   fetch("/globe/countries.geojson")
     .then((r) => r.json())
-    .then((geo) => world.hexPolygonsData(geo.features))
+    .then((geo) => {
+      if (style === "hex") { world.hexPolygonsData(geo.features); return; }
+      if (style === "dark" || style === "night" || style === "sun") {
+        // Only the visited countries, as gold dots over the photo.
+        world.hexPolygonsData(geo.features.filter(isVisited))
+             .hexPolygonMargin(style === "night" ? 0.55 : 0.4)
+             .hexPolygonAltitude(0.006)
+             .hexPolygonColor(() => (style === "dark" ? "rgba(227,195,110,.95)" : "rgba(227,195,110,.8)"));
+        return;
+      }
+      world.polygonsData(geo.features).polygonAltitude(0.004).polygonSideColor(() => "rgba(0,0,0,0)");
+      if (style === "solid") {
+        world.polygonCapColor((f: any) => (isVisited(f) ? "rgba(227,195,110,.95)" : "rgba(241,238,228,.28)"))
+             .polygonStrokeColor(() => "rgba(14,51,41,.8)");
+      } else {
+        world.polygonCapColor((f: any) => (isVisited(f) ? "rgba(227,195,110,.85)" : "rgba(0,0,0,0)"))
+             .polygonStrokeColor((f: any) => (isVisited(f) ? GOLD : "rgba(241,238,228,.55)"));
+      }
+    })
     .catch(() => { /* the globe still works without country dots */ });
 
   const controls: any = world.controls();
@@ -332,6 +413,20 @@ function groupByCountry(list) {
     const ms = reduceMotion ? 0 : fromPin ? 900 : 0;
     world.pointOfView(landView(p), ms);
     setTimeout(() => showPanel(p), ms);
+  }
+
+  /** Where the sun is directly overhead right now (declination + equation of time). */
+  function subsolarPoint(d: Date) {
+    const start = Date.UTC(d.getUTCFullYear(), 0, 0);
+    const doy = (d.getTime() - start) / 86_400_000;
+    const rad = Math.PI / 180;
+    const decl = -23.44 * Math.cos(rad * (360 / 365) * (doy + 10));
+    const b = rad * (360 / 365) * (doy - 81);
+    const eot = 9.87 * Math.sin(2 * b) - 7.53 * Math.cos(b) - 1.5 * Math.sin(b); // minutes
+    const utcHours = d.getUTCHours() + d.getUTCMinutes() / 60 + d.getUTCSeconds() / 3600;
+    let lng = 15 * (12 - (utcHours + eot / 60));
+    lng = ((lng + 540) % 360) - 180;
+    return { lat: decl, lng };
   }
 
   // ── Spin the globe ───────────────────────────────────────────────────────
@@ -453,7 +548,9 @@ function groupByCountry(list) {
     display: grid; place-items: center; color: var(--gold);
     filter: drop-shadow(0 0 6px rgba(227,195,110,.7));
     transition: transform .18s ease;
+    opacity: 0; animation: pin-in .3s ease .5s forwards; /* wait for the first frames to place it */
   }
+  @keyframes pin-in { to { opacity: 1; } }
   .pin svg { width: 16px; height: 16px; }
   .pin svg path { fill: currentColor; }
   .pin::before {

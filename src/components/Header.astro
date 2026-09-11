@@ -1,22 +1,28 @@
 ---
-// Top bar — mirrors the search page's .topbar, plus nav links and the
-// "Book a call" CTA (opens the Superhuman scheduling page in a new tab).
-// Self-styled on purpose: it must look right on the search page, which does
-// not load global.css.
+// Top bar — mirrors the search page's .topbar. Nav links are the "read" pages;
+// the three "do something" destinations (award search, plan a trip, book a
+// call) are buttons on the right. Self-styled on purpose: it must look right
+// on the search page, which does not load global.css.
 import { SITE } from "../lib/site.js";
 
 const { active } = Astro.props;
 const links = [
-  { href: "/search", label: "Award search", key: "search" },
+  { href: "/", label: "Home", key: "home" },
   { href: "/about", label: "About", key: "about" },
   { href: "/globe", label: "Globe", key: "globe" },
-  { href: "/inquiry", label: "Plan a trip", key: "inquiry" },
+  { href: "/travel-reports", label: "Travel reports", key: "reports" },
 ];
 ---
 <nav class="topbar" aria-label="Primary">
   <div class="topbar-inner">
     <a class="topbar-brand" href="/">
-      <svg class="topbar-mark" viewBox="0 0 30 30" aria-hidden="true"><path d="M15 2 L17.4 12.6 L28 15 L17.4 17.4 L15 28 L12.6 17.4 L2 15 L12.6 12.6 Z"/></svg>
+      <!-- The star mark with one orbit whose line travels around it, like the flight arcs on the globe. -->
+      <svg class="topbar-mark" viewBox="0 0 44 44" aria-hidden="true">
+        <path class="orbit orbit--track" d="M3 22 a19 7.5 0 1 0 38 0 a19 7.5 0 1 0 -38 0" transform="rotate(-32 22 22)" />
+        <path class="orbit orbit--tail" pathLength="100" d="M3 22 a19 7.5 0 1 0 38 0 a19 7.5 0 1 0 -38 0" transform="rotate(-32 22 22)" />
+        <path class="orbit" pathLength="100" d="M3 22 a19 7.5 0 1 0 38 0 a19 7.5 0 1 0 -38 0" transform="rotate(-32 22 22)" />
+        <path class="star" d="M22 10 L23.9 20.1 L34 22 L23.9 23.9 L22 34 L20.1 23.9 L10 22 L20.1 20.1 Z" />
+      </svg>
       <span>{SITE.name}</span>
     </a>
     <div class="topbar-links">
@@ -24,36 +30,58 @@ const links = [
         <a href={l.href} aria-current={active === l.key ? "page" : undefined}>{l.label}</a>
       ))}
     </div>
-    <a class="topbar-cta" href={SITE.bookUrl} target="_blank" rel="noopener">Book a call</a>
+    <div class="topbar-actions">
+      <a class="topbar-btn topbar-btn--ghost" href="/search" aria-current={active === "search" ? "page" : undefined}>Award search</a>
+      <a class="topbar-btn topbar-btn--ghost" href="/inquiry" aria-current={active === "inquiry" ? "page" : undefined}>Plan a trip</a>
+      <a class="topbar-btn topbar-btn--gold" href={SITE.bookUrl} target="_blank" rel="noopener">Book a call</a>
+    </div>
   </div>
 </nav>
 
 <style>
   .topbar { background: var(--emerald); }
   .topbar-inner {
-    max-width: 1120px; margin: 0 auto; padding: 16px 24px;
+    max-width: 1120px; margin: 0 auto; padding: 14px 24px;
     display: flex; align-items: center; gap: 28px; flex-wrap: wrap;
   }
-  .topbar-brand { display: flex; align-items: center; gap: 10px; text-decoration: none; }
-  .topbar-mark { width: 20px; height: 20px; }
-  .topbar-mark path { fill: var(--gold); }
+  .topbar-brand { display: flex; align-items: center; gap: 8px; text-decoration: none; }
+  .topbar-mark { width: 34px; height: 34px; overflow: visible; }
+  .topbar-mark .star { fill: var(--gold); }
+  .topbar-mark .orbit {
+    fill: none; stroke: var(--gold); stroke-width: 0.8; stroke-linecap: round;
+    stroke-dasharray: 7 93; animation: orbit-travel 5s linear infinite;
+  }
+  /* Faint tail that trails the bright head. */
+  .topbar-mark .orbit--tail { stroke: rgba(227,195,110,.4); stroke-dasharray: 22 78; stroke-dashoffset: 15; animation-name: orbit-travel-tail; }
+  @keyframes orbit-travel-tail { to { stroke-dashoffset: -85; } }
+  .topbar-mark .orbit--track { stroke: rgba(227,195,110,.22); stroke-dasharray: none; animation: none; }
+  @keyframes orbit-travel { to { stroke-dashoffset: -100; } }
   .topbar-brand span { font-family: var(--serif); font-style: italic; font-size: 22px; color: #F1EEE4; }
-  .topbar-links { display: flex; gap: 24px; margin-left: 8px; }
+  .topbar-links { display: flex; gap: 24px; margin-left: 4px; }
   .topbar-links a {
     font-size: 13px; color: var(--cream-90); text-decoration: none;
     padding-bottom: 2px; border-bottom: 1px solid transparent; transition: color .15s ease;
   }
   .topbar-links a:hover { color: #F1EEE4; }
   .topbar-links a[aria-current="page"] { color: var(--gold); border-bottom-color: var(--gold); }
-  .topbar-cta {
-    margin-left: auto; display: inline-flex; align-items: center; white-space: nowrap;
-    background: var(--gold); color: var(--emerald); text-decoration: none;
+  .topbar-actions { margin-left: auto; display: flex; gap: 8px; }
+  .topbar-btn {
+    display: inline-flex; align-items: center; white-space: nowrap; text-decoration: none;
     font-size: 11px; letter-spacing: .14em; text-transform: uppercase; font-weight: 600;
-    padding: 11px 20px; border-radius: 6px; transition: filter .15s ease;
+    padding: 10px 18px; border-radius: 6px; transition: filter .15s ease, background .15s ease, color .15s ease;
   }
-  .topbar-cta:hover { filter: brightness(.94); }
-  @media (max-width: 640px) {
+  .topbar-btn--gold { background: var(--gold); color: var(--emerald); }
+  .topbar-btn--gold:hover { filter: brightness(.94); }
+  .topbar-btn--ghost { color: #F1EEE4; border: 1px solid rgba(241,238,228,.4); padding: 9px 17px; font-weight: 500; }
+  .topbar-btn--ghost:hover { background: rgba(241,238,228,.1); }
+  .topbar-btn--ghost[aria-current="page"] { border-color: var(--gold); color: var(--gold); }
+  @media (prefers-reduced-motion: reduce) { .topbar-mark .orbit { animation: none; stroke-dasharray: none; stroke: rgba(227,195,110,.45); } .topbar-mark .orbit--track, .topbar-mark .orbit--tail { display: none; } }
+  @media (max-width: 900px) {
     .topbar-inner { gap: 14px 20px; }
     .topbar-links { order: 3; width: 100%; margin-left: 0; gap: 18px; }
+  }
+  @media (max-width: 640px) {
+    .topbar-actions { order: 4; width: 100%; }
+    .topbar-btn { flex: 1; justify-content: center; padding: 10px 8px; }
   }
 </style>

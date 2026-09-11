@@ -1,0 +1,47 @@
+---
+// Placeholder for the blog ("Travel reports") until Astro content collections
+// land. Keeps the nav link live and captures newsletter signups meanwhile.
+import Layout from "../layouts/Layout.astro";
+import "../styles/global.css";
+---
+<Layout
+  title="Travel Reports — My Jet Set Life"
+  description="Dispatches from the road: award sweet spots, transfer bonuses, and places worth the miles. Coming soon."
+  active="reports"
+>
+  <section class="section reports">
+    <div class="container reports-grid">
+      <div>
+        <p class="eyebrow">Travel reports</p>
+        <h1 class="display-l">Dispatches from the road.</h1>
+        <p class="body-l lead">Trip reports, award sweet spots, and the places worth the miles. The first ones are being written now. Until then, the <a href="/globe">globe</a> has the photos.</p>
+        <form action="https://buttondown.com/api/emails/embed-subscribe/myjetsetlife" method="post" target="_blank" class="news-form">
+          <label class="field-label" for="reports-email">Get them by email</label>
+          <div class="row">
+            <input class="input" id="reports-email" name="email" type="email" placeholder="you@email.com" autocomplete="email" required />
+            <button class="btn btn--primary" type="submit">Subscribe</button>
+          </div>
+        </form>
+      </div>
+      <div class="photo photo--4x5">
+        <img src="/images/travel-view.jpg" alt="Doha skyline at night, framed by stone arches" width="1600" height="2000" loading="eager" />
+      </div>
+    </div>
+  </section>
+</Layout>
+
+<style>
+  .reports { padding-top: 72px; }
+  .reports-grid { display: grid; grid-template-columns: 1.2fr .8fr; gap: 56px; align-items: center; }
+  .reports h1 { color: var(--emerald); margin-top: 12px; }
+  .lead { margin-top: 22px; max-width: 50ch; }
+  .lead a { color: var(--emerald); }
+  .news-form { margin-top: 32px; max-width: 480px; }
+  .news-form .row { flex-wrap: nowrap; gap: 10px; }
+  .news-form .input { flex: 1; }
+  @media (max-width: 860px) {
+    .reports { padding-top: 48px; }
+    .reports-grid { grid-template-columns: 1fr; gap: 32px; }
+    .photo { max-width: 360px; }
+  }
+</style>
