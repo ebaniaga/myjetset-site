@@ -5,11 +5,14 @@ import { SITE } from "../lib/site.js";
 
 const askMeAbout = ["Hawaiʻi", "South America", "Solo travel", "Luxury travel"];
 const gallery = [
-  { src: "/images/travel-camel.jpg", alt: "Erickson on a camel at the Pyramids of Giza", kicker: "Egypt", caption: "Pyramids of Giza" },
-  { src: "/images/travel-taj-mahal.jpg", alt: "Erickson in front of the Taj Mahal", kicker: "India", caption: "Taj Mahal" },
-  { src: "/images/travel-view.jpg", alt: "Doha skyline at night, framed by stone arches", kicker: "Qatar", caption: "Doha" },
+  { src: "/images/budapest-1.jpg", alt: "Hungarian Parliament lit gold at blue hour, from the Danube", kicker: "Hungary", caption: "Budapest at blue hour" },
+  { src: "/images/leh-1.jpg", alt: "Snow-covered Ladakh range under a clear sky", kicker: "Ladakh, India", caption: "Leh in January" },
+  { src: "/images/doha-1.jpg", alt: "Doha skyline reflected in the bay at night", kicker: "Qatar", caption: "Doha" },
+  { src: "/images/honolulu-1.jpg", alt: "Makapuʻu coastline, Oʻahu", kicker: "Hawaiʻi", caption: "Makapuʻu, Oʻahu" },
+  { src: "/images/phuket-1.jpg", alt: "Shallow turquoise water at Khai Nai Island", kicker: "Thailand", caption: "Khai Nai, Phuket" },
+  { src: "/images/kyoto-4.jpg", alt: "A Kyoto garden seen through a temple window", kicker: "Japan", caption: "Kyoto" },
+  { src: "/images/leh-2.jpg", alt: "Golden ridge with snow, Ladakh", kicker: "Ladakh, India", caption: "The high road" },
   { src: "/images/travel-sunset-mountains.jpg", alt: "Sunset over Rio de Janeiro from Sugarloaf Mountain", kicker: "Rio de Janeiro", caption: "Sugarloaf Mountain" },
-  { src: "/images/travel-snow.jpg", alt: "Erickson in Antarctica", kicker: "Antarctica", caption: "The seventh continent" },
 ];
 ---
 <Layout
@@ -87,11 +90,12 @@ const gallery = [
       <div class="gallery">
         {gallery.map((g) => (
           <div class="photo photo--3x2">
-            <img src={g.src} alt={g.alt} width="1600" height="1067" loading="lazy" />
+            <img src={g.src} alt={g.alt} width="1800" height="1350" loading="lazy" />
             <div class="overlay"><div class="kicker">{g.kicker}</div><div class="caption">{g.caption}</div></div>
           </div>
         ))}
       </div>
+      <p class="gallery-more"><a class="btn btn--link" href="/globe">See every place on the globe →</a></p>
     </div>
   </section>
 
@@ -127,6 +131,7 @@ const gallery = [
 
   .why { margin-top: 24px; }
   .gallery { margin-top: 20px; display: grid; grid-template-columns: repeat(3, 1fr); gap: 16px; }
+  .gallery-more { margin-top: 22px; }
   .gallery .photo:nth-child(1) { grid-column: span 2; }
   .gallery .photo:nth-child(1) { aspect-ratio: auto; min-height: 100%; }
 
