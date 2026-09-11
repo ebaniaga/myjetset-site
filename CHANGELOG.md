@@ -6,6 +6,18 @@ it was planned.
 
 ## 2026-09-11 — The whole library, not just favorites
 
+**Phones** (hash to follow)
+- The globe was laggy on a handset once it had 159 story pins: every pin was an
+  animated DOM star with a pulsing ring, plus an animated flight arc, rendered
+  at 3× pixel density. On phones it now draws the 40 richest story pins as
+  stars (the rest as tappable gold dots), keeps arcs static, pulses only the
+  active pin, and renders at 1.5×. Desktop is unchanged.
+- Place cards no longer crop portrait photos into a landscape box — the frame
+  takes each photo's own shape, from 4:5 up to 16:10.
+- The "What your points can do" strip is a swipe carousel on phones instead of
+  nine stacked squares.
+
+
 **Best photos from all 82,304** (`8d13de7`)
 - The first photo pass only looked at favorites and high-scoring shots, which is
   why Niseko, Lake Tōya and better frames of Kyoto never surfaced. This pass

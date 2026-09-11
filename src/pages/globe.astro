@@ -172,13 +172,25 @@ function groupByCountry(list) {
   const reduceMotion = matchMedia("(prefers-reduced-motion: reduce)").matches;
   const home = PLACES.find((p) => p.home) ?? PLACES[0];
   const stories = PLACES.filter((p) => markerType(p) === "story");
-  const pinned = PLACES.filter((p) => markerType(p) !== "visit"); // gold + cream stars (DOM markers)
+  // Phones: fewer DOM markers and static arcs — 159 animated stars + arcs is too much for a handset.
+  const lite = matchMedia("(max-width: 760px), (pointer: coarse)").matches;
+  const special = PLACES.filter((p) => markerType(p) !== "visit" && markerType(p) !== "story");
+  const starStories = lite ? [...stories].sort((a, b) => (b.photos?.length || 0) - (a.photos?.length || 0)).slice(0, 40) : stories;
+  const starIds = new Set(starStories.map((p) => p.id));
+  const pinned = [...special, ...starStories]; // gold + cream stars (DOM markers)
   const visits = PLACES.filter((p) => markerType(p) === "visit");  // dots, drawn in WebGL
-  // Each dot is two tiny discs: a cream rim underneath and a dark core on top.
-  const dotData = visits.flatMap((p) => [
-    { place: p, lat: p.lat, lng: p.lng, r: 0.3, alt: 0.006, color: "rgba(241,238,228,.8)" },
-    { place: p, lat: p.lat, lng: p.lng, r: 0.19, alt: 0.008, color: PINE },
-  ]);
+  const dotStories = stories.filter((p) => !starIds.has(p.id));   // on phones: story pins drawn as gold dots
+  // Each dot is two tiny discs: a rim underneath and a dark core on top.
+  const dotData = [
+    ...visits.flatMap((p) => [
+      { place: p, lat: p.lat, lng: p.lng, r: 0.3, alt: 0.006, color: "rgba(241,238,228,.8)" },
+      { place: p, lat: p.lat, lng: p.lng, r: 0.19, alt: 0.008, color: PINE },
+    ]),
+    ...dotStories.flatMap((p) => [
+      { place: p, lat: p.lat, lng: p.lng, r: 0.42, alt: 0.007, color: "rgba(227,195,110,.95)" },
+      { place: p, lat: p.lat, lng: p.lng, r: 0.2, alt: 0.009, color: PINE },
+    ]),
+  ];
   const visited = new Set(PLACES.map((p) => p.country));
   const byId = new Map(PLACES.map((p) => [p.id, p]));
 
@@ -203,13 +215,13 @@ function groupByCountry(list) {
     .hexPolygonAltitude(0.004)
     .hexPolygonColor((f: any) => (visited.has(f.properties.iso) ? "rgba(227,195,110,.95)" : "rgba(241,238,228,.42)"))
     // Flight arcs from home to every pin.
-    .arcsData(stories.map((p) => ({ startLat: home.lat, startLng: home.lng, endLat: p.lat, endLng: p.lng })))
+    .arcsData(starStories.map((p) => ({ startLat: home.lat, startLng: home.lng, endLat: p.lat, endLng: p.lng })))
     .arcColor(() => ["rgba(227,195,110,.05)", "rgba(227,195,110,.7)"])
     .arcAltitudeAutoScale(0.35)
     .arcStroke(0.32)
     .arcDashLength(0.45)
     .arcDashGap(0.6)
-    .arcDashAnimateTime(reduceMotion ? 0 : 6000)
+    .arcDashAnimateTime(reduceMotion || lite ? 0 : 6000)
     // "Been there" dots live in the WebGL scene so they stay locked to the globe.
     .pointsData(dotData)
     .pointLat("lat").pointLng("lng")
@@ -245,6 +257,9 @@ function groupByCountry(list) {
       b.addEventListener("click", (e) => { e.stopPropagation(); goTo(p, true); });
       return b;
     });
+
+  // Phones render at 3× density; 1.5× is indistinguishable on the globe and far cheaper.
+  world.renderer().setPixelRatio(Math.min(window.devicePixelRatio || 1, lite ? 1.5 : 2));
 
   if (style === "sun") {
     // Live day/night. World-space normals vs. the sub-solar direction decide
@@ -396,6 +411,11 @@ function groupByCountry(list) {
     stage.classList.add("has-panel");
   }
 
+  // The frame takes each photo's own shape (clamped 4:5 … 16:10) so portraits aren't cropped into a landscape box.
+  photo.addEventListener("load", () => {
+    const r = photo.naturalWidth / photo.naturalHeight;
+    if (r) photoFrame.style.aspectRatio = String(Math.max(0.8, Math.min(1.6, r)));
+  });
   function setPhoto(ph: any) { photo.src = ph.src; photo.alt = ph.alt || ""; }
 
   function hidePanel() {
@@ -571,6 +591,11 @@ function groupByCountry(list) {
     text-shadow: 0 1px 6px rgba(8,30,24,.9);
   }
   .pin:hover .pin__label, .pin:focus-visible .pin__label { opacity: 1; }
+  /* Phones: pulse only the active pin — 150 concurrent ring animations stutter on a handset. */
+  @media (max-width: 760px), (pointer: coarse) {
+    .pin::before { animation: none; opacity: 0; }
+    .pin.is-active::before { animation: pin-pulse 2.6s ease-out infinite; opacity: 1; }
+  }
   @keyframes pin-pulse { 0% { transform: scale(.6); opacity: .9; } 100% { transform: scale(1.9); opacity: 0; } }
 
   /* ── Place panel ──────────────────────────────────────────────────────── */
