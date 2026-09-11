@@ -193,7 +193,7 @@ export const PLACES = [
     continent: "South America",
     lat: -0.7749, lng: -78.6354,
     when: "",
-    blurb: "",
+    blurb: "Rose farms under the volcano — boxes of them, sorted by colour, on their way somewhere far less beautiful than here.",
     photos: [
       { src: "/images/best/cotopaxi-1.jpg", alt: "grid of boxed roses in many colours, tidy top-down pattern" },
       { src: "/images/best/cotopaxi-2.jpg", alt: "overhead of wrapped rose bouquets, saturated reds/pinks/whites, graphic" },
@@ -208,7 +208,7 @@ export const PLACES = [
     continent: "South America",
     lat: -20.4603, lng: -67.3538,
     when: "",
-    blurb: "",
+    blurb: "Wet season on the salt flat: the sky underfoot, the horizon gone, and a sunset that happens twice.",
     photos: [
       { src: "/images/best/salar-de-uyuni-1.jpg", alt: "endless white salt horizon under deep blue sky, minimal and striking" },
       { src: "/images/best/salar-de-uyuni-2.jpg", alt: "brine pool with cloud bank on horizon, colour contrast of ochre/teal/white" },
@@ -227,7 +227,7 @@ export const PLACES = [
     continent: "South America",
     lat: -21.0787, lng: -67.603,
     when: "",
-    blurb: "",
+    blurb: "A straight gravel road across the altiplano, and one llama with right of way.",
     photos: [
       { src: "/images/best/sud-lipez-altiplano-1.jpg", alt: "desert scrub, pale mesa and blue sky, well exposed" },
       { src: "/images/best/sud-lipez-altiplano-2.jpg", alt: "lone llama on a straight gravel road under wispy sky" },
@@ -242,7 +242,7 @@ export const PLACES = [
     continent: "South America",
     lat: -21.5316, lng: -67.5995,
     when: "",
-    blurb: "",
+    blurb: "The canyon bends like its namesake; the river stays green all the way down.",
     photos: [
       { src: "/images/best/canon-del-anaconda-1.jpg", alt: "big cumulus over rocky valley, dramatic sky, 0.78" },
       { src: "/images/best/canon-del-anaconda-2.jpg", alt: "canyon walls and green riverbed from the rim" },
@@ -257,7 +257,7 @@ export const PLACES = [
     continent: "South America",
     lat: -22.3733, lng: -68.0267,
     when: "",
-    blurb: "",
+    blurb: "Fresh snow on the altiplano at 4,300 metres, vicuñas grazing through it as if that were normal.",
     photos: [
       { src: "/images/best/el-tatio-1.jpg", alt: "fresh snow on altiplano with volcano and cobalt sky, crisp, 0.80" },
       { src: "/images/best/el-tatio-2.jpg", alt: "snowy slope with a vicuna grazing, 0.82" },
@@ -273,7 +273,7 @@ export const PLACES = [
     continent: "South America",
     lat: -27.6032, lng: -48.4447,
     when: "",
-    blurb: "",
+    blurb: "Sunrise over Praia Mole, a sailboat afternoon on the lagoon, and a mermaid on the rocks for luck.",
     photos: [
       { src: "/images/best/florianopolis-1.jpg", alt: "orange sunrise over surf with island silhouette, 0.70" },
       { src: "/images/best/florianopolis-2.jpg", alt: "mermaid statue on rocks with lagoon and hills, quirky landmark" },
@@ -289,7 +289,7 @@ export const PLACES = [
     continent: "Oceania",
     lat: -38.7505, lng: 143.6702,
     when: "",
-    blurb: "",
+    blurb: "First light on the Great Ocean Road — wet sand, a low sun, and no one else awake.",
     photos: [
       { src: "/images/best/apollo-bay-1.jpg", alt: "blazing orange sunrise over the ocean with wet-sand reflection, 0.70" },
       { src: "/images/best/apollo-bay-2.jpg", alt: "dramatic dark clouds with sun on the horizon and dune grass" },
@@ -305,7 +305,7 @@ export const PLACES = [
     continent: "Oceania",
     lat: -44.0043, lng: 170.4808,
     when: "",
-    blurb: "",
+    blurb: "Glacial blue that looks retouched and isn't, the Southern Alps behind, and the little church on the shore.",
     photos: [
       { src: "/images/best/lake-tekapo-1.jpg", alt: "turquoise lake with snow-capped Southern Alps and rocky shore, 0.81" },
       { src: "/images/best/lake-tekapo-2.jpg", alt: "white footbridge over glacial-blue water" },
@@ -322,7 +322,7 @@ export const PLACES = [
     continent: "Oceania",
     lat: -45.3581, lng: 167.0824,
     when: "",
-    blurb: "",
+    blurb: "Doubtful Sound: rainforest walls folding into cloud, and a silence you can hear from the deck.",
     photos: [
       { src: "/images/best/fiordland-1.jpg", alt: "layered rainforest fiord walls receding into cloud, 0.73" },
       { src: "/images/best/fiordland-2.jpg", alt: "forested islet with boat under big cloudscape, 0.70" },
@@ -341,7 +341,7 @@ export const PLACES = [
     continent: "Asia",
     lat: -8.2421, lng: 115.3801,
     when: "",
-    blurb: "",
+    blurb: "Up in the dark for the sunrise over the caldera — worth every minute of the climb.",
     photos: [
       { src: "/images/best/mount-batur-1.jpg", alt: "sunrise over Lake Batur with volcano silhouettes, 0.84" },
       { src: "/images/best/mount-batur-2.jpg", alt: "daytime caldera with lake and forest, fresh green" },
@@ -358,7 +358,7 @@ export const PLACES = [
     continent: "North America",
     lat: 10.3069, lng: -84.8248,
     when: "",
-    blurb: "",
+    blurb: "Cloud forest by day, and a sunset over the ridges that somehow arrives without any cloud at all.",
     photos: [
       { src: "/images/best/monteverde-1.jpg", alt: "sunset over rolling green hills, 0.79" },
       { src: "/images/best/monteverde-2.jpg", alt: "sun setting behind ridge with grassy foreground and pink clouds" },
@@ -374,7 +374,7 @@ export const PLACES = [
     continent: "Asia",
     lat: 10.3373, lng: 106.3699,
     when: "",
-    blurb: "",
+    blurb: "Palm-lined canals by boat, a bee farm on the bank, and a slower clock.",
     photos: [
       { src: "/images/best/mekong-delta-1.jpg", alt: "boat prow into a palm-lined canal with sun flare" },
       { src: "/images/best/mekong-delta-me.jpg", alt: "owner holding a honeycomb frame at a bee farm, alone in frame" },
@@ -389,7 +389,7 @@ export const PLACES = [
     continent: "Asia",
     lat: 13.4602, lng: 99.986,
     when: "",
-    blurb: "",
+    blurb: "The train comes through the market several times a day; the awnings fold back with about a second to spare.",
     photos: [
       { src: "/images/best/maeklong-railway-market-1.jpg", alt: "train arriving through the market, iconic; small distant figures" },
       { src: "/images/best/maeklong-railway-market-2.jpg", alt: "longtail boat on a green canal under foliage" },
@@ -404,7 +404,7 @@ export const PLACES = [
     continent: "Asia",
     lat: 16.0003, lng: 121.6534,
     when: "",
-    blurb: "",
+    blurb: "Home turf on the Pacific side of Luzon — Ditumabo Falls, Sabang Beach, and a river that reflects the mountains.",
     photos: [
       { src: "/images/best/baler-1.jpg", alt: "tall waterfall into a rocky pool, no people" },
       { src: "/images/best/baler-2.jpg", alt: "long beach curve with headland, sunny" },
@@ -422,7 +422,7 @@ export const PLACES = [
     continent: "North America",
     lat: 15.9887, lng: -97.5588,
     when: "",
-    blurb: "",
+    blurb: "Twilight on the lagoon, a boat at the pier, and the moon coming up over the hills.",
     photos: [
       { src: "/images/best/laguna-de-manialtepec-1.jpg", alt: "twilight lagoon with boat and pier, calm blue tones" },
       { src: "/images/best/laguna-de-manialtepec-2.jpg", alt: "moon over the water with distant hills" },
@@ -437,7 +437,7 @@ export const PLACES = [
     continent: "North America",
     lat: 18.3603, lng: -66.9803,
     when: "",
-    blurb: "",
+    blurb: "An emerald pool in the jungle that you can swim in — and I did.",
     photos: [
       { src: "/images/best/gozalandia-falls-1.jpg", alt: "waterfall into emerald pool framed by jungle, 0.77" },
       { src: "/images/best/gozalandia-falls-2.jpg", alt: "wider view of the cascade and cliff" },
@@ -453,7 +453,7 @@ export const PLACES = [
     continent: "North America",
     lat: 19.0278, lng: -155.5942,
     when: "",
-    blurb: "",
+    blurb: "The southernmost point in the United States: a road to the sea, cliffs, and very deep blue water.",
     photos: [
       { src: "/images/best/ka-lae-south-point-1.jpg", alt: "road running to the sea under blue sky" },
       { src: "/images/best/ka-lae-south-point-2.jpg", alt: "grass path to the cliffs and deep-blue ocean" },
@@ -468,7 +468,7 @@ export const PLACES = [
     continent: "North America",
     lat: 19.3027, lng: -155.1271,
     when: "",
-    blurb: "",
+    blurb: "Where the island is still being made — black lava running to the coast, the sea glittering past it.",
     photos: [
       { src: "/images/best/kilauea-lava-fields-1.jpg", alt: "lava plain to the coast with soft light on the sea" },
       { src: "/images/best/kilauea-lava-fields-2.jpg", alt: "sun over the lava coastline with glittering sea" },
@@ -484,7 +484,7 @@ export const PLACES = [
     continent: "North America",
     lat: 19.8412, lng: -155.786,
     when: "",
-    blurb: "",
+    blurb: "The dry side of the Big Island: cinder cones, gold sunsets over the Pacific, and a moon halo over the palms.",
     photos: [
       { src: "/images/best/kona-coast-1.jpg", alt: "golden sunset over the Pacific with cloud band, 0.70" },
       { src: "/images/best/kona-coast-2.jpg", alt: "island from the air, deep blue sea and sky, 0.72" },
@@ -501,7 +501,7 @@ export const PLACES = [
     continent: "Asia",
     lat: 2.1966, lng: 102.2494,
     when: "",
-    blurb: "",
+    blurb: "Straits-Chinese shophouses, murals along the river, and the white church on the square.",
     photos: [
       { src: "/images/best/melaka-1.jpg", alt: "restored Straits-Chinese colonial facade, symmetric" },
       { src: "/images/best/melaka-2.jpg", alt: "colourful geometric mural along the street" },
@@ -519,7 +519,7 @@ export const PLACES = [
     continent: "North America",
     lat: 20.2026, lng: -87.4533,
     when: "",
-    blurb: "",
+    blurb: "The Caribbean under a dramatic sky — and a pool with a cocktail when the sky wins.",
     photos: [
       { src: "/images/best/tulum-1.jpg", alt: "Caribbean shore with dramatic cloud sky" },
       { src: "/images/best/tulum-me.jpg", alt: "owner in the pool with a cocktail and purple sunglasses, fun vacation vibe" },
@@ -534,7 +534,7 @@ export const PLACES = [
     continent: "Asia",
     lat: 26.2177, lng: 127.676,
     when: "",
-    blurb: "",
+    blurb: "Fukushūen, a Chinese garden in Naha: stone paths, a pavilion above the waterfall, moody green.",
     photos: [
       { src: "/images/best/naha-okinawa-1.jpg", alt: "Chinese garden gate framed by stone path, symmetrical" },
       { src: "/images/best/naha-okinawa-2.jpg", alt: "pavilion atop rockery waterfall, lush and moody" },
@@ -549,7 +549,7 @@ export const PLACES = [
     continent: "Africa",
     lat: 31.2225, lng: -7.6721,
     when: "",
-    blurb: "",
+    blurb: "Into the Atlas at Setti Fatma — waterfalls, boulders, and peaks under a dramatic sky.",
     photos: [
       { src: "/images/best/ourika-valley-1.jpg", alt: "waterfall stream through rocky Atlas gorge, sunlit" },
       { src: "/images/best/ourika-valley-me.jpg", alt: "owner seated on boulders with Atlas peaks and dramatic clouds, highest score" },
@@ -564,7 +564,7 @@ export const PLACES = [
     continent: "Asia",
     lat: 34.287, lng: 76.791,
     when: "",
-    blurb: "",
+    blurb: "Moonland: badlands so strange they have their own name, then white stupas against the snow peaks.",
     photos: [
       { src: "/images/best/lamayuru-1.jpg", alt: "Moonland badlands with winding road under cobalt sky, otherworldly" },
       { src: "/images/best/lamayuru-2.jpg", alt: "white stupas with gold spires against snow peaks, iconic Ladakh" },
@@ -581,7 +581,7 @@ export const PLACES = [
     continent: "North America",
     lat: 36.0539, lng: -112.0937,
     when: "",
-    blurb: "",
+    blurb: "The South Rim, doing exactly what everyone says it does.",
     photos: [
       { src: "/images/best/grand-canyon-1.jpg", alt: "classic layered canyon vista under clear sky, highest score" },
       { src: "/images/best/grand-canyon-2.jpg", alt: "wide rim view with gnarled trees framing the canyon" },
@@ -597,7 +597,7 @@ export const PLACES = [
     continent: "Europe",
     lat: 37.3452, lng: 23.4523,
     when: "",
-    blurb: "",
+    blurb: "No cars on Hydra — just a coastal path, a sailboat at sunset, and the moon over a glassy sea.",
     photos: [
       { src: "/images/best/hydra-1.jpg", alt: "moon over glassy sea and islet at blue hour, painterly gradient" },
       { src: "/images/best/hydra-2.jpg", alt: "sunset with sailboat silhouette over the Saronic Gulf" },
@@ -615,7 +615,7 @@ export const PLACES = [
     continent: "Europe",
     lat: 38.5686, lng: -7.9083,
     when: "",
-    blurb: "",
+    blurb: "The Chapel of Bones in Évora: unsettling, beautiful, and very much the point.",
     photos: [
       { src: "/images/best/evora-1.jpg", alt: "Chapel of Bones nave with columns and gate, atmospheric" },
       { src: "/images/best/evora-2.jpg", alt: "skull-lined column detail, macabre but striking" },
@@ -630,7 +630,7 @@ export const PLACES = [
     continent: "Europe",
     lat: 38.7045, lng: -9.1669,
     when: "",
-    blurb: "",
+    blurb: "Belém Tower mirrored in still water, the Monument to the Discoveries over its wave-pattern pavement, and a funicular lane at night.",
     photos: [
       { src: "/images/best/lisbon-belem-1.jpg", alt: "Monument to the Discoveries with wave-pattern pavement, top score" },
       { src: "/images/best/lisbon-belem-2.jpg", alt: "Belem Tower mirrored in still water, favorited" },
@@ -648,7 +648,7 @@ export const PLACES = [
     continent: "Europe",
     lat: 38.7904, lng: -9.3929,
     when: "",
-    blurb: "",
+    blurb: "Pena Palace over the forested hills, the tunnels at Regaleira, and a ceiling worth lying on the floor for.",
     photos: [
       { src: "/images/best/sintra-1.jpg", alt: "ornate ceiling with ring chandelier looking straight up, top score" },
       { src: "/images/best/sintra-2.jpg", alt: "Pena Palace panorama over forested hills" },
@@ -665,7 +665,7 @@ export const PLACES = [
     continent: "North America",
     lat: 41.8191, lng: -74.2167,
     when: "",
-    blurb: "",
+    blurb: "Weekends up the Hudson: sunrise over misty fields, a rainbow over the meadow, and the dog on the platform at Cold Spring.",
     photos: [
       { src: "/images/best/hudson-valley-me.jpg", alt: "owner with dog on Cold Spring platform, casual weekend shot" },
       { src: "/images/best/hudson-valley-2.jpg", alt: "sunrise pink clouds over misty fields, top score" },
@@ -683,7 +683,7 @@ export const PLACES = [
     continent: "North America",
     lat: 41.8819, lng: -87.6227,
     when: "",
-    blurb: "",
+    blurb: "The lakefront from above, Marina City from the river, and the Bean at night on an empty plaza.",
     photos: [
       { src: "/images/best/chicago-1.jpg", alt: "aerial of lakefront, Millennium Park and skyline, top score" },
       { src: "/images/best/chicago-2.jpg", alt: "mackerel sky over river skyline, dramatic" },
@@ -701,7 +701,7 @@ export const PLACES = [
     continent: "Europe",
     lat: 42.1725, lng: 23.3245,
     when: "",
-    blurb: "",
+    blurb: "Seven glacial lakes in a cirque, snow on the peaks in summer, and a boardwalk to the water.",
     photos: [
       { src: "/images/best/seven-rila-lakes-1.jpg", alt: "alpine lake cupped by snow-streaked peaks, top score" },
       { src: "/images/best/seven-rila-lakes-2.jpg", alt: "mirror reflection of peaks in still lake, favorited" },
@@ -719,7 +719,7 @@ export const PLACES = [
     continent: "North America",
     lat: 43.0776, lng: -79.0783,
     when: "",
-    blurb: "",
+    blurb: "Horseshoe Falls in winter — mist freezing on the railings and the water curling over the ice.",
     photos: [
       { src: "/images/best/niagara-falls-1.jpg", alt: "Horseshoe Falls brink with rising mist and ice" },
       { src: "/images/best/niagara-falls-2.jpg", alt: "falls from behind-the-falls platform with ice" },
@@ -736,7 +736,7 @@ export const PLACES = [
     continent: "Europe",
     lat: 43.007, lng: 16.0747,
     when: "",
-    blurb: "",
+    blurb: "Limestone cliffs and coves by boat, and Komiža under its mountain from the sea.",
     photos: [
       { src: "/images/best/vis-1.jpg", alt: "limestone cliffs and cove with small boat" },
       { src: "/images/best/vis-2.jpg", alt: "Komiza town under mountain from the sea" },
@@ -752,7 +752,7 @@ export const PLACES = [
     continent: "Europe",
     lat: 63.4091, lng: -19.0203,
     when: "",
-    blurb: "",
+    blurb: "Black sand, basalt columns, and a mossy cliff over pale boulders — Iceland's south coast.",
     photos: [
       { src: "/images/best/reynisfjara-1.jpg", alt: "mossy cliff over pale boulders" },
       { src: "/images/best/reynisfjara-2.jpg", alt: "basalt column cliff at Reynisfjara" },
@@ -767,7 +767,7 @@ export const PLACES = [
     continent: "Europe",
     lat: 63.5349, lng: -19.5091,
     when: "",
-    blurb: "",
+    blurb: "Skógafoss from the top, plunging into a green gorge, with a glacier tongue up the road.",
     photos: [
       { src: "/images/best/skogafoss-1.jpg", alt: "Skogafoss from above plunging into green gorge, top score" },
       { src: "/images/best/skogafoss-2.jpg", alt: "glacier tongue and lagoon, cool tones" },
@@ -783,7 +783,7 @@ export const PLACES = [
     continent: "Europe",
     lat: 63.6155, lng: -19.9896,
     when: "",
-    blurb: "",
+    blurb: "The waterfall you can walk behind — and did, and got soaked, and would again.",
     photos: [
       { src: "/images/best/seljalandsfoss-1.jpg", alt: "Seljalandsfoss full drop over green meadow" },
       { src: "/images/best/seljalandsfoss-2.jpg", alt: "view from behind the curtain, favorited" },
@@ -800,7 +800,7 @@ export const PLACES = [
     continent: "Asia",
     lat: 7.6863, lng: 98.7685,
     when: "",
-    blurb: "",
+    blurb: "Sheer karsts over emerald water, a longtail boat at the foot of the cliff, and the lagoon at Pileh.",
     photos: [
       { src: "/images/best/phi-phi-islands-1.jpg", alt: "limestone karsts with boat wake, top score" },
       { src: "/images/best/phi-phi-islands-2.jpg", alt: "sheer karst over emerald water" },
@@ -821,7 +821,7 @@ export const PLACES = [
     continent: "North America",
     lat: 43.6532, lng: -79.3832,
     when: "",
-    blurb: "",
+    blurb: "The CN Tower, by day against the clouds and by night lit red.",
     photos: [
       { src: "/images/best/toronto-1.jpg", alt: "CN Tower soaring into a blue sky with clouds, best of many similar frames" },
       { src: "/images/best/toronto-2.jpg", alt: "CN Tower lit red at night, distinct from the daytime set" },
@@ -856,7 +856,7 @@ export const PLACES = [
     continent: "North America",
     lat: 17.0732, lng: -96.7266,
     when: "",
-    blurb: "",
+    blurb: "The valley from above, and marigolds in the windows for Día de Muertos.",
     photos: [
       { src: "/images/best/oaxaca-city-1.jpg", alt: "Sweeping view over Oaxaca valley and city under blue sky" },
       { src: "/images/best/oaxaca-city-2.jpg", alt: "Marigold-framed window with Day of the Dead skeleton, very Oaxaca" },
@@ -871,7 +871,7 @@ export const PLACES = [
     continent: "North America",
     lat: 15.8593, lng: -97.0729,
     when: "",
-    blurb: "",
+    blurb: "A baby sea turtle crawling to the surf, a sunset through a palm frond, and the Pacific at full blue.",
     photos: [
       { src: "/images/best/puerto-escondido-1.jpg", alt: "Baby sea turtle crawling to the sea, shallow depth of field, charming" },
       { src: "/images/best/puerto-escondido-2.jpg", alt: "Deep blue Pacific with white surf, clean and bright" },
@@ -890,7 +890,7 @@ export const PLACES = [
     continent: "North America",
     lat: 20.6534, lng: -105.2253,
     when: "",
-    blurb: "",
+    blurb: "Sunset through the palms over Banderas Bay, and a jungle bridge into the mountains.",
     photos: [
       { src: "/images/best/puerto-vallarta-1.jpg", alt: "Sunset through palms over the bay, glowing and iconic" },
       { src: "/images/best/puerto-vallarta-2.jpg", alt: "Long jungle suspension bridge into the mountains" },
@@ -907,7 +907,7 @@ export const PLACES = [
     continent: "North America",
     lat: 23.1136, lng: -82.3666,
     when: "",
-    blurb: "",
+    blurb: "The Malecón curving toward the skyline, and the Museo de la Revolución with the flag flying.",
     photos: [
       { src: "/images/best/havana-1.jpg", alt: "Ornate Museo de la Revolución facade with Cuban flag, well exposed" },
       { src: "/images/best/havana-2.jpg", alt: "Malecón seawall curving toward the city skyline with the sea beside it" },
@@ -922,7 +922,7 @@ export const PLACES = [
     continent: "North America",
     lat: 25.048, lng: -77.3554,
     when: "",
-    blurb: "",
+    blurb: "Atlantis from above — lagoon, beach and towers — and its great hall inside.",
     photos: [
       { src: "/images/best/nassau-1.jpg", alt: "High view over Atlantis lagoon, beach and resort towers" },
       { src: "/images/best/nassau-2.jpg", alt: "Ornate Atlantis great hall arches and ceiling" },
@@ -937,7 +937,7 @@ export const PLACES = [
     continent: "North America",
     lat: 14.6349, lng: -90.5069,
     when: "",
-    blurb: "",
+    blurb: "A giant red tree in the plaza under a dramatic Guatemalan sky.",
     photos: [
       { src: "/images/best/guatemala-city-1.jpg", alt: "Giant red Christmas tree in the plaza against a dramatic cloud-streaked sky; only usable scenic from this stop" },
     ],
@@ -951,7 +951,7 @@ export const PLACES = [
     continent: "North America",
     lat: 14.5586, lng: -90.7295,
     when: "",
-    blurb: "",
+    blurb: "Terraced gardens with a volcano peeking through, and the yellow arch of Santa Catalina.",
     photos: [
       { src: "/images/best/antigua-1.jpg", alt: "Terraced gardens and stone paths with volcano peeking through, lush wide landscape" },
       { src: "/images/best/antigua-2.jpg", alt: "Volcán de Agua under moody clouds seen from the Hobbitenango hand viewpoint; layered green hills" },
@@ -967,7 +967,7 @@ export const PLACES = [
     continent: "North America",
     lat: 14.7407, lng: -91.1583,
     when: "",
-    blurb: "",
+    blurb: "The lake with its twin volcanoes — sunrise gold, sunset pastel, and a perfect mirror in between.",
     photos: [
       { src: "/images/best/lake-atitla-n-1.jpg", alt: "Lake with the twin volcanoes San Pedro and Tolimán under puffy clouds, framed by a tree; iconic Atitlán" },
       { src: "/images/best/lake-atitla-n-2.jpg", alt: "Pastel sunset with volcano silhouettes mirrored perfectly in glassy water" },
@@ -984,7 +984,7 @@ export const PLACES = [
     continent: "North America",
     lat: 16.9258, lng: -89.8922,
     when: "",
-    blurb: "",
+    blurb: "Flores' white church under a dramatic sky, and Lake Petén Itzá with the clouds building.",
     photos: [
       { src: "/images/best/tikal-flores-1.jpg", alt: "White colonial church of Flores under dramatic sky" },
       { src: "/images/best/tikal-flores-2.jpg", alt: "Lake Peten Itza with lamp posts and big clouds" },
@@ -999,7 +999,7 @@ export const PLACES = [
     continent: "North America",
     lat: 12.115, lng: -86.2362,
     when: "",
-    blurb: "",
+    blurb: "Masaya's lava lake glowing at dusk — a crater you can stand at the edge of after dark.",
     photos: [
       { src: "/images/best/managua-1.jpg", alt: "Smoking Masaya crater under a fiery sunset, layered green hills, best of the sunset burst" },
       { src: "/images/best/managua-2.jpg", alt: "Masaya volcano's glowing lava lake at dusk with jagged rock rim and blue sky, rare and striking" },
@@ -1016,7 +1016,7 @@ export const PLACES = [
     continent: "North America",
     lat: 11.9344, lng: -85.956,
     when: "",
-    blurb: "",
+    blurb: "Terracotta rooftops to the cathedral dome, and the nave inside in warm light.",
     photos: [
       { src: "/images/best/granada-1.jpg", alt: "Rooftop view over terracotta tiles to the cathedral dome under a huge blue sky with streaked clouds" },
       { src: "/images/best/granada-2.jpg", alt: "Cathedral nave with ribbed vaults and wooden pews, warm light, well aligned" },
@@ -1032,7 +1032,7 @@ export const PLACES = [
     continent: "North America",
     lat: 11.5, lng: -85.58,
     when: "",
-    blurb: "",
+    blurb: "Concepción across Lake Nicaragua, a fiery sunset over the water, and a jungle trail to walk it off.",
     photos: [
       { src: "/images/best/ometepe-island-1.jpg", alt: "Concepcion volcano across Lake Nicaragua, classic island view" },
       { src: "/images/best/ometepe-island-2.jpg", alt: "Banana leaves against blue sky, tropical texture shot" },
@@ -1049,7 +1049,7 @@ export const PLACES = [
     continent: "North America",
     lat: 13.6929, lng: -89.2182,
     when: "",
-    blurb: "",
+    blurb: "The Pacific coast of El Salvador — pastel sunsets, driftwood, and the estuary from the plane.",
     photos: [
       { src: "/images/best/san-salvador-1.jpg", alt: "Pastel sunset over the Pacific surf, top score" },
       { src: "/images/best/san-salvador-2.jpg", alt: "Sun dipping behind driftwood on the beach, favorited, distinct foreground" },
@@ -1081,7 +1081,7 @@ export const PLACES = [
     continent: "North America",
     lat: 13.9942, lng: -89.5597,
     when: "",
-    blurb: "",
+    blurb: "Santa Ana's crater with its turquoise lake, and Izalco's perfect cone over the green ridges.",
     photos: [
       { src: "/images/best/santa-ana-1.jpg", alt: "Izalco volcano cone over green ridges, crisp blue sky" },
       { src: "/images/best/santa-ana-2.jpg", alt: "Santa Ana volcano crater with turquoise lake, iconic" },
@@ -1097,7 +1097,7 @@ export const PLACES = [
     continent: "North America",
     lat: 18.4655, lng: -66.1057,
     when: "",
-    blurb: "",
+    blurb: "The beach at sunset, with the wet sand doing the reflecting.",
     photos: [
       { src: "/images/best/san-juan-1.jpg", alt: "Beach at sunset with wet sand reflections, best of a four-shot burst" },
     ],
@@ -1146,7 +1146,7 @@ export const PLACES = [
     continent: "North America",
     lat: 20.8893, lng: -156.4729,
     when: "",
-    blurb: "",
+    blurb: "Maui's coastal trail above deep-blue surf, and Haleakalā's crater from the summit.",
     photos: [
       { src: "/images/best/kahului-1.jpg", alt: "Maui coastal trail on green cliffs above a deep-blue ocean with white surf, huge sky; site-hero quality" },
       { src: "/images/best/kahului-2.jpg", alt: "Haleakalā crater from the summit, red-brown cinder cones and clouds under clear blue sky" },
@@ -1164,7 +1164,7 @@ export const PLACES = [
     continent: "North America",
     lat: 21.9811, lng: -159.3711,
     when: "",
-    blurb: "",
+    blurb: "Kauaʻi: the Nā Pali cliffs plunging into cobalt sea, and Waimea Canyon's red-and-green walls.",
     photos: [
       { src: "/images/best/li-hu-e-1.jpg", alt: "Nā Pali cliffs plunging to a cobalt sea with lush foreground, textbook Kauai hero" },
       { src: "/images/best/li-hu-e-2.jpg", alt: "Waimea Canyon's red-and-green striated walls under blue sky, sharp and saturated" },
@@ -1180,7 +1180,7 @@ export const PLACES = [
     continent: "North America",
     lat: 37.7749, lng: -122.4194,
     when: "",
-    blurb: "",
+    blurb: "The Golden Gate on a perfectly clear day, from the bridge and from the Headlands.",
     photos: [
       { src: "/images/best/san-francisco-1.jpg", alt: "Golden Gate Bridge full span, deep blue sky, perfectly clear" },
       { src: "/images/best/san-francisco-2.jpg", alt: "Golden Gate and city from the Marin Headlands with a ship passing" },
@@ -1200,7 +1200,7 @@ export const PLACES = [
     continent: "North America",
     lat: 36.1699, lng: -115.1398,
     when: "",
-    blurb: "",
+    blurb: "Paris on the Strip at night, and the Seven Magic Mountains out in the desert.",
     photos: [
       { src: "/images/best/las-vegas-1.jpg", alt: "Paris Las Vegas Eiffel Tower lit at night with lamp posts, iconic and sharp" },
       { src: "/images/best/las-vegas-2.jpg", alt: "Seven Magic Mountains stacked boulders in bold colours against blue sky, tight composition" },
@@ -1216,7 +1216,7 @@ export const PLACES = [
     continent: "North America",
     lat: 45.5152, lng: -122.6784,
     when: "",
-    blurb: "",
+    blurb: "The Japanese Garden under a dramatic sky, and the river woodland in autumn from above.",
     photos: [
       { src: "/images/best/portland-1.jpg", alt: "Portland Japanese Garden raked sand garden, dramatic sky, serene" },
       { src: "/images/best/portland-2.jpg", alt: "Aerial over river and autumn woodland with layered clouds" },
@@ -1232,7 +1232,7 @@ export const PLACES = [
     continent: "North America",
     lat: 47.6062, lng: -122.3321,
     when: "",
-    blurb: "",
+    blurb: "The Space Needle at blue hour with Chihuly's yellow sun, and the glass garden below.",
     photos: [
       { src: "/images/best/seattle-1.jpg", alt: "Space Needle at blue hour with Chihuly yellow sun sculpture, top score" },
       { src: "/images/best/seattle-2.jpg", alt: "Chihuly glass garden, saturated reds and yellows" },
@@ -1251,7 +1251,7 @@ export const PLACES = [
     continent: "North America",
     lat: 25.7617, lng: -80.1918,
     when: "",
-    blurb: "",
+    blurb: "Sunrise over the Atlantic in full orange, and the skyline and Everglades from the air.",
     photos: [
       { src: "/images/best/miami-1.jpg", alt: "Blazing orange sunrise over the ocean, top score, pure luxury-travel mood" },
       { src: "/images/best/miami-2.jpg", alt: "Aerial of Miami skyline and coast with clouds, crisp" },
@@ -1268,7 +1268,7 @@ export const PLACES = [
     continent: "North America",
     lat: 42.3601, lng: -71.0589,
     when: "",
-    blurb: "",
+    blurb: "The harbor with its boats, and a wing against a twilight horizon on the way in.",
     photos: [
       { src: "/images/best/boston-1.jpg", alt: "Airplane wing against a deep-blue twilight horizon line, minimalist and elegant; tagged Boston but not place-i" },
       { src: "/images/best/boston-2.jpg", alt: "Boston harbor with moored boats and calm water; a little hazy but a clean waterfront scene" },
@@ -1295,7 +1295,7 @@ export const PLACES = [
     continent: "South America",
     lat: 4.711, lng: -74.0721,
     when: "",
-    blurb: "",
+    blurb: "Monserrate at sunset with the whole city gold below, and the striped Iglesia del Carmen.",
     photos: [
       { src: "/images/best/bogota-1.jpg", alt: "Golden Monserrate sunset over the city with warm foreground light, highest-scoring Bogota frame" },
       { src: "/images/best/bogota-2.jpg", alt: "Striped neo-gothic Iglesia del Carmen facade, the city's most photogenic landmark" },
@@ -1310,7 +1310,7 @@ export const PLACES = [
     continent: "South America",
     lat: 6.2476, lng: -75.5658,
     when: "",
-    blurb: "",
+    blurb: "Los Alumbrados: the river channel lined with Christmas lights, and lanterns in every tree.",
     photos: [
       { src: "/images/best/medelli-n-1.jpg", alt: "Alumbrados: river channel lined with Christmas lights reflecting pink/green, iconic Medellin December scene, s" },
       { src: "/images/best/medelli-n-2.jpg", alt: "Red lantern ornament framed by curtains of white string lights, clean night composition" },
@@ -1326,7 +1326,7 @@ export const PLACES = [
     continent: "South America",
     lat: 10.391, lng: -75.4794,
     when: "",
-    blurb: "",
+    blurb: "Bocagrande glowing over the Caribbean at night, and the umbrella street in Getsemaní.",
     photos: [
       { src: "/images/best/cartagena-1.jpg", alt: "Bocagrande skyline glowing over dark Caribbean water at night, striking and hotel-luxury in feel" },
       { src: "/images/best/cartagena-2.jpg", alt: "Clean sunset with the sun sitting on the horizon over calm sea and a dark headland, minimal and elegant" },
@@ -1343,7 +1343,7 @@ export const PLACES = [
     continent: "South America",
     lat: 12.5847, lng: -81.7006,
     when: "",
-    blurb: "",
+    blurb: "The island from the plane in seven shades of turquoise, and terracotta roofs by the pool.",
     photos: [
       { src: "/images/best/san-andre-s-island-1.jpg", alt: "Aerial of the island in turquoise Caribbean water from the plane window, striking blues" },
       { src: "/images/best/san-andre-s-island-2.jpg", alt: "Terracotta rooftops, palms and pool with the sea beyond, resort feel" },
@@ -1358,7 +1358,7 @@ export const PLACES = [
     continent: "South America",
     lat: -0.1807, lng: -78.4678,
     when: "",
-    blurb: "",
+    blurb: "The Virgen del Panecillo lit against a stormy sky, and a foot on each hemisphere at Mitad del Mundo.",
     photos: [
       { src: "/images/best/quito-1.jpg", alt: "Virgen del Panecillo lit at dusk against stormy sky, dramatic low angle" },
       { src: "/images/best/quito-2.jpg", alt: "Mitad del Mundo monument under moody clouds, clean and recognizable though flat light" },
@@ -1374,7 +1374,7 @@ export const PLACES = [
     continent: "South America",
     lat: -2.171, lng: -79.9224,
     when: "",
-    blurb: "",
+    blurb: "Iguanas on the grass in Parque Seminario, and the cathedral spires through the palms.",
     photos: [
       { src: "/images/best/guayaquil-1.jpg", alt: "Iguana on the grass in Parque Seminario, sharp, characterful and unique to the city" },
       { src: "/images/best/guayaquil-2.jpg", alt: "Cathedral spires framed by palms and the Bolivar monument" },
@@ -1389,7 +1389,7 @@ export const PLACES = [
     continent: "South America",
     lat: -2.9001, lng: -79.0059,
     when: "",
-    blurb: "",
+    blurb: "The blue domes of the New Cathedral over terracotta rooftops.",
     photos: [
       { src: "/images/best/cuenca-1.jpg", alt: "Blue domes of the New Cathedral over terracotta rooftops, Cuenca's signature view" },
       { src: "/images/best/cuenca-2.jpg", alt: "Twin-towered colonial church facade, clean and upright" },
@@ -1405,7 +1405,7 @@ export const PLACES = [
     continent: "South America",
     lat: -25.6953, lng: -54.4367,
     when: "",
-    blurb: "",
+    blurb: "Iguaçu — mist, cumulus, and more water than the eye is prepared for.",
     photos: [
       { src: "/images/best/iguac-u-falls-1.jpg", alt: "Wide sweep of the falls with mist and towering cumulus, the definitive frame of the batch" },
       { src: "/images/best/iguac-u-falls-2.jpg", alt: "Falls cascading under a bright blue sky with puffy clouds, vivid and sharp" },
@@ -1423,7 +1423,7 @@ export const PLACES = [
     continent: "South America",
     lat: -23.1487, lng: -44.23,
     when: "",
-    blurb: "",
+    blurb: "An empty beach curving to forested mountains, and rainforest canopy in purple bloom.",
     photos: [
       { src: "/images/best/ilha-grande-1.jpg", alt: "Empty beach curving toward forested mountains under a swirl of cloud" },
       { src: "/images/best/ilha-grande-2.jpg", alt: "Dense Atlantic rainforest canopy with purple blooms and blue sky" },
@@ -1439,7 +1439,7 @@ export const PLACES = [
     continent: "South America",
     lat: -16.4897, lng: -68.1193,
     when: "",
-    blurb: "",
+    blurb: "Umbrellas over a cobbled lane at night, and houses stacked up the canyon walls.",
     photos: [
       { src: "/images/best/la-paz-1.jpg", alt: "Cobbled lane with colourful hanging umbrellas at night, atmospheric and clean" },
       { src: "/images/best/la-paz-2.jpg", alt: "Houses stacked up the canyon walls under cloud, shows the city's scale" },
@@ -1454,7 +1454,7 @@ export const PLACES = [
     continent: "South America",
     lat: -20.1338, lng: -67.4891,
     when: "",
-    blurb: "",
+    blurb: "The hexagon crust at sunset, and giant cacti on Incahuasi with the white expanse behind.",
     photos: [
       { src: "/images/best/uyuni-salt-flats-1.jpg", alt: "Sunset over the salt flats with hexagon crust in foreground and mountains silhouetted, spectacular" },
       { src: "/images/best/uyuni-salt-flats-2.jpg", alt: "Isla Incahuasi rocky ridge overlooking the white expanse, wide" },
@@ -1471,7 +1471,7 @@ export const PLACES = [
     continent: "South America",
     lat: -16.1667, lng: -69.0861,
     when: "",
-    blurb: "",
+    blurb: "Lake Titicaca from a terrace with a red-tiled roof, boats below the hills and towering clouds.",
     photos: [
       { src: "/images/best/copacabana-1.jpg", alt: "Lake Titicaca from a terrace with white balustrade and red roofs, big dramatic sky" },
       { src: "/images/best/copacabana-2.jpg", alt: "Boats on the lake below rolling hills and towering clouds" },
@@ -1486,7 +1486,7 @@ export const PLACES = [
     continent: "South America",
     lat: -33.4489, lng: -70.6693,
     when: "",
-    blurb: "",
+    blurb: "The Andes going gold at sunset from Cerro San Cristóbal, and the pagoda in the Japanese garden.",
     photos: [
       { src: "/images/best/santiago-1.jpg", alt: "Sun setting behind the Andes in saturated gold from Cerro San Cristobal, painterly" },
       { src: "/images/best/santiago-2.jpg", alt: "Japanese garden pagoda reflected in lily pond, calm green composition" },
@@ -1503,7 +1503,7 @@ export const PLACES = [
     continent: "South America",
     lat: -33.0472, lng: -71.6127,
     when: "",
-    blurb: "",
+    blurb: "Ascensor tracks up the hill, and a red painted doorway on a street full of them.",
     photos: [
       { src: "/images/best/valparai-so-1.jpg", alt: "Historic ascensor (funicular) tracks climbing the hill, characterful Valparaiso detail" },
       { src: "/images/best/valparai-so-me.jpg", alt: "Owner arms outstretched in the red painted doorway with street art, colorful and fun" },
@@ -1518,7 +1518,7 @@ export const PLACES = [
     continent: "South America",
     lat: -22.9087, lng: -68.1997,
     when: "",
-    blurb: "",
+    blurb: "Ojos del Salar mirroring the sky, the dune ridge, and the Valle de la Luna under saturated blue.",
     photos: [
       { src: "/images/best/atacama-1.jpg", alt: "Ojos del Salar lagoon mirroring deep blue sky and clouds, clean composition, highest score in batch" },
       { src: "/images/best/atacama-2.jpg", alt: "Rippled dune ridge with sun overhead, strong desert texture and scale" },
@@ -1535,7 +1535,7 @@ export const PLACES = [
     continent: "South America",
     lat: -34.6037, lng: -58.3816,
     when: "",
-    blurb: "",
+    blurb: "Tigre on a weekend — the Art Museum against blue sky and a gazebo on the river.",
     photos: [
       { src: "/images/best/buenos-aires-1.jpg", alt: "Ornate Tigre Art Museum against blue sky and clouds, sharp and well composed" },
       { src: "/images/best/buenos-aires-2.jpg", alt: "Riverside gazebo and lush trees in Tigre, calm and green" },
@@ -1550,7 +1550,7 @@ export const PLACES = [
     continent: "South America",
     lat: -54.8019, lng: -68.303,
     when: "",
-    blurb: "",
+    blurb: "The end of the road: the Beagle Channel, snow peaks, and the expedition ship waiting in the harbor.",
     photos: [
       { src: "/images/best/ushuaia-1.jpg", alt: "Beagle Channel waterfront with snow-capped peaks and deep blue sky, sharp" },
       { src: "/images/best/ushuaia-2.jpg", alt: "Expedition cruise ship anchored in the harbor with mountains behind, dramatic clouds" },
@@ -1565,7 +1565,7 @@ export const PLACES = [
     continent: "South America",
     lat: -34.9011, lng: -56.1645,
     when: "",
-    blurb: "",
+    blurb: "Palacio Salvo under deep blue, a fiery sunset on the Rambla, and the castle in Parque Rodó.",
     photos: [
       { src: "/images/best/montevideo-1.jpg", alt: "Palacio Salvo under deep blue sky with palms, the city's iconic landmark, sharp" },
       { src: "/images/best/montevideo-2.jpg", alt: "Fiery orange sunset over the Rambla coastline with rocky shore, moody and atmospheric" },
@@ -1599,7 +1599,7 @@ export const PLACES = [
     continent: "Europe",
     lat: 64.1466, lng: -21.9426,
     when: "",
-    blurb: "",
+    blurb: "Hallgrímskirkja across Tjörnin, and the wing over snow on the way in.",
     photos: [
       { src: "/images/best/reykjavi-k-1.jpg", alt: "Green lawn by Tjornin lake with Hallgrimskirkja in the distance, sunny" },
       { src: "/images/best/reykjavi-k-2.jpg", alt: "Wing over snowy Icelandic terrain, clean minimalist arrival shot" },
@@ -1614,7 +1614,7 @@ export const PLACES = [
     continent: "Europe",
     lat: 59.9139, lng: 10.7522,
     when: "",
-    blurb: "",
+    blurb: "The Opera House from the water, and its roof underfoot.",
     photos: [
       { src: "/images/best/oslo-1.jpg", alt: "Symmetrical fountain in front of a stone building, steady and well composed" },
       { src: "/images/best/oslo-2.jpg", alt: "Oslo Opera House from the water under blue sky, iconic and well exposed" },
@@ -1630,7 +1630,7 @@ export const PLACES = [
     continent: "Europe",
     lat: 59.3293, lng: 18.0686,
     when: "",
-    blurb: "",
+    blurb: "Gamla Stan's alleys opening onto the water, and the bridges lit at blue hour.",
     photos: [
       { src: "/images/best/stockholm-1.jpg", alt: "Sunlit alley opening onto the water and Gamla Stan skyline" },
       { src: "/images/best/stockholm-2.jpg", alt: "Blue-hour bridge and lit facades reflected in the water" },
@@ -1645,7 +1645,7 @@ export const PLACES = [
     continent: "Europe",
     lat: 51.5074, lng: -0.1278,
     when: "",
-    blurb: "",
+    blurb: "Buckingham Palace with the flag up, and St Paul's dome with the sun behind it.",
     photos: [
       { src: "/images/best/london-1.jpg", alt: "Buckingham Palace facade with flag, clean and uncluttered" },
       { src: "/images/best/london-2.jpg", alt: "St Paul's dome from below with sun flare" },
@@ -1660,7 +1660,7 @@ export const PLACES = [
     continent: "Europe",
     lat: 53.3498, lng: -6.2603,
     when: "",
-    blurb: "",
+    blurb: "St Patrick's in soft evening light, and Christ Church under dramatic clouds.",
     photos: [
       { src: "/images/best/dublin-1.jpg", alt: "St Patrick's Cathedral facade in soft evening light" },
       { src: "/images/best/dublin-2.jpg", alt: "Christ Church Cathedral and Synod Hall under dramatic clouds" },
@@ -1708,7 +1708,7 @@ export const PLACES = [
     continent: "Europe",
     lat: 52.3676, lng: 4.9041,
     when: "",
-    blurb: "",
+    blurb: "A canal at dusk with warm lights in the water, and St Nicholas over the harbour.",
     photos: [
       { src: "/images/best/amsterdam-1.jpg", alt: "Canal at dusk with mirror reflections and warm lights, classic Amsterdam" },
       { src: "/images/best/amsterdam-2.jpg", alt: "Basilica of St Nicholas over the harbour in sun, clean composition" },
@@ -1724,7 +1724,7 @@ export const PLACES = [
     continent: "Europe",
     lat: 52.52, lng: 13.405,
     when: "",
-    blurb: "",
+    blurb: "The Humboldt Forum dome with the TV tower behind, and the gables of the Nikolaiviertel.",
     photos: [
       { src: "/images/best/berlin-1.jpg", alt: "Humboldt Forum dome with the TV tower behind, crisp blue sky" },
       { src: "/images/best/berlin-2.jpg", alt: "Nikolaiviertel gabled houses and twin church spires" },
@@ -1742,7 +1742,7 @@ export const PLACES = [
     continent: "Europe",
     lat: 50.1109, lng: 8.6821,
     when: "",
-    blurb: "",
+    blurb: "The ECB tower and the Main from above under a moody sky.",
     photos: [
       { src: "/images/best/frankfurt-1.jpg", alt: "ECB tower and the Main river from above under moody sky" },
     ],
@@ -1757,7 +1757,7 @@ export const PLACES = [
     continent: "Europe",
     lat: 55.6761, lng: 12.5683,
     when: "",
-    blurb: "",
+    blurb: "Nyhavn mirrored in still water, the Marble Church dome, and Kastellet's moat in autumn.",
     photos: [
       { src: "/images/best/copenhagen-1.jpg", alt: "Nyhavn colourful houses and boats reflected in still water" },
       { src: "/images/best/copenhagen-2.jpg", alt: "Frederik V equestrian statue with the Marble Church dome" },
@@ -1774,7 +1774,7 @@ export const PLACES = [
     continent: "Europe",
     lat: 60.1699, lng: 24.9384,
     when: "",
-    blurb: "",
+    blurb: "Uspenski's red brick and green domes in perfect light, and the cathedral over Senate Square.",
     photos: [
       { src: "/images/best/helsinki-1.jpg", alt: "Uspenski Cathedral red brick and green domes, perfect light" },
       { src: "/images/best/helsinki-2.jpg", alt: "St John's Church twin spires in evening light" },
@@ -1793,7 +1793,7 @@ export const PLACES = [
     continent: "Europe",
     lat: 50.0755, lng: 14.4378,
     when: "",
-    blurb: "",
+    blurb: "A spritz over the Vltava, sunset over the bridges, and the red rooftops from above.",
     photos: [
       { src: "/images/best/prague-1.jpg", alt: "Aperol spritz held over the Vltava and bridges, sunny lifestyle frame" },
       { src: "/images/best/prague-2.jpg", alt: "Sunset over the river and city with a colorful sky" },
@@ -1826,7 +1826,7 @@ export const PLACES = [
     continent: "Europe",
     lat: 43.5081, lng: 16.4402,
     when: "",
-    blurb: "",
+    blurb: "The fortress above the old town, and a harbor with the Adriatic clear to the bottom.",
     photos: [
       { src: "/images/best/split-1.jpg", alt: "Hillside fortress above the old town and palms under clear blue sky" },
       { src: "/images/best/split-2.jpg", alt: "Harbor with bronze statue, monastery and clear Adriatic water" },
@@ -1841,7 +1841,7 @@ export const PLACES = [
     continent: "Europe",
     lat: 44.7866, lng: 20.4489,
     when: "",
-    blurb: "",
+    blurb: "Kalemegdan's stone gates, and the ramparts over the Sava–Danube confluence.",
     photos: [
       { src: "/images/best/belgrade-1.jpg", alt: "Kalemegdan fortress stone gate framing the bridge beyond" },
       { src: "/images/best/belgrade-2.jpg", alt: "Fortress ramparts with the Sava/Danube confluence under blue sky" },
@@ -1856,7 +1856,7 @@ export const PLACES = [
     continent: "Europe",
     lat: 42.6977, lng: 23.3219,
     when: "",
-    blurb: "",
+    blurb: "Alexander Nevsky's gold domes in evening light.",
     photos: [
       { src: "/images/best/sofia-1.jpg", alt: "Domed church under dramatic clouds, strong sky" },
       { src: "/images/best/sofia-2.jpg", alt: "Alexander Nevsky Cathedral gold domes in warm evening light" },
@@ -1871,7 +1871,7 @@ export const PLACES = [
     continent: "Europe",
     lat: 37.9838, lng: 23.7275,
     when: "",
-    blurb: "",
+    blurb: "The city from the Acropolis under dramatic clouds, the Theatre of Dionysus below, Hephaestus through the trees.",
     photos: [
       { src: "/images/best/athens-1.jpg", alt: "Wide panorama over Athens from the Acropolis under dramatic clouds" },
       { src: "/images/best/athens-2.jpg", alt: "Theatre of Dionysus tiers leading up to the Acropolis wall" },
@@ -1888,7 +1888,7 @@ export const PLACES = [
     continent: "Europe",
     lat: 41.9028, lng: 12.4964,
     when: "",
-    blurb: "",
+    blurb: "The Trevi with no one in front of it, St Peter's dome over the Tiber at night, the Colosseum lit gold.",
     photos: [
       { src: "/images/best/rome-1.jpg", alt: "Trevi Fountain with turquoise water and no crowd, rare and sharp" },
       { src: "/images/best/rome-2.jpg", alt: "St Peter's dome over the Tiber and bridge at night with reflections" },
@@ -1906,7 +1906,7 @@ export const PLACES = [
     continent: "Europe",
     lat: 45.4642, lng: 9.19,
     when: "",
-    blurb: "",
+    blurb: "The Galleria's dome from directly beneath, and the Arco della Pace lit for the Olympics.",
     photos: [
       { src: "/images/best/milan-1.jpg", alt: "Arco della Pace arch at night with the illuminated Olympic wreath framed inside, warm-lit stone, clean composi" },
       { src: "/images/best/milan-2.jpg", alt: "Symmetrical straight-up shot of the Galleria dome ceiling, graphic and unusual" },
@@ -1922,7 +1922,7 @@ export const PLACES = [
     continent: "Europe",
     lat: 41.3874, lng: 2.1686,
     when: "",
-    blurb: "",
+    blurb: "The Passion facade of the Sagrada Família, an empty Gothic Quarter alley, and a rooftop pool over the city at night.",
     photos: [
       { src: "/images/best/barcelona-1.jpg", alt: "Sagrada Familia Passion facade towers against blue sky" },
       { src: "/images/best/barcelona-2.jpg", alt: "Glowing rooftop infinity pool over the city at night, luxury feel" },
@@ -1939,7 +1939,7 @@ export const PLACES = [
     continent: "Europe",
     lat: 40.4168, lng: -3.7038,
     when: "",
-    blurb: "",
+    blurb: "The Royal Palace across the plaza, and the skyline from a rooftop.",
     photos: [
       { src: "/images/best/madrid-1.jpg", alt: "Rooftop view over Madrid skyline" },
       { src: "/images/best/madrid-2.jpg", alt: "Royal Palace across the plaza under dramatic sky" },
@@ -1955,7 +1955,7 @@ export const PLACES = [
     continent: "Europe",
     lat: 41.1239, lng: -8.6118,
     when: "",
-    blurb: "",
+    blurb: "Porto's rooftops silhouetted against a blazing Douro sunset, from the Gaia side of the river.",
     photos: [
       { src: "/images/best/vila-nova-de-gaia-1.jpg", alt: "Blazing sunset over the Douro with Porto's rooftops silhouetted" },
       { src: "/images/best/vila-nova-de-gaia-2.jpg", alt: "Porto skyline with the Clerigos tower over terracotta roofs" },
@@ -1972,7 +1972,7 @@ export const PLACES = [
     continent: "Europe",
     lat: 41.1893, lng: -7.5453,
     when: "",
-    blurb: "",
+    blurb: "Terraced vineyards mirrored in the Douro, and a glass on the terrace above them.",
     photos: [
       { src: "/images/best/pinha-o-1.jpg", alt: "Douro river with terraced vineyard hills mirrored in still water" },
       { src: "/images/best/pinha-o-2.jpg", alt: "Wine glass on a terrace overlooking the vineyards; attainable-luxury lifestyle shot" },
@@ -1987,7 +1987,7 @@ export const PLACES = [
     continent: "Europe",
     lat: 41.0082, lng: 28.9784,
     when: "",
-    blurb: "",
+    blurb: "Hagia Sophia behind the fountains, Çamlıca floodlit at night, and the Bosphorus from the plane.",
     photos: [
       { src: "/images/best/istanbul-1.jpg", alt: "Hagia Sophia behind dancing fountains and blue pool, brilliant sun" },
       { src: "/images/best/istanbul-2.jpg", alt: "Camlica Mosque floodlit at night, symmetrical minarets" },
@@ -2025,7 +2025,7 @@ export const PLACES = [
     continent: "Africa",
     lat: 30.0444, lng: 31.2357,
     when: "",
-    blurb: "",
+    blurb: "The Nile at night from a rooftop, with the towers lit and the river holding the reflection.",
     photos: [
       { src: "/images/best/cairo-1.jpg", alt: "Lit tower on the Nile at night with clean reflection; sharp, simple composition" },
       { src: "/images/best/cairo-2.jpg", alt: "Rooftop obelisk against the night skyline; moody, no people" },
@@ -2056,7 +2056,7 @@ export const PLACES = [
     continent: "Africa",
     lat: 31.6295, lng: -7.9811,
     when: "",
-    blurb: "",
+    blurb: "Mint tea beside a tiled courtyard pool, and lanterns on the pillars after dark.",
     photos: [
       { src: "/images/best/marrakech-1.jpg", alt: "Silver teapot and glasses beside a tiled courtyard pool; still-life that reads as a luxury riad" },
       { src: "/images/best/marrakech-2.jpg", alt: "Ornate white pillar with glowing lanterns at night; luxury-riad detail" },
@@ -2071,7 +2071,7 @@ export const PLACES = [
     continent: "Africa",
     lat: 33.5731, lng: -7.5898,
     when: "",
-    blurb: "",
+    blurb: "The Hassan II Mosque's minaret against deep blue sky, and a sunlit alley in the medina.",
     photos: [
       { src: "/images/best/casablanca-1.jpg", alt: "Hassan II Mosque minaret against deep blue sky, sharp and perfectly lit; top score on the sheet" },
       { src: "/images/best/casablanca-2.jpg", alt: "Wider framing of the whole mosque and plaza; different enough from AFR2-12 to keep" },
@@ -2089,7 +2089,7 @@ export const PLACES = [
     continent: "Asia",
     lat: 35.6762, lng: 139.6503,
     when: "",
-    blurb: "",
+    blurb: "Lotus at Shinobazu Pond with the skyline behind — and a detour to DisneySea.",
     photos: [
       { src: "/images/best/tokyo-1.jpg", alt: "Fairytale tower at Tokyo DisneySea, sharp and whimsical (score 0.78)" },
       { src: "/images/best/tokyo-2.jpg", alt: "Shinobazu Pond lotus field against the skyline, clean and green (score 0.74)" },
@@ -2122,7 +2122,7 @@ export const PLACES = [
     continent: "Asia",
     lat: 34.6937, lng: 135.5023,
     when: "",
-    blurb: "",
+    blurb: "Osaka Castle on its stone base, the moat reflecting it, and teamLab's projections on the botanical garden pond.",
     photos: [
       { src: "/images/best/osaka-1.jpg", alt: "Osaka Castle keep on its stone base, blue sky, sharp" },
       { src: "/images/best/osaka-2.jpg", alt: "Castle moat and walls with reflection under blue sky" },
@@ -2139,7 +2139,7 @@ export const PLACES = [
     continent: "Asia",
     lat: 35.3192, lng: 139.5467,
     when: "",
-    blurb: "",
+    blurb: "Sunset over Sagami Bay with Fuji on the horizon, hydrangeas in bloom, and the red torii at Tsurugaoka.",
     photos: [
       { src: "/images/best/kamakura-1.jpg", alt: "Sun setting over Sagami Bay with golden reflection, 0.82" },
       { src: "/images/best/kamakura-2.jpg", alt: "Sunset with a bird in flight and Mt Fuji silhouette on the horizon" },
@@ -2157,7 +2157,7 @@ export const PLACES = [
     continent: "Asia",
     lat: 43.0618, lng: 141.3545,
     when: "",
-    blurb: "",
+    blurb: "Azaleas in bloom, the red-brick Beer Museum, and sushi by the window.",
     photos: [
       { src: "/images/best/sapporo-1.jpg", alt: "Vivid azalea close-up, sharp and saturated (score 0.79)" },
       { src: "/images/best/sapporo-2.jpg", alt: "Sapporo Beer Museum with stacked kegs and red brick" },
@@ -2173,7 +2173,7 @@ export const PLACES = [
     continent: "Asia",
     lat: 43.1907, lng: 140.9947,
     when: "",
-    blurb: "",
+    blurb: "The canal with its stone warehouses, ivy on the brick, boats on the water.",
     photos: [
       { src: "/images/best/otaru-1.jpg", alt: "Ivy-covered brick warehouse across the canal" },
       { src: "/images/best/otaru-2.jpg", alt: "Otaru Canal with stone warehouses on both banks, blue sky" },
@@ -2189,7 +2189,7 @@ export const PLACES = [
     continent: "Asia",
     lat: 42.9797, lng: 140.5094,
     when: "",
-    blurb: "",
+    blurb: "A rocky Hokkaido shoreline at sunset, and the mist over Shinsen-numa marsh.",
     photos: [
       { src: "/images/best/iwanai-1.jpg", alt: "Sunset over a rocky Hokkaido shoreline, 0.70" },
       { src: "/images/best/iwanai-2.jpg", alt: "Rocky coast and blue sea under clear sky" },
@@ -2205,7 +2205,7 @@ export const PLACES = [
     continent: "Asia",
     lat: 42.8048, lng: 140.6874,
     when: "",
-    blurb: "",
+    blurb: "Mount Yōtei over the valley, moss-phlox in magenta, and — once — a pizza with the mountain behind it.",
     photos: [
       { src: "/images/best/niseko-1.jpg", alt: "Mt Yotei over the resort valley, clean landscape" },
       { src: "/images/best/niseko-2.jpg", alt: "Pink and magenta moss-phlox field with forest behind" },
@@ -2221,7 +2221,7 @@ export const PLACES = [
     continent: "Asia",
     lat: 42.5966, lng: 140.8497,
     when: "",
-    blurb: "",
+    blurb: "The lake from the summit boardwalk: an island in the middle and green hills all around.",
     photos: [
       { src: "/images/best/lake-to-ya-1.jpg", alt: "Boardwalk overlook leading the eye to the lake" },
       { src: "/images/best/lake-to-ya-2.jpg", alt: "Wide lake panorama with island and rolling green hills" },
@@ -2237,7 +2237,7 @@ export const PLACES = [
     continent: "Asia",
     lat: 37.5665, lng: 126.978,
     when: "",
-    blurb: "",
+    blurb: "Namdaemun gate with the skyline behind it.",
     photos: [
       { src: "/images/best/seoul-1.jpg", alt: "Namdaemun gate with flowering shrubs and skyline behind; a few distant visitors" },
     ],
@@ -2251,7 +2251,7 @@ export const PLACES = [
     continent: "Asia",
     lat: 39.9042, lng: 116.4074,
     when: "",
-    blurb: "",
+    blurb: "The Water Cube and the Bird's Nest lit at night — Olympic Park after dark.",
     photos: [
       { src: "/images/best/beijing-1.jpg", alt: "Water Cube glowing blue at night, recognizable landmark" },
       { src: "/images/best/beijing-2.jpg", alt: "Bird's Nest stadium lit up at night with wide plaza" },
@@ -2269,7 +2269,7 @@ export const PLACES = [
     continent: "Asia",
     lat: 22.3193, lng: 114.1694,
     when: "",
-    blurb: "",
+    blurb: "Victoria Harbour at night from Kowloon, and the Big Buddha grounds at Ngong Ping.",
     photos: [
       { src: "/images/best/hong-kong-1.jpg", alt: "Wide Victoria Harbour skyline at night from Kowloon, classic and sharp" },
       { src: "/images/best/hong-kong-2.jpg", alt: "Central Plaza and convention centre lit at night, 0.78" },
@@ -2286,7 +2286,7 @@ export const PLACES = [
     continent: "Asia",
     lat: 25.033, lng: 121.5654,
     when: "",
-    blurb: "",
+    blurb: "The lantern festival's koi, and the National Theater's red columns.",
     photos: [
       { src: "/images/best/taipei-1.jpg", alt: "Vivid koi lantern sculpture at the lantern festival" },
       { src: "/images/best/taipei-2.jpg", alt: "National Theater's ornate roofline and red columns" },
@@ -2301,7 +2301,7 @@ export const PLACES = [
     continent: "Asia",
     lat: 14.5995, lng: 120.9842,
     when: "",
-    blurb: "",
+    blurb: "An infinity pool over the skyline at dusk, cocktail in hand.",
     photos: [
       { src: "/images/best/manila-1.jpg", alt: "Cocktail held over an infinity pool with skyline, attainable-luxury lifestyle shot (owner's hand only)" },
       { src: "/images/best/manila-2.jpg", alt: "Dusk skyline of high-rises, moody blue-hour light" },
@@ -2317,7 +2317,7 @@ export const PLACES = [
     continent: "Asia",
     lat: 10.3157, lng: 123.8854,
     when: "",
-    blurb: "",
+    blurb: "A rainbow over a palm-lined beach at dusk.",
     photos: [
       { src: "/images/best/cebu-1.jpg", alt: "Rainbow over palm-lined beach at dusk, gentle and atmospheric" },
     ],
@@ -2332,7 +2332,7 @@ export const PLACES = [
     continent: "Asia",
     lat: 21.0278, lng: 105.8342,
     when: "",
-    blurb: "",
+    blurb: "St Joseph's Cathedral, the Temple of Literature over its pond, and the Old Quarter on foot.",
     photos: [
       { src: "/images/best/hanoi-1.jpg", alt: "Bronze statue on St Joseph's Cathedral facade, sharp detail, 0.77" },
       { src: "/images/best/hanoi-2.jpg", alt: "Temple of Literature pavilion over a green pond, calm composition" },
@@ -2348,7 +2348,7 @@ export const PLACES = [
     continent: "Asia",
     lat: 10.8231, lng: 106.6297,
     when: "",
-    blurb: "",
+    blurb: "A sunflower field against the Saigon skyline at golden hour, the Central Post Office, and a wall of silk lanterns.",
     photos: [
       { src: "/images/best/ho-chi-minh-city-1.jpg", alt: "Sunflower field with the Saigon skyline at golden hour, 0.81" },
       { src: "/images/best/ho-chi-minh-city-2.jpg", alt: "Saigon Central Post Office colonial facade" },
@@ -2365,7 +2365,7 @@ export const PLACES = [
     continent: "Asia",
     lat: 16.0544, lng: 108.2022,
     when: "",
-    blurb: "",
+    blurb: "Hội An's lanterns at night, the Phúc Kiến gate in pink and red, and a circular gate mirrored in a lotus pond.",
     photos: [
       { src: "/images/best/da-nang-hoi-an-1.jpg", alt: "Phuc Kien Assembly Hall gate in Hoi An, pink and red with yellow chrysanthemums, 0.80" },
       { src: "/images/best/da-nang-hoi-an-2.jpg", alt: "Silk lanterns glowing at night, the iconic Hoi An image" },
@@ -2382,7 +2382,7 @@ export const PLACES = [
     continent: "Asia",
     lat: 20.9101, lng: 107.1839,
     when: "",
-    blurb: "",
+    blurb: "Limestone karsts and a cruise boat on jade water — the classic view, and the elevated one.",
     photos: [
       { src: "/images/best/ha-long-bay-1.jpg", alt: "Limestone karsts and a cruise boat on jade water, 0.72" },
       { src: "/images/best/ha-long-bay-2.jpg", alt: "Elevated overview of the bay dotted with karst islands and boats" },
@@ -2398,7 +2398,7 @@ export const PLACES = [
     continent: "Asia",
     lat: 13.7563, lng: 100.5018,
     when: "",
-    blurb: "",
+    blurb: "Wat Phra Kaew against blue sky, and a gilded kinnari on a mosaic wall.",
     photos: [
       { src: "/images/best/bangkok-1.jpg", alt: "Wat Phra Kaew ornate facade against blue sky" },
       { src: "/images/best/bangkok-2.jpg", alt: "Gilded kinnari statue with mosaic tile backdrop, rich detail" },
@@ -2430,7 +2430,7 @@ export const PLACES = [
     continent: "Asia",
     lat: 3.139, lng: 101.6869,
     when: "",
-    blurb: "",
+    blurb: "The Petronas Towers straight up at night, the KLCC fountains, and the Batu Caves from inside the cavern.",
     photos: [
       { src: "/images/best/kuala-lumpur-1.jpg", alt: "Petronas Towers straight-up night shot, sharp, symmetrical, iconic; best of a large burst" },
       { src: "/images/best/kuala-lumpur-2.jpg", alt: "Colorful KLCC fountain show at night with towers behind" },
@@ -2466,7 +2466,7 @@ export const PLACES = [
     continent: "Asia",
     lat: -8.6705, lng: 115.2126,
     when: "",
-    blurb: "",
+    blurb: "Rice terraces under blue sky, a temple water garden, a macaque in Ubud, and the Handara Gate.",
     photos: [
       { src: "/images/best/bali-1.jpg", alt: "Macaque resting on a mossy rock in Ubud monkey forest, soft light, 0.86" },
       { src: "/images/best/bali-2.jpg", alt: "Temple water garden with carved stone and lily pond" },
@@ -2483,7 +2483,7 @@ export const PLACES = [
     continent: "Asia",
     lat: 4.1755, lng: 73.5093,
     when: "",
-    blurb: "",
+    blurb: "Turquoise lagoon, a speedboat at the jetty — arrival in the Maldives.",
     photos: [
       { src: "/images/best/male-1.jpg", alt: "Turquoise lagoon with speedboat at the jetty, classic Maldives arrival" },
     ],
@@ -2497,7 +2497,7 @@ export const PLACES = [
     continent: "Asia",
     lat: -0.6934, lng: 73.1554,
     when: "",
-    blurb: "",
+    blurb: "A palm mirrored in an infinity pool, a coral lagoon, and a sunset over glassy water — the Maldives, on points.",
     photos: [
       { src: "/images/best/addu-atoll-1.jpg", alt: "Palm tree mirrored in an infinity pool, pure Maldives luxury shot, 0.83" },
       { src: "/images/best/addu-atoll-2.jpg", alt: "Turquoise shallow lagoon with coral shoreline and puffy clouds" },
@@ -2514,7 +2514,7 @@ export const PLACES = [
     continent: "Asia",
     lat: 28.6139, lng: 77.209,
     when: "",
-    blurb: "",
+    blurb: "Humayun's Tomb with its reflecting channel, India Gate through the haze, and a colonial atrium from below.",
     photos: [
       { src: "/images/best/delhi-1.jpg", alt: "Looking straight up an octagonal colonial atrium to a domed skylight, striking geometry, 0.82" },
       { src: "/images/best/delhi-2.jpg", alt: "India Gate canopy with fountains, hazy but recognizable" },
@@ -2530,7 +2530,7 @@ export const PLACES = [
     continent: "Asia",
     lat: 19.076, lng: 72.8777,
     when: "",
-    blurb: "",
+    blurb: "The sun rising directly behind the Gateway of India, gulls over the harbor, fishing boats at dawn.",
     photos: [
       { src: "/images/best/mumbai-1.jpg", alt: "Sun rising directly behind the Gateway of India arch" },
       { src: "/images/best/mumbai-2.jpg", alt: "Flock of gulls over the harbor water, graphic and sharp (score 0.77)" },
@@ -2565,7 +2565,7 @@ export const PLACES = [
     continent: "Oceania",
     lat: -38.6662, lng: 143.1044,
     when: "",
-    blurb: "",
+    blurb: "The Twelve Apostles in full sun, cliffs at golden hour, and Beauchamp Falls in the rainforest.",
     photos: [
       { src: "/images/best/great-ocean-road-1.jpg", alt: "Twelve Apostles sea stacks and beach in full sun, classic postcard view" },
       { src: "/images/best/great-ocean-road-2.jpg", alt: "Coastal cliffs at golden hour with soft sky" },
@@ -2584,7 +2584,7 @@ export const PLACES = [
     continent: "Oceania",
     lat: -25.3444, lng: 131.0369,
     when: "",
-    blurb: "",
+    blurb: "Uluru glowing red from the air, and on the horizon across the desert scrub.",
     photos: [
       { src: "/images/best/uluru-1.jpg", alt: "Uluru glowing red against blue sky from the air, iconic" },
       { src: "/images/best/uluru-2.jpg", alt: "Uluru on the horizon over red desert scrub, wide" },
@@ -2600,7 +2600,7 @@ export const PLACES = [
     continent: "Oceania",
     lat: -42.8821, lng: 147.3272,
     when: "",
-    blurb: "",
+    blurb: "Turquoise water under dolerite cliffs, and the botanical gardens' lily pond.",
     photos: [
       { src: "/images/best/hobart-1.jpg", alt: "Turquoise water below layered dolerite cliffs, vivid colour and clean framing" },
       { src: "/images/best/hobart-2.jpg", alt: "Lily pond in the botanical gardens with tall trees" },
@@ -2616,7 +2616,7 @@ export const PLACES = [
     continent: "Oceania",
     lat: -36.8509, lng: 174.7645,
     when: "",
-    blurb: "",
+    blurb: "The Sky Tower from the water, the Ferry Building in the harbour, and a sailing boat — at the helm, briefly.",
     photos: [
       { src: "/images/best/auckland-1.jpg", alt: "Auckland skyline with Sky Tower from the water, deep blue sky and sea, clean composition" },
       { src: "/images/best/auckland-2.jpg", alt: "Hotel infinity pool with trees, luxury feel" },
@@ -2633,7 +2633,7 @@ export const PLACES = [
     continent: "Oceania",
     lat: -36.7867, lng: 174.86,
     when: "",
-    blurb: "",
+    blurb: "Auckland across the gulf from the summit of a volcano.",
     photos: [
       { src: "/images/best/rangitoto-island-1.jpg", alt: "Auckland skyline across the gulf from the summit, clear blue water" },
       { src: "/images/best/rangitoto-island-2.jpg", alt: "Skyline framed by pohutukawa foliage" },
@@ -2649,7 +2649,7 @@ export const PLACES = [
     continent: "Oceania",
     lat: -36.8, lng: 175.1,
     when: "",
-    blurb: "",
+    blurb: "Vineyard rows rolling to the hills under moody cloud — and archery among the vines.",
     photos: [
       { src: "/images/best/waiheke-island-1.jpg", alt: "Vineyard rows rolling to the hills under moody cloud" },
       { src: "/images/best/waiheke-island-me.jpg", alt: "Owner drawing a bow at targets among the vines, an activity shot" },
@@ -2682,7 +2682,7 @@ export const PLACES = [
     continent: "Oceania",
     lat: -41.2924, lng: 174.7787,
     when: "",
-    blurb: "",
+    blurb: "The waterfront's carved figure with pāua eyes, and the harbour in sun.",
     photos: [
       { src: "/images/best/wellington-1.jpg", alt: "Carved wooden figure with paua eyes on the waterfront" },
       { src: "/images/best/wellington-2.jpg", alt: "Sunlit harbour with rocky shoreline and hills" },
@@ -2697,7 +2697,7 @@ export const PLACES = [
     continent: "Oceania",
     lat: -43.5321, lng: 172.6362,
     when: "",
-    blurb: "",
+    blurb: "The Cardboard Cathedral's stained-glass triangle, and a penguin at the Antarctic Centre.",
     photos: [
       { src: "/images/best/christchurch-1.jpg", alt: "Penguin on rocks at the Antarctic Centre, clean and bright" },
       { src: "/images/best/christchurch-2.jpg", alt: "Cardboard Cathedral with its stained-glass triangle, iconic of the city" },
