@@ -6,6 +6,22 @@ it was planned.
 
 ## 2026-09-10 — Globe, new nav, full Astro rebuild goes live
 
+**Photos from my own library** (`0a5cb97`)
+- Went through my Photos library for the site instead of relying on the five
+  shots from my Fora profile. Every favorite (629) plus the top-scored
+  non-favorites (1,795) was matched to a globe pin by GPS, ranked by Apple's
+  own aesthetic score, and 305 of them reviewed by hand across 24 places.
+- 43 photos made the cut and live in `public/images/`: 34 scenery with no one in
+  frame, 9 of me. All web-sized to 1800 px with EXIF and location data stripped.
+- New places with photos: Budapest, Abu Dhabi, Paris, Kyoto, Rotorua, El Tunco
+  (a new coastal pin — the sunsets were 35 km from the San Salvador pin), Punta
+  del Este, Leh, Singapore, Queenstown, Mexico City, Oʻahu, Hilo, Phuket,
+  Hurghada and Reims — plus stronger shots for Antarctica, Doha, Rio, the Taj
+  Mahal and Giza. The Antarctica iceberg is the best photo in the whole library.
+- A "Website picks" album in Photos holds the 43 originals.
+- Next: wire them into `src/data/places.js` so those pins turn into gold story
+  pins, and consider the iceberg as the home-page hero.
+
 **The globe** (`696f465`, `1a4336a`, `f50b95d`, `f9d5882`)
 - New `/globe` page: a 3D globe (globe.gl / three.js) in the brand emerald with a
   gold atmosphere. Every place I've been is on it: 166 places, 58 countries, 7
