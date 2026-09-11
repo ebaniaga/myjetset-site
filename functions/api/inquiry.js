@@ -3,6 +3,8 @@
 // traveler), then sends the traveler a short confirmation. Same env vars as
 // /api/search: RESEND_API_KEY, FROM_EMAIL, OWNER_EMAIL.
 
+import { isRecord, escapeHtml as esc } from "../../src/lib/validation.js";
+
 const OWNER_FALLBACK = "hello@myjetset.life";
 const LIMITS = { name: 120, email: 200, phone: 40, short: 200, long: 2000 };
 
@@ -12,6 +14,11 @@ export async function onRequestPost({ request, env }) {
     body = await request.json();
   } catch {
     return json({ error: "Invalid request." }, 400);
+  }
+  if (!isRecord(body)) return json({ error: "Invalid request." }, 400);
+  const fields = ["name", "email", "phone", "help", "destinations", "dates", "travelers", "budget", "notes", "website"];
+  if (fields.some((key) => body[key] != null && typeof body[key] !== "string")) {
+    return json({ error: "Inquiry fields must be text." }, 400);
   }
 
   // Honeypot — real visitors never fill this field.
@@ -112,10 +119,6 @@ function renderConfirmation(name, owner) {
       <p style="font-size:15px;line-height:1.65;color:#4A463D;margin:0 0 12px;">I'll read through the details and follow up within a day or two with next steps. If anything comes to mind in the meantime, just reply to this email.</p>
       <p style="font-size:15px;line-height:1.65;color:#4A463D;margin:0;">— Erickson<br/><span style="font-size:12px;color:#6E7C72;">Fora Travel Advisor · ${esc(owner)}</span></p>
     </div></div>`;
-}
-
-function esc(str) {
-  return String(str).replace(/[&<>"']/g, (c) => ({ "&": "&amp;", "<": "&lt;", ">": "&gt;", '"': "&quot;", "'": "&#39;" }[c]));
 }
 
 function json(data, status = 200) {

@@ -4,14 +4,22 @@
   "type": "module",
   "description": "My Jet Set Life — travel advisory, miles & points optimization, and award search. Entry point to Erickson Baniaga's Fora travel services.",
   "scripts": {
+    "thumbnails": "node scripts/generate-thumbnails.mjs",
+    "predev": "npm run thumbnails",
     "dev": "astro dev",
+    "prebuild": "npm run thumbnails",
     "build": "astro build",
+    "test": "node --test",
+    "check:build": "node scripts/check-build.mjs",
     "preview": "astro preview",
-    "deploy": "astro build && wrangler pages deploy dist --project-name myjetset --branch main"
+    "deploy": "npm run build && npm run check:build && wrangler pages deploy dist --project-name myjetset --branch main"
   },
   "dependencies": {
     "astro": "^5.0.0",
     "globe.gl": "^2.46.2",
     "three": "^0.186.0"
+  },
+  "devDependencies": {
+    "sharp": "0.34.5"
   }
 }

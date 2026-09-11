@@ -1315,7 +1315,7 @@ import Layout from "../layouts/Layout.astro";
                 destination: payload.surprise ? 'Anywhere' : payload.destination
               }));
             } catch (e) {}
-            window.location.href = '/submitted.html';
+            window.location.href = '/submitted';
           })
           .catch(function () {
             show('err', 'Network error. Please check your connection and try again.');

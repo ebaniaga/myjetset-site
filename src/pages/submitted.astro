@@ -1,0 +1,45 @@
+---
+import Layout from "../layouts/Layout.astro";
+import Star from "../components/Star.astro";
+import "../styles/global.css";
+---
+<Layout title="Search complete — My Jet Set Life" description="Your award search is complete. Check your inbox for the results." active="search">
+  <section class="section confirmation">
+    <div class="container">
+      <div class="panel framed confirmation-card">
+        <Star size={32} />
+        <p class="eyebrow">Search complete</p>
+        <h1 class="display-m">Check your inbox.</h1>
+        <p class="body-l soft" id="confirmation-lead">After a successful search, your results arrive by email. You can run another search whenever you're ready.</p>
+        <p class="body-s muted" id="confirmation-detail"></p>
+        <a class="btn btn--primary" href="/search">Search again</a>
+      </div>
+    </div>
+  </section>
+</Layout>
+
+<style>
+  .confirmation-card { max-width: 640px; margin: 0 auto; text-align: center; padding: 56px 32px; }
+  .confirmation-card :global(.star) { margin: 0 auto 20px; }
+  .eyebrow { margin-bottom: 12px; }
+  h1 { color: var(--emerald); }
+  .body-l { margin-top: 20px; }
+  .body-s { margin-top: 14px; }
+  .btn { margin-top: 28px; }
+</style>
+
+<script>
+  try {
+    const data = JSON.parse(sessionStorage.getItem("mjsl_submit") || "null");
+    if (data && typeof data === "object" && typeof data.email === "string" &&
+        Number.isSafeInteger(data.count) && data.count >= 0) {
+      const lead = document.getElementById("confirmation-lead")!;
+      const detail = document.getElementById("confirmation-detail")!;
+      const name = typeof data.name === "string" && data.name.trim() ? `Thanks, ${data.name.trim()} — ` : "Thanks — ";
+      lead.textContent = `${name}we've emailed your search results to ${data.email}.`;
+      detail.textContent = data.count > 0
+        ? `We found ${data.count} option${data.count === 1 ? "" : "s"} within your budget. Check your spam folder if you don't see the email.`
+        : "We didn't find matching award space for these dates. Try different dates or nearby airports.";
+    }
+  } catch { /* Storage may be unavailable; the generic page still works. */ }
+</script>

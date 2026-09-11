@@ -6,6 +6,7 @@
 import Layout from "../layouts/Layout.astro";
 import "../styles/global.css";
 import { PLACES, placeStats, markerType } from "../data/places.js";
+import { THUMBNAIL_WIDTHS, thumbnailUrl } from "../lib/thumbnails.js";
 
 const stats = placeStats(PLACES);
 const continents = [...new Set(PLACES.map((p) => p.continent))].sort();
@@ -103,7 +104,9 @@ function groupByCountry(list) {
             <li class="pin-item">
               <button class="pin-card" type="button" data-place={p.id}>
                 {p.photos[0]
-                  ? <img class="pin-thumb" src={p.photos[0].src} alt="" width="160" height="107" loading="lazy" />
+                  ? <img class="pin-thumb" src={thumbnailUrl(p.photos[0].src, 160)}
+                      srcset={THUMBNAIL_WIDTHS.map((w) => `${thumbnailUrl(p.photos[0].src, w)} ${w}w`).join(", ")}
+                      sizes="80px" alt="" width="160" height="108" loading="lazy" decoding="async" />
                   : <span class="pin-thumb pin-thumb--empty" aria-hidden="true" />}
                 <span class="pin-text">
                   <span class="pin-place">{p.place}{p.when ? ` · ${p.when}` : ""}</span>
@@ -165,6 +168,7 @@ function groupByCountry(list) {
   const blogLink = document.getElementById("place-blog") as HTMLAnchorElement;
 
   const reduceMotion = matchMedia("(prefers-reduced-motion: reduce)").matches;
+  const IDLE_SPIN = false; // false = globe sits still at rest (motion only on drag / Inspire me)
   const home = PLACES.find((p) => p.home) ?? PLACES[0];
   const stories = PLACES.filter((p) => markerType(p) === "story");
   // Phones: fewer DOM markers and static arcs — 159 animated stars + arcs is too much for a handset.
@@ -206,7 +210,7 @@ function groupByCountry(list) {
   const param = new URLSearchParams(location.search).get("style") || "";
   const style = STYLES.includes(param) ? param : STYLES.includes(GLOBE_STYLE) ? GLOBE_STYLE : "hex";
 
-  const world = Globe({ animateIn: !reduceMotion })(el)
+  const world = Globe({ animateIn: IDLE_SPIN && !reduceMotion })(el)
     .backgroundColor("rgba(0,0,0,0)")
     .showAtmosphere(true)
     .atmosphereColor(GOLD)
@@ -226,7 +230,7 @@ function groupByCountry(list) {
     .arcDashLength(0.4)
     .arcDashGap(0.9)
     .arcDashInitialGap((d: any) => d.gap)
-    .arcDashAnimateTime(reduceMotion || lite ? 0 : 4200)
+    .arcDashAnimateTime(reduceMotion || lite || !IDLE_SPIN ? 0 : 4200)
     // "Been there" dots live in the WebGL scene so they stay locked to the globe.
     .pointsData(dotData)
     .pointLat("lat").pointLng("lng")
@@ -348,8 +352,9 @@ function groupByCountry(list) {
     .catch(() => { /* the globe still works without country dots */ });
 
   const controls: any = world.controls();
-  controls.autoRotate = true;
+  controls.autoRotate = IDLE_SPIN;
   controls.autoRotateSpeed = 0.9;
+  controls.enableDamping = IDLE_SPIN; // no inertial drift when the globe is meant to rest
   controls.enablePan = false;
   controls.minDistance = 140;
   controls.maxDistance = 520;
@@ -382,7 +387,7 @@ function groupByCountry(list) {
   let onScreen = true;
   new IntersectionObserver(([e]) => { onScreen = e.isIntersecting; e.isIntersecting ? world.resumeAnimation() : world.pauseAnimation(); }, { threshold: 0.05 }).observe(el);
   // Swap the visible routes every several seconds so they vary over time.
-  if (!reduceMotion) setInterval(() => { if (onScreen && !document.hidden) world.arcsData(pickArcs()); }, 7000);
+  if (!reduceMotion && IDLE_SPIN) setInterval(() => { if (onScreen && !document.hidden) world.arcsData(pickArcs()); }, 7000);
 
   // ── Place panel ──────────────────────────────────────────────────────────
   function showPanel(p: any) {
@@ -424,7 +429,7 @@ function groupByCountry(list) {
     document.querySelectorAll(".pin.is-active").forEach((n) => n.classList.remove("is-active"));
     current = null;
     world.pointColor("color");
-    controls.autoRotate = true;
+    controls.autoRotate = IDLE_SPIN;
   }
 
   // Fly the camera to a place and open its panel.
@@ -631,6 +636,11 @@ function groupByCountry(list) {
     text-shadow: 0 1px 6px rgba(8,30,24,.9);
   }
   .pin:hover .pin__label, .pin:focus-visible .pin__label { opacity: 1; }
+  @media (max-width: 760px), (pointer: coarse) {
+    .pin svg { width: 11px; height: 11px; }
+    .pin--special svg { width: 13px; height: 13px; }
+    .pin { filter: drop-shadow(0 0 4px rgba(227,195,110,.6)); }
+  }
   @keyframes pin-pulse { 0% { transform: scale(.6); opacity: .9; } 100% { transform: scale(1.9); opacity: 0; } }
 
   /* ── Place panel ──────────────────────────────────────────────────────── */
