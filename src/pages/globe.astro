@@ -168,7 +168,7 @@ function groupByCountry(list) {
   const blogLink = document.getElementById("place-blog") as HTMLAnchorElement;
 
   const reduceMotion = matchMedia("(prefers-reduced-motion: reduce)").matches;
-  const IDLE_SPIN = false; // false = globe sits still at rest (motion only on drag / Inspire me)
+  const IDLE_SPIN = !reduceMotion;
   const home = PLACES.find((p) => p.home) ?? PLACES[0];
   const stories = PLACES.filter((p) => markerType(p) === "story");
   // Phones: fewer DOM markers and static arcs — 159 animated stars + arcs is too much for a handset.
@@ -247,17 +247,13 @@ function groupByCountry(list) {
     .htmlLat("lat")
     .htmlLng("lng")
     .htmlAltitude(0.01)
-    // Markers on the far side aren't positioned by the renderer and would sit
-    // at the page origin, so hide anything the globe hasn't placed or has occluded.
-    .htmlElementVisibilityModifier((el: HTMLElement, isVisible: boolean) => {
-      el.style.visibility = isVisible && el.style.transform ? "visible" : "hidden";
-    })
+    // Let the renderer position visible pins and hide those behind the globe.
+    // Checking their transform here hides new pins before their first render.
     .htmlElement((p: any) => {
       const b = document.createElement("button");
       b.type = "button";
       b.className = `pin pin--${markerType(p)}` + (current?.id === p.id ? " is-active" : "");
       b.dataset.id = p.id;
-      b.style.visibility = "hidden"; // until the globe positions it
       b.title = p.name;
       b.setAttribute("aria-label", p.name);
       b.innerHTML =
@@ -354,7 +350,7 @@ function groupByCountry(list) {
   const controls: any = world.controls();
   controls.autoRotate = IDLE_SPIN;
   controls.autoRotateSpeed = 0.9;
-  controls.enableDamping = IDLE_SPIN; // no inertial drift when the globe is meant to rest
+  controls.enableDamping = IDLE_SPIN;
   controls.enablePan = false;
   controls.minDistance = 140;
   controls.maxDistance = 520;
