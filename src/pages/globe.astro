@@ -584,7 +584,8 @@ function groupByCountry(list) {
     position: relative; height: min(78vh, 760px); min-height: 480px;
     background: radial-gradient(ellipse at 50% 60%, #1a4f41 0%, var(--emerald) 45%, var(--pine) 100%);
   }
-  .globe-canvas { position: absolute; inset: 0; cursor: grab; }
+  /* Keep the renderer's per-pin z-indexes below the destination card and controls. */
+  .globe-canvas { position: absolute; inset: 0; z-index: 0; cursor: grab; }
   .globe-canvas:active { cursor: grabbing; }
   .globe-canvas canvas { outline: none; }
 
