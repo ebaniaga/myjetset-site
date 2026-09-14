@@ -656,13 +656,13 @@ function groupByCountry(list) {
   .sr-only { position: absolute; width: 1px; height: 1px; padding: 0; margin: -1px; overflow: hidden; clip: rect(0 0 0 0); white-space: nowrap; border: 0; }
   .panel-close:focus-visible { position: absolute; top: 12px; right: 12px; width: auto; height: auto; margin: 0; padding: 8px 12px; clip: auto; z-index: 2; background: var(--gold); color: var(--emerald); border-radius: 4px; font-size: 12px; }
   .place-back { margin-top: 18px; font-size: 11px; letter-spacing: .14em; text-transform: uppercase; color: rgba(241,238,228,.45); }
-  /* Filmstrip: fixed height, natural widths, snap-scroll. Bleeds to the panel edge. */
+  /* Keep the scrollable filmstrip inside the card's padded gold frame. */
   .strip {
     --strip-h: 240px;
     display: flex; gap: 10px; height: var(--strip-h);
     overflow-x: auto; overflow-y: hidden; scroll-snap-type: x mandatory;
     -webkit-overflow-scrolling: touch; scrollbar-width: none;
-    margin: 0 -24px; padding: 0 24px; scroll-padding: 0 24px;
+    margin: 0; padding: 0; scroll-padding: 0;
   }
   .strip::-webkit-scrollbar { display: none; }
   .strip[hidden] { display: none; }
@@ -712,7 +712,7 @@ function groupByCountry(list) {
     .globe-stats dd { font-size: 34px; }
     .globe-stage { height: 78vh; min-height: 520px; }
     .place-panel { top: auto; right: 12px; left: 12px; bottom: 12px; width: auto; max-height: 67%; }
-    .strip { --strip-h: 220px; margin: 0 -16px; padding: 0 16px; scroll-padding: 0 16px; }
+    .strip { --strip-h: 220px; }
     .place-panel__inner { padding: 16px; }
     .place-panel__inner::before { inset: 7px; }
     .place-body { margin-top: 12px; }
