@@ -1,0 +1,239 @@
+---
+import Layout from "../layouts/Layout.astro";
+import "../styles/global.css";
+import { SITE } from "../lib/site.js";
+import { CABINS } from "../lib/cabins.js";
+import { PROGRAM_NAMES, CARD_NAMES } from "../lib/programs.js";
+
+const HERO = CABINS.find((c) => c.src === "/images/qatar-first-bar.jpg")!;
+const gallery = CABINS.filter((c) => c !== HERO);
+const inquiryUrl = "/inquiry?help=points";
+
+const services = [
+  { title: "Mapping your balances", body: "Airline miles and card points, side by side: which programs you hold, where they transfer, and what they can reach." },
+  { title: "Finding the redemption", body: "Premium cabins, partner awards and sweet spots, matched to the route and dates you have in mind." },
+  { title: "Timing transfers", body: "When a transfer bonus is worth waiting for, and when to move. Most transfers can’t be reversed, so they come last." },
+];
+
+const steps = [
+  { title: "Tell me what you have.", body: "Your balances across airline and card programs, where you’d like to go, and roughly when. Rough numbers are fine." },
+  { title: "See the options.", body: "I’ll look for award space across programs and lay out the redemptions that fit — the cabin, the route, and what each costs in points and taxes." },
+  { title: "Choose and book.", body: "Pick the option you like, and I’ll walk you through the transfers and booking steps." },
+];
+
+const faqs = [
+  { q: "Should I transfer points before we talk?", a: "No. Transfers between programs usually can’t be undone, so it’s worth finding the seat first." },
+  { q: "How many points do I need?", a: "It depends on the route, the cabin and the program. Share what you have, and I’ll tell you what it can realistically reach." },
+  { q: "How is the award search different from working with you?", a: "The award search emails you available seats that match your programs, balance and dates. Working with me adds the planning around it — which program to use, when to transfer, and how the flights fit the rest of the trip." },
+  { q: "Do you only help with flights?", a: "No. I also book hotels through Fora, where partner properties come with perks like breakfast and upgrades when available. Mention it in your inquiry if you’d like help with both." },
+];
+---
+<Layout
+  title="Miles & Points Optimization | My Jet Set Life"
+  description="Turn airline miles and credit-card points into premium cabins. Personal help mapping balances, partner awards and transfers, from Fora travel advisor Erickson Baniaga."
+  socialTitle="Points and miles, spent beautifully."
+  socialDescription="Premium cabins, partner awards and transfer timing — personal points help from Erickson at My Jet Set Life."
+  ogImage="/images/ana-first-suite.jpg"
+  active="points"
+>
+
+  <!-- Hero -->
+  <section class="hero section--emerald">
+    <div class="container hero-grid">
+      <div class="hero-copy">
+        <p class="eyebrow eyebrow--gold">Miles &amp; points</p>
+        <h1 class="display-xl">Points and miles, <em>spent beautifully.</em></h1>
+        <p class="body-l hero-lead">Sitting on a balance you’re not sure how to use? I’ll map the best redemptions for the trip you actually want — premium cabins, partner awards, transfer bonuses and sweet spots.</p>
+        <div class="row hero-ctas">
+          <a class="btn btn--accent btn--lg" href={inquiryUrl}>Ask about your points</a>
+          <a class="btn btn--link btn--link-light" href="/search">Search award flights</a>
+        </div>
+      </div>
+      <div class="photo photo--4x5 hero-photo">
+        <img src={HERO.src} alt={HERO.alt} width={HERO.width} height={HERO.height} loading="eager" fetchpriority="high" />
+      </div>
+    </div>
+  </section>
+
+  <!-- What I help with -->
+  <section class="section">
+    <div class="container">
+      <p class="eyebrow">What I help with</p>
+      <h2 class="display-m">More from the balance you already have.</h2>
+      <div class="grid-3 scope">
+        {services.map((s) => (
+          <div class="scope-item">
+            <h3 class="serif-m">{s.title}</h3>
+            <p class="soft">{s.body}</p>
+          </div>
+        ))}
+      </div>
+    </div>
+  </section>
+
+  <!-- How it works -->
+  <section class="section section--tight steps-section">
+    <div class="container">
+      <p class="eyebrow">How it works</p>
+      <h2 class="display-m">From a balance to a booked seat.</h2>
+      <ol class="grid-3 steps">
+        {steps.map((s) => (
+          <li>
+            <h3 class="serif-m">{s.title}</h3>
+            <p class="soft">{s.body}</p>
+          </li>
+        ))}
+      </ol>
+    </div>
+  </section>
+
+  <!-- Cabins -->
+  <section class="section section--emerald cabins">
+    <div class="container">
+      <p class="eyebrow eyebrow--gold">Flown on points</p>
+      <h2 class="display-m">The seats miles are made for.</h2>
+      <p class="body-l cabins-lead">I’ve flown these cabins on points. Let me help you do the same.</p>
+      <div class="cabins-grid">
+        {gallery.map((c) => (
+          <div class="photo photo--4x5">
+            <img src={c.src} alt={c.alt} width={c.width} height={c.height} loading="lazy" />
+            <div class="overlay"><div class="kicker">{c.kicker}</div><div class="caption">{c.caption}</div></div>
+          </div>
+        ))}
+      </div>
+      <p class="cabins-hint">Swipe →</p>
+    </div>
+  </section>
+
+  <!-- Programs + award search -->
+  <section class="section">
+    <div class="container programs-grid">
+      <div>
+        <p class="eyebrow">Programs</p>
+        <h2 class="display-m">What the award search covers.</h2>
+        <div class="lists">
+          <div>
+            <h3 class="label list-head">Airline programs</h3>
+            <ul class="list list--split">{Object.values(PROGRAM_NAMES).map((n) => <li>{n}</li>)}</ul>
+          </div>
+          <div>
+            <h3 class="label list-head">Card points</h3>
+            <ul class="list">{Object.values(CARD_NAMES).map((n) => <li>{n}</li>)}</ul>
+            <p class="body-s muted list-note">Transfer partners change often, so confirm the current partners before you move any points.</p>
+          </div>
+        </div>
+      </div>
+      <div class="panel framed tool">
+        <p class="eyebrow">Award search</p>
+        <h3 class="serif-l">See what your points can do.</h3>
+        <p class="soft">Enter your balance, programs and dates. I’ll search award availability and email you the options — real seats, real prices in points.</p>
+        <a class="btn btn--accent btn--lg" href="/search">Search award flights</a>
+      </div>
+    </div>
+  </section>
+
+  <!-- FAQ -->
+  <section class="section faq-section">
+    <div class="container narrow">
+      <p class="eyebrow">Questions</p>
+      <h2 class="display-m">Before you transfer anything.</h2>
+      <dl class="faq">
+        {faqs.map((f) => (
+          <div>
+            <dt class="serif-m">{f.q}</dt>
+            <dd class="soft">{f.a}</dd>
+          </div>
+        ))}
+      </dl>
+    </div>
+  </section>
+
+  <!-- Closing CTA -->
+  <section class="section section--pine">
+    <div class="container cta">
+      <h2 class="display-m">Have a balance in mind?</h2>
+      <p class="body-l cta-lead">Tell me what you’re holding and where you’d like to go, or grab a few minutes on my calendar.</p>
+      <div class="row cta-row">
+        <a class="btn btn--accent btn--lg" href={inquiryUrl}>Ask about your points</a>
+        <a class="btn btn--ghost-dark btn--lg" href={SITE.bookUrl} target="_blank" rel="noopener">Book a call</a>
+      </div>
+    </div>
+  </section>
+
+</Layout>
+
+<style>
+  .hero { padding: 88px 0; }
+  .hero-grid { display: grid; grid-template-columns: 1.15fr .85fr; gap: 56px; align-items: center; }
+  .hero h1 { color: var(--cream); margin-top: 18px; }
+  .hero h1 em { font-style: italic; font-weight: 400; color: var(--gold); }
+  .hero-lead { margin-top: 22px; max-width: 46ch; }
+  .hero-ctas { margin-top: 34px; gap: 28px; }
+  .hero-photo { box-shadow: var(--shadow-raised); }
+
+  .display-m { margin-top: 12px; }
+  .scope, .steps { margin-top: 40px; }
+  .scope-item { border-top: 1px solid rgba(27,26,23,.14); padding-top: 22px; }
+  .scope-item h3, .steps h3 { color: var(--emerald); }
+  .scope-item p, .steps p { margin-top: 10px; max-width: 40ch; }
+
+  .steps-section { padding-top: 0; }
+  .steps { list-style: none; padding: 0; counter-reset: step; }
+  .steps li { counter-increment: step; border-top: 1px solid rgba(27,26,23,.14); padding-top: 22px; }
+  .steps li::before {
+    content: counter(step, decimal-leading-zero); display: block; margin-bottom: 10px;
+    font-family: var(--serif); font-size: 34px; line-height: 1; color: var(--accent-ink);
+  }
+
+  .cabins-lead { margin-top: 12px; max-width: 52ch; }
+  .cabins-grid { margin-top: 32px; display: grid; grid-template-columns: repeat(4, 1fr); gap: 16px; }
+  .cabins-grid .caption { font-size: 19px; line-height: 1.2; margin-top: 4px; }
+  .cabins-hint { display: none; margin-top: 12px; font-size: 11px; letter-spacing: .14em; text-transform: uppercase; color: var(--cream-90); }
+
+  .programs-grid { display: grid; grid-template-columns: 1.25fr .75fr; gap: 56px; align-items: start; }
+  .lists { margin-top: 32px; display: grid; grid-template-columns: 2fr 1fr; gap: 32px; }
+  .list-head { color: var(--meta); font-size: 11px; }
+  .list { list-style: none; margin: 14px 0 0; padding: 0; }
+  .list li { padding: 7px 0; border-top: 1px solid var(--line); font-size: 14px; color: var(--ink-soft); }
+  .list--split { columns: 2; column-gap: 24px; }
+  .list--split li { break-inside: avoid; }
+  .list-note { margin-top: 16px; max-width: 34ch; }
+  .tool { position: sticky; top: 24px; }
+  .tool .serif-l { color: var(--emerald); margin-top: 10px; }
+  .tool .soft { margin-top: 10px; }
+  .tool .btn { margin-top: 24px; }
+
+  .narrow { max-width: 820px; }
+  .faq-section { padding-top: 0; }
+  .faq { margin: 32px 0 0; }
+  .faq > div { border-top: 1px solid rgba(27,26,23,.14); padding: 22px 0; }
+  .faq dt { color: var(--emerald); }
+  .faq dd { margin: 8px 0 0; max-width: 62ch; }
+
+  .cta { text-align: center; }
+  .cta-lead { margin: 14px auto 0; max-width: 46ch; }
+  .cta-row { justify-content: center; margin-top: 30px; }
+
+  @media (max-width: 960px) {
+    .programs-grid { grid-template-columns: 1fr; gap: 40px; }
+    .tool { position: static; }
+  }
+  @media (max-width: 860px) {
+    .hero { padding: 56px 0; }
+    .hero-grid { grid-template-columns: 1fr; gap: 32px; }
+    .hero-photo { max-width: 460px; }
+  }
+  /* Phones: a swipe carousel, matching the home page strip. */
+  @media (max-width: 760px) {
+    .cabins-grid {
+      display: flex; gap: 12px; margin: 24px -20px 0; padding: 0 20px 6px;
+      overflow-x: auto; scroll-snap-type: x mandatory; scroll-padding: 0 20px;
+      -webkit-overflow-scrolling: touch; scrollbar-width: none;
+    }
+    .cabins-grid::-webkit-scrollbar { display: none; }
+    .cabins-grid > .photo { flex: 0 0 70%; scroll-snap-align: start; }
+    .cabins-hint { display: block; }
+    .lists { grid-template-columns: 1fr; gap: 28px; }
+    .panel { padding: 28px 22px; }
+  }
+</style>

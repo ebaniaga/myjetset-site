@@ -3,9 +3,11 @@
 // traveler), then sends the traveler a short confirmation. Same env vars as
 // /api/search: RESEND_API_KEY, FROM_EMAIL, OWNER_EMAIL.
 
-import { isRecord, escapeHtml as esc } from "../../src/lib/validation.js";
+import { isRecord } from "../../src/lib/validation.js";
+import { OWNER_FALLBACK, send, renderOwnerEmail, renderConfirmation, json } from "../../src/lib/mail.js";
 
-const OWNER_FALLBACK = "hello@myjetset.life";
+const CONFIRMATION =
+  "I'll read through the details and follow up within a day or two with next steps. If anything comes to mind in the meantime, just reply to this email.";
 const LIMITS = { name: 120, email: 200, phone: 40, short: 200, long: 2000 };
 
 export async function onRequestPost({ request, env }) {
@@ -58,7 +60,7 @@ export async function onRequestPost({ request, env }) {
     to: [owner],
     reply_to: email,
     subject,
-    html: renderOwnerEmail(rows),
+    html: renderOwnerEmail("New trip inquiry", rows),
   });
   if (!sent) {
     return json(
@@ -72,58 +74,8 @@ export async function onRequestPost({ request, env }) {
     to: [email],
     reply_to: owner,
     subject: "Got it — I'll be in touch shortly",
-    html: renderConfirmation(name, owner),
+    html: renderConfirmation(name, owner, CONFIRMATION),
   });
 
   return json({ ok: true });
-}
-
-async function send(env, msg) {
-  try {
-    const res = await fetch("https://api.resend.com/emails", {
-      method: "POST",
-      headers: {
-        Authorization: `Bearer ${env.RESEND_API_KEY}`,
-        "Content-Type": "application/json",
-      },
-      body: JSON.stringify({ from: env.FROM_EMAIL, ...msg }),
-    });
-    return res.ok;
-  } catch {
-    return false;
-  }
-}
-
-function renderOwnerEmail(rows) {
-  const trs = rows
-    .map(
-      ([k, v]) =>
-        `<tr><td style="padding:8px 12px;color:#8a8275;font-size:11px;letter-spacing:.14em;text-transform:uppercase;vertical-align:top;white-space:nowrap;">${esc(k)}</td>` +
-        `<td style="padding:8px 12px;color:#1B1A17;font-size:15px;line-height:1.5;">${esc(v).replace(/\n/g, "<br/>")}</td></tr>`
-    )
-    .join("");
-  return `<div style="font-family:'Hanken Grotesk',system-ui,sans-serif;background:#F1EEE4;padding:32px;">
-    <div style="max-width:560px;margin:0 auto;background:#FBFAF6;border-radius:10px;padding:28px;">
-      <div style="font-size:11px;letter-spacing:.28em;text-transform:uppercase;color:#8a8275;margin-bottom:10px;">New trip inquiry</div>
-      <table style="border-collapse:collapse;width:100%;">${trs}</table>
-      <div style="margin-top:20px;font-size:12px;color:#6E7C72;">Reply to this email to respond to the traveler directly.</div>
-    </div></div>`;
-}
-
-function renderConfirmation(name, owner) {
-  const first = esc(name.split(/\s+/)[0]);
-  return `<div style="font-family:'Hanken Grotesk',system-ui,sans-serif;background:#F1EEE4;padding:32px;">
-    <div style="max-width:560px;margin:0 auto;background:#FBFAF6;border-radius:10px;padding:28px;color:#1B1A17;">
-      <div style="font-size:11px;letter-spacing:.28em;text-transform:uppercase;color:#8a8275;margin-bottom:10px;">My Jet Set Life</div>
-      <div style="font-family:'Cormorant Garamond',Georgia,serif;font-size:28px;color:#16463A;margin-bottom:12px;">Thanks, ${first} — I've got your inquiry.</div>
-      <p style="font-size:15px;line-height:1.65;color:#4A463D;margin:0 0 12px;">I'll read through the details and follow up within a day or two with next steps. If anything comes to mind in the meantime, just reply to this email.</p>
-      <p style="font-size:15px;line-height:1.65;color:#4A463D;margin:0;">— Erickson<br/><span style="font-size:12px;color:#6E7C72;">Fora Travel Advisor · ${esc(owner)}</span></p>
-    </div></div>`;
-}
-
-function json(data, status = 200) {
-  return new Response(JSON.stringify(data), {
-    status,
-    headers: { "Content-Type": "application/json" },
-  });
 }

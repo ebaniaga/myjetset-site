@@ -108,6 +108,11 @@ import { SITE } from "../lib/site.js";
   const message = document.getElementById("message") as HTMLDivElement;
   const submit = document.getElementById("submit") as HTMLButtonElement;
 
+  // Links like /inquiry?help=points arrive with the matching topic selected.
+  const PRESELECT: Record<string, string> = { points: "Miles & points optimization" };
+  const preset = PRESELECT[new URLSearchParams(location.search).get("help") ?? ""];
+  if (preset) (document.getElementById("help") as HTMLSelectElement).value = preset;
+
   function show(kind: "ok" | "err", text: string) {
     message.textContent = text;
     message.className = `message ${kind}`;

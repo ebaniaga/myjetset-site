@@ -9,6 +9,8 @@ const { active } = Astro.props;
 const links = [
   { href: "/", label: "Home", key: "home" },
   { href: "/about", label: "About", key: "about" },
+  { href: "/points", label: "Points", key: "points" },
+  { href: "/group-travel", label: "Group travel", key: "group" },
   { href: "/globe", label: "Globe", key: "globe" },
   { href: "/travel-reports", label: "Travel reports", key: "reports" },
 ];
@@ -78,7 +80,7 @@ const links = [
   @media (prefers-reduced-motion: reduce) { .topbar-mark .orbit { animation: none; stroke-dasharray: none; stroke: rgba(227,195,110,.45); } .topbar-mark .orbit--track, .topbar-mark .orbit--tail { display: none; } }
   @media (max-width: 900px) {
     .topbar-inner { gap: 14px 20px; }
-    .topbar-links { order: 3; width: 100%; margin-left: 0; gap: 18px; }
+    .topbar-links { order: 3; width: 100%; margin-left: 0; gap: 8px 18px; flex-wrap: wrap; }
   }
   @media (max-width: 640px) {
     .topbar-actions { order: 4; width: 100%; }

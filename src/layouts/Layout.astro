@@ -9,6 +9,9 @@ interface Props {
   title: string;
   description?: string;
   ogImage?: string;
+  /** Share-card title/description when they should differ from the page's. */
+  socialTitle?: string;
+  socialDescription?: string;
   /** Which nav item is active, e.g. "search" | "about" | "inquiry" */
   active?: string;
 }
@@ -18,6 +21,8 @@ const {
   description = "Travel advisory, miles & points optimization, and award flight search — by Fora travel advisor Erickson Baniaga.",
   ogImage = "/images/travel-sunset-mountains.jpg",
   active,
+  socialTitle = title,
+  socialDescription = description,
 } = Astro.props;
 
 const canonical = new URL(Astro.url.pathname, Astro.site);
@@ -34,8 +39,8 @@ const ogUrl = new URL(ogImage, Astro.site);
 <link rel="icon" href="/star-mark.svg" type="image/svg+xml" />
 <meta property="og:site_name" content="My Jet Set Life" />
 <meta property="og:type" content="website" />
-<meta property="og:title" content={title} />
-<meta property="og:description" content={description} />
+<meta property="og:title" content={socialTitle} />
+<meta property="og:description" content={socialDescription} />
 <meta property="og:url" content={canonical} />
 <meta property="og:image" content={ogUrl} />
 <meta name="twitter:card" content="summary_large_image" />

@@ -3,6 +3,8 @@ import Layout from "../layouts/Layout.astro";
 import Star from "../components/Star.astro";
 import "../styles/global.css";
 import { SITE } from "../lib/site.js";
+import { AMINA } from "../lib/testimonials.js";
+import { CABINS } from "../lib/cabins.js";
 ---
 <Layout
   title="My Jet Set Life — Travel advisory, miles & points optimization"
@@ -56,6 +58,24 @@ import { SITE } from "../lib/site.js";
     </div>
   </section>
 
+  <!-- Group travel -->
+  <section class="section--tight group">
+    <div class="container">
+      <div class="panel framed group-panel">
+        <div class="group-copy">
+          <p class="eyebrow">Group travel</p>
+          <h2 class="serif-l">Bringing the team together?</h2>
+          <p class="soft">Hotel blocks and booking coordination for team trips, offsites, and retreats—with personal support from Erickson.</p>
+          <a class="btn btn--primary" href="/group-travel">Explore group travel</a>
+        </div>
+        <figure class="group-quote">
+          <blockquote><p>“{AMINA.excerpt}”</p></blockquote>
+          <figcaption>{AMINA.name} · Team trip to Atlanta</figcaption>
+        </figure>
+      </div>
+    </div>
+  </section>
+
   <!-- What your points can do -->
   <section class="section--tight points">
     <div class="container">
@@ -63,42 +83,12 @@ import { SITE } from "../lib/site.js";
       <h2 class="display-m">The seats miles are made for.</h2>
       <p class="body-l soft points-lead">I've flown these cabins on points. Let me help you do the same.</p>
       <div class="grid-3 points-grid">
-        <div class="photo photo--square">
-          <img src="/images/ana-first-suite.jpg" alt="ANA First Class suite on the A380 Flying Honu" width="1800" height="1350" loading="lazy" />
-          <div class="overlay"><div class="kicker">ANA · First Class</div><div class="caption">Honolulu → Tokyo, seat 2K</div></div>
-        </div>
-        <div class="photo photo--square">
-          <img src="/images/ana-first-krug.jpg" alt="A bottle of Krug and a flute in ANA First Class" width="1350" height="1800" loading="lazy" />
-          <div class="overlay"><div class="kicker">ANA · First Class</div><div class="caption">Krug, poured before pushback</div></div>
-        </div>
-        <div class="photo photo--square">
-          <img src="/images/ana-first-me.jpg" alt="Erickson settled into his ANA First Class suite" width="1350" height="1800" loading="lazy" />
-          <div class="overlay"><div class="kicker">ANA · First Class</div><div class="caption">Settled in</div></div>
-        </div>
-        <div class="photo photo--square">
-          <img src="/images/qatar-first-suite.jpg" alt="Qatar Airways A380 First Class suite" width="1350" height="1800" loading="lazy" />
-          <div class="overlay"><div class="kicker">Qatar Airways · First Class</div><div class="caption">The A380 suite</div></div>
-        </div>
-        <div class="photo photo--square">
-          <img src="/images/qatar-first-bar.jpg" alt="The onboard bar on the Qatar Airways A380" width="1350" height="1800" loading="lazy" />
-          <div class="overlay"><div class="kicker">Qatar Airways · First Class</div><div class="caption">The onboard bar</div></div>
-        </div>
-        <div class="photo photo--square">
-          <img src="/images/qatar-first-bar-me.jpg" alt="Erickson at the onboard bar of the Qatar Airways A380 with a tasting flight" width="1350" height="1800" loading="lazy" />
-          <div class="overlay"><div class="kicker">Qatar Airways · First Class</div><div class="caption">A tasting flight at the bar</div></div>
-        </div>
-        <div class="photo photo--square">
-          <img src="/images/qatar-qsuite-bed.jpg" alt="Qatar Airways Qsuite made up as a bed" width="1800" height="1350" loading="lazy" />
-          <div class="overlay"><div class="kicker">Qatar Airways · Qsuite</div><div class="caption">Business class with a door — and a bed</div></div>
-        </div>
-        <div class="photo photo--square">
-          <img src="/images/singapore-business-seat.jpg" alt="Singapore Airlines business class seat by the window" width="1350" height="1800" loading="lazy" />
-          <div class="overlay"><div class="kicker">Singapore Airlines · Business</div><div class="caption">Seat and window</div></div>
-        </div>
-        <div class="photo photo--square">
-          <img src="/images/ba-club-suite.jpg" alt="British Airways Club Suite made up for the night" width="1800" height="1350" loading="lazy" />
-          <div class="overlay"><div class="kicker">British Airways · Club Suite</div><div class="caption">Made up for the night</div></div>
-        </div>
+        {CABINS.map((c) => (
+          <div class="photo photo--square">
+            <img src={c.src} alt={c.alt} width={c.width} height={c.height} loading="lazy" />
+            <div class="overlay"><div class="kicker">{c.kicker}</div><div class="caption">{c.caption}</div></div>
+          </div>
+        ))}
       </div>
       <p class="points-hint">Swipe →</p>
       <div class="row points-ctas">
@@ -187,6 +177,16 @@ import { SITE } from "../lib/site.js";
   .services .card__body { flex: 1; }
   .services .btn--link { align-self: flex-start; margin-top: 18px; }
 
+  .group { padding-top: 0; }
+  .group-panel { display: grid; grid-template-columns: 1fr 1fr; gap: 48px; align-items: center; }
+  .group .serif-l { color: var(--emerald); margin-top: 10px; }
+  .group .soft { margin-top: 10px; max-width: 44ch; }
+  .group .btn { margin-top: 24px; }
+  .group-quote { margin: 0; padding-left: 24px; border-left: 2px solid var(--accent); }
+  .group-quote blockquote { margin: 0; }
+  .group-quote p { font-family: var(--serif); font-size: 22px; line-height: 1.45; color: var(--ink-soft); }
+  .group-quote figcaption { margin-top: 14px; font-size: 13px; color: var(--sage); }
+
   .teaser { display: flex; align-items: center; justify-content: space-between; gap: 32px; }
   .teaser-copy { max-width: 560px; }
   .teaser .serif-l { color: var(--emerald); margin-top: 10px; }
@@ -227,5 +227,6 @@ import { SITE } from "../lib/site.js";
     .hero-grid, .about-grid { grid-template-columns: 1fr; gap: 32px; }
     .hero-photo { max-width: 460px; }
     .teaser { flex-direction: column; align-items: flex-start; }
+    .group-panel { grid-template-columns: 1fr; gap: 28px; }
   }
 </style>

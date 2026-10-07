@@ -3,27 +3,7 @@
 // they can afford, and emails the options via Resend.
 
 import { isRecord, isCalendarDate, escapeHtml as esc } from "../../src/lib/validation.js";
-
-const PROGRAM_NAMES = {
-  aeroplan: "Air Canada Aeroplan",
-  aeromexico: "Aeroméxico Club Premier",
-  alaska: "Alaska Mileage Plan",
-  american: "American AAdvantage",
-  azul: "Azul TudoAzul",
-  british: "British Airways Club",
-  delta: "Delta SkyMiles",
-  etihad: "Etihad Guest",
-  finnair: "Finnair Plus",
-  flyingblue: "Air France-KLM Flying Blue",
-  jetblue: "JetBlue TrueBlue",
-  qantas: "Qantas Frequent Flyer",
-  qatar: "Qatar Privilege Club",
-  saudia: "Saudia AlFursan",
-  smiles: "GOL Smiles",
-  united: "United MileagePlus",
-  velocity: "Virgin Australia Velocity",
-  virginatlantic: "Virgin Atlantic Flying Club",
-};
+import { PROGRAM_NAMES, CARD_NAMES } from "../../src/lib/programs.js";
 
 // Shorter labels for the email table column.
 const PROGRAM_SHORT = {
@@ -50,13 +30,6 @@ const PROGRAM_SHORT = {
 // Transferable credit-card currencies → the supported airline programs each
 // one can transfer to (usually ~1:1). Approximate and easy to edit as
 // transfer partners change; only lists partners we actually search.
-const CARD_NAMES = {
-  amex: "Amex Membership Rewards",
-  chase: "Chase Ultimate Rewards",
-  capitalone: "Capital One Miles",
-  citi: "Citi ThankYou Points",
-  bilt: "Bilt Rewards",
-};
 const CARD_TRANSFER_PARTNERS = {
   amex: ["aeroplan", "aeromexico", "british", "delta", "etihad", "flyingblue", "jetblue", "qantas", "virginatlantic"],
   chase: ["aeroplan", "british", "flyingblue", "jetblue", "united", "virginatlantic"],

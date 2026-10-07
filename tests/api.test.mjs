@@ -2,6 +2,7 @@ import test, { afterEach, mock } from "node:test";
 import assert from "node:assert/strict";
 import { onRequestPost as search } from "../functions/api/search.js";
 import { onRequestPost as inquiry } from "../functions/api/inquiry.js";
+import { onRequestPost as groupInquiry } from "../functions/api/group-inquiry.js";
 
 afterEach(() => mock.restoreAll());
 const env = { SEATS_AERO_KEY: "mock", RESEND_API_KEY: "mock", FROM_EMAIL: "site@example.invalid", OWNER_EMAIL: "owner@example.invalid" };
@@ -171,4 +172,72 @@ test("inquiry escapes text and retains owner-first delivery and reply-to", async
   assert.match(emails[0].html, /&lt;img src=x&gt;/);
   assert.deepEqual(emails[1].to, ['traveler@example.invalid']);
   assert.doesNotMatch(emails[1].html, /<b>Traveler<\/b>/);
+});
+
+const group = {
+  name: "Organizer Person", email: "organizer@example.invalid", company: "Remote Co", destination: "Atlanta",
+  dateMode: "known", arrival: "2099-05-04", departure: "2099-05-07", flexibility: "Fixed",
+  rooms: "12", budgetAmount: "250", budgetCurrency: "USD", budgetBasis: "Per room, per night",
+  stage: "Exploring", notes: "<script>x</script>",
+};
+
+test("group inquiry reaches the owner first with derived nights, escaping and reply-to", async () => {
+  const { emails } = services();
+  const res = await groupInquiry(context(group));
+  assert.equal(res.status, 200);
+  assert.deepEqual(emails[0].to, [env.OWNER_EMAIL]);
+  assert.equal(emails[0].reply_to, group.email);
+  assert.match(emails[0].html, /2099-05-04 → 2099-05-07 \(3 nights\)/);
+  assert.match(emails[0].html, /USD 250 — per room, per night/);
+  assert.match(emails[0].html, /&lt;script&gt;/);
+  assert.doesNotMatch(emails[0].html, /<script>/);
+  assert.deepEqual(emails[1].to, [group.email]);
+});
+
+test("group inquiry accepts undecided dates and unknown counts", async () => {
+  const { emails } = services();
+  const body = { ...group, dateMode: "deciding", arrival: "", departure: "", timeframe: "Spring", nights: "", nightsUnsure: true, rooms: "", roomsUnsure: true, budgetAmount: "", budgetGuidance: true };
+  assert.equal((await groupInquiry(context(body))).status, 200);
+  assert.match(emails[0].html, /Still deciding — Spring/);
+  assert.match(emails[0].html, /Would like guidance/);
+});
+
+for (const [label, invalid, field] of [
+  ["departure before arrival", { departure: "2099-05-04" }, "departure"],
+  ["missing date choice", { dateMode: "" }, "dateMode"],
+  ["zero rooms", { rooms: "0" }, "rooms"],
+  ["fractional rooms", { rooms: "2.5" }, "rooms"],
+  ["unknown stage", { stage: "Booked yesterday" }, "stage"],
+  ["missing company", { company: " " }, "company"],
+  ["budget without basis", { budgetBasis: "" }, "budgetBasis"],
+  ["undecided dates without nights", { dateMode: "deciding", nights: "" }, "nights"],
+]) {
+  test(`group inquiry rejects ${label}`, async () => {
+    const { emails } = services();
+    const res = await groupInquiry(context({ ...group, ...invalid }));
+    assert.equal(res.status, 400);
+    assert.ok((await res.json()).errors[field]);
+    assert.equal(emails.length, 0);
+  });
+}
+
+for (const body of [null, [], "text", { ...group, rooms: 12 }, { ...group, roomsUnsure: "yes" }]) {
+  test(`group inquiry rejects a malformed body: ${JSON.stringify(body)?.slice(0, 40)}`, async () => {
+    const { emails } = services();
+    assert.equal((await groupInquiry(context(body))).status, 400);
+    assert.equal(emails.length, 0);
+  });
+}
+
+test("group inquiry honeypot sends nothing", async () => {
+  const { emails } = services();
+  assert.equal((await groupInquiry(context({ ...group, website: "spam" }))).status, 200);
+  assert.equal(emails.length, 0);
+});
+
+test("group inquiry reports failure when the owner email is not accepted", async () => {
+  mock.method(globalThis, "fetch", async () => new Response("nope", { status: 500 }));
+  const res = await groupInquiry(context(group));
+  assert.equal(res.status, 502);
+  assert.equal((await res.json()).ok, undefined);
 });

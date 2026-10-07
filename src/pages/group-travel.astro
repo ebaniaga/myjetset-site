@@ -1,0 +1,536 @@
+---
+import Layout from "../layouts/Layout.astro";
+import "../styles/global.css";
+import { SITE } from "../lib/site.js";
+import { AMINA } from "../lib/testimonials.js";
+import { FLEXIBILITY, CURRENCIES, BUDGET_BASES, STAGES } from "../lib/group-inquiry.js";
+
+// Hotel photos supplied by Erickson as interim imagery. Each must be one he
+// owns or is licensed to use, and none may be captioned or described as the
+// Atlanta hotel from the testimonial. Set HERO_PHOTO to null to fall back to
+// the brand gradient.
+type Photo = { src: string; alt: string; width: number; height: number };
+const HERO_PHOTO: Photo | null = {
+  src: "/images/group/hotel-lobby.jpg",
+  alt: "A quiet hotel lobby lounge with armchairs, warm lighting and a Christmas tree before a snowy window",
+  width: 640, height: 853,
+};
+const ROOM_PHOTOS: Photo[] = [
+  { src: "/images/group/hotel-suite.jpg", alt: "A hotel suite bedroom with a king bed, opening onto a separate living and dining room", width: 1600, height: 900 },
+  { src: "/images/group/hotel-onsen.jpg", alt: "A private soaking tub beside a window overlooking snowy ski slopes", width: 1200, height: 900 },
+];
+
+const services = [
+  { title: "Hotel sourcing", body: "Find hotel options that fit your destination, budget, and the places your team needs to be." },
+  { title: "Room blocks", body: "Bring your room requirements and stay dates together into a coordinated hotel booking." },
+  { title: "Booking coordination", body: "Have one person helping you keep track of the hotel details and questions along the way." },
+];
+
+const steps = [
+  { title: "Tell me about the trip.", body: "Share your dates, approximate room count, destination ideas, and budget. It’s fine if a few details are still taking shape." },
+  { title: "Review the options.", body: "We’ll narrow down the hotels and discuss the details that matter to your team." },
+  { title: "Bring the booking together.", body: "Once you choose, I’ll help coordinate the hotel booking and clarify the next steps." },
+];
+
+const faqs = [
+  { q: "Do we need to have a destination picked out?", a: "No. Share the destinations you’re considering, or let me know you’re still deciding." },
+  { q: "Can we inquire before our headcount is final?", a: "Yes. An approximate room count is a useful starting point. Include what you know and what may change." },
+  { q: "We already have a hotel in mind. Can you help?", a: "Tell me which hotel and whether anything is already booked or signed. I’ll review the situation and let you know where I can help." },
+  { q: "Can you help with meeting space or other trip details?", a: "Include those needs in your inquiry so we can discuss the scope. This service focuses on hotel accommodation and booking coordination." },
+];
+---
+<Layout
+  title="Team Offsites & Group Hotel Bookings | My Jet Set Life"
+  description="Plan your team trip with My Jet Set Life. Get personal help with hotel sourcing, room blocks, and booking coordination for offsites and retreats."
+  socialTitle="Team offsites, thoughtfully arranged."
+  socialDescription="Hotel blocks and booking coordination for your next team trip, with Erickson at My Jet Set Life."
+  ogImage="/images/group/og-group-travel.jpg"
+  active="group"
+>
+
+  <!-- Hero -->
+  <section class="hero section--emerald">
+    <div class="container hero-grid">
+      <div class="hero-copy">
+        <p class="eyebrow eyebrow--gold">Group travel · Team offsites &amp; retreats</p>
+        <h1 class="display-xl">Team offsites, <em>thoughtfully arranged.</em></h1>
+        <p class="body-l hero-lead">Bring the team together. I’ll help you find the right hotel, arrange your room block, and coordinate the booking details around your dates, budget, and plans.</p>
+        <div class="row hero-ctas">
+          <a class="btn btn--accent btn--lg" href="#group-inquiry">Plan your team offsite</a>
+          <a class="btn btn--link btn--link-light" href={SITE.bookUrl} target="_blank" rel="noopener">Book a call</a>
+        </div>
+        <p class="hero-note">Hotel blocks and booking coordination with Erickson at {SITE.name}.</p>
+      </div>
+      <div class="photo photo--4x5 photo--warm hero-photo">
+        {HERO_PHOTO && <img src={HERO_PHOTO.src} alt={HERO_PHOTO.alt} width={HERO_PHOTO.width} height={HERO_PHOTO.height} loading="eager" fetchpriority="high" />}
+      </div>
+    </div>
+  </section>
+
+  <!-- What I help with -->
+  <section class="section">
+    <div class="container">
+      <p class="eyebrow">What I help with</p>
+      <h2 class="display-m">A hotel that works for your whole team.</h2>
+      <div class="grid-3 scope">
+        {services.map((s) => (
+          <div class="scope-item">
+            <h3 class="serif-m">{s.title}</h3>
+            <p class="soft">{s.body}</p>
+          </div>
+        ))}
+      </div>
+      <div class="grid-2 rooms">
+        {ROOM_PHOTOS.map((p) => (
+          <div class="photo photo--3x2">
+            <img src={p.src} alt={p.alt} width={p.width} height={p.height} loading="lazy" decoding="async" />
+          </div>
+        ))}
+      </div>
+    </div>
+  </section>
+
+  <!-- How it works -->
+  <section class="section section--tight steps-section">
+    <div class="container">
+      <p class="eyebrow">How it works</p>
+      <h2 class="display-m">From a rough plan to a booked hotel.</h2>
+      <ol class="grid-3 steps">
+        {steps.map((s) => (
+          <li>
+            <h3 class="serif-m">{s.title}</h3>
+            <p class="soft">{s.body}</p>
+          </li>
+        ))}
+      </ol>
+    </div>
+  </section>
+
+  <!-- About -->
+  <section class="section section--emerald">
+    <div class="container about-grid">
+      <div class="photo photo--4x5 about-photo">
+        <img src="/images/erickson.jpg" alt="Erickson Baniaga" width="1200" height="1500" loading="lazy" />
+      </div>
+      <div>
+        <p class="eyebrow eyebrow--gold">About Erickson</p>
+        <h2 class="display-m">An operations mindset. A personal approach.</h2>
+        <p class="body-l about-lead">I’m Erickson, the travel advisor behind {SITE.name}. My background is in operations, and I’ve spent years working remotely and traveling. I know how much coordination happens behind a team trip—and how helpful it is to have someone responsive handling the hotel details.</p>
+        <p class="about-sig">{SITE.advisor} · Fora Travel Advisor</p>
+      </div>
+    </div>
+  </section>
+
+  <!-- Testimonial -->
+  <section class="section testimonial">
+    <div class="container">
+      <figure class="quote">
+        <p class="eyebrow">A team trip to Atlanta</p>
+        <h2 class="display-m">“Everything went smoothly from start to finish.”</h2>
+        <blockquote>
+          <p>{AMINA.quote}</p>
+        </blockquote>
+        <figcaption>
+          <span class="quote-name">{AMINA.name}</span>
+          <span class="quote-context">{AMINA.context}</span>
+        </figcaption>
+      </figure>
+    </div>
+  </section>
+
+  <!-- Inquiry -->
+  <section class="section inquiry-section" id="group-inquiry" aria-labelledby="inquiry-title">
+    <div class="container narrow">
+      <header class="inquiry-head">
+        <p class="eyebrow">Group inquiry</p>
+        <h2 class="display-m" id="inquiry-title">Tell me about your team trip.</h2>
+        <p class="body-l soft">Share what you know so far. I’ll review the details and get in touch about how I can help with your hotel plans.</p>
+      </header>
+
+      <div class="panel framed success" id="success" tabindex="-1" hidden>
+        <p class="serif-l">Thank you.</p>
+        <p class="body-l soft">Thanks—your trip details are on their way to Erickson. I’ll review your plans and get in touch by email.</p>
+      </div>
+
+      <form class="panel framed group-form" id="group-form" novalidate>
+        <div class="error-summary" id="error-summary" tabindex="-1" hidden>
+          <h3 class="error-summary__title">Please check the following:</h3>
+          <ul id="error-list"></ul>
+        </div>
+
+        <div class="grid-2">
+          <div class="field">
+            <label class="field-label" for="name">Name</label>
+            <input class="input" id="name" name="name" type="text" autocomplete="name" required aria-describedby="err-name" />
+            <p class="field-error" id="err-name" hidden></p>
+          </div>
+          <div class="field">
+            <label class="field-label" for="email">Email</label>
+            <input class="input" id="email" name="email" type="email" autocomplete="email" required aria-describedby="err-email" />
+            <p class="field-error" id="err-email" hidden></p>
+          </div>
+          <div class="field">
+            <label class="field-label" for="company">Company or group</label>
+            <input class="input" id="company" name="company" type="text" autocomplete="organization" required aria-describedby="err-company" />
+            <p class="field-error" id="err-company" hidden></p>
+          </div>
+          <div class="field">
+            <label class="field-label" for="destination">Destination</label>
+            <input class="input" id="destination" name="destination" type="text" required aria-describedby="hint-destination err-destination" />
+            <p class="field-hint" id="hint-destination">A city, a few ideas, or “still deciding.”</p>
+            <p class="field-error" id="err-destination" hidden></p>
+          </div>
+
+          <fieldset class="span group" aria-describedby="err-dateMode">
+            <legend class="field-label">Dates</legend>
+            <div class="row choices">
+              <label class="radio"><input type="radio" id="date-known" name="dateMode" value="known" /><span class="radio__dot"></span>I have dates</label>
+              <label class="radio"><input type="radio" id="date-deciding" name="dateMode" value="deciding" /><span class="radio__dot"></span>Still deciding</label>
+            </div>
+            <p class="field-error" id="err-dateMode" hidden></p>
+
+            <div class="grid-2 sub" id="dates-known" hidden>
+              <div class="field">
+                <label class="field-label" for="arrival">Arrival</label>
+                <input class="input" id="arrival" name="arrival" type="date" aria-describedby="err-arrival" />
+                <p class="field-error" id="err-arrival" hidden></p>
+              </div>
+              <div class="field">
+                <label class="field-label" for="departure">Departure</label>
+                <input class="input" id="departure" name="departure" type="date" aria-describedby="hint-nights err-departure" />
+                <p class="field-hint" id="hint-nights" aria-live="polite"></p>
+                <p class="field-error" id="err-departure" hidden></p>
+              </div>
+              <div class="field">
+                <label class="field-label" for="flexibility">Date flexibility <span class="opt">optional</span></label>
+                <select class="select" id="flexibility" name="flexibility">
+                  <option value="">Choose one</option>
+                  {FLEXIBILITY.map((f) => <option>{f}</option>)}
+                </select>
+              </div>
+            </div>
+
+            <div class="grid-2 sub" id="dates-deciding" hidden>
+              <div class="field">
+                <label class="field-label" for="timeframe">Approximate timeframe <span class="opt">optional</span></label>
+                <input class="input" id="timeframe" name="timeframe" type="text" aria-describedby="hint-timeframe err-timeframe" />
+                <p class="field-hint" id="hint-timeframe">A month or season, like “March” or “early fall.”</p>
+                <p class="field-error" id="err-timeframe" hidden></p>
+              </div>
+              <div class="field">
+                <label class="field-label" for="nights">Nights</label>
+                <input class="input" id="nights" name="nights" type="text" inputmode="numeric" aria-describedby="err-nights" />
+                <label class="check unsure"><input type="checkbox" id="nightsUnsure" name="nightsUnsure" /><span class="check__box"></span>Not sure yet</label>
+                <p class="field-error" id="err-nights" hidden></p>
+              </div>
+            </div>
+          </fieldset>
+
+          <div class="field">
+            <label class="field-label" for="rooms">Approximate rooms</label>
+            <input class="input" id="rooms" name="rooms" type="text" inputmode="numeric" aria-describedby="hint-rooms err-rooms" />
+            <p class="field-hint" id="hint-rooms">Rooms, not attendees — some guests may share.</p>
+            <label class="check unsure"><input type="checkbox" id="roomsUnsure" name="roomsUnsure" /><span class="check__box"></span>Not sure yet</label>
+            <p class="field-error" id="err-rooms" hidden></p>
+          </div>
+          <div class="field">
+            <label class="field-label" for="stage">Planning stage</label>
+            <select class="select" id="stage" name="stage" required aria-describedby="err-stage">
+              <option value="">Choose one</option>
+              {STAGES.map((s) => <option>{s}</option>)}
+            </select>
+            <p class="field-error" id="err-stage" hidden></p>
+          </div>
+
+          <fieldset class="span group">
+            <legend class="field-label">Hotel budget <span class="opt">optional</span></legend>
+            <div class="budget">
+              <div class="field">
+                <label class="field-label sub-label" for="budgetAmount">Amount</label>
+                <input class="input" id="budgetAmount" name="budgetAmount" type="text" inputmode="decimal" aria-describedby="err-budgetAmount" />
+              </div>
+              <div class="field">
+                <label class="field-label sub-label" for="budgetCurrency">Currency</label>
+                <select class="select" id="budgetCurrency" name="budgetCurrency" aria-describedby="err-budgetCurrency">
+                  {CURRENCIES.map((c) => <option>{c}</option>)}
+                </select>
+              </div>
+              <div class="field">
+                <label class="field-label sub-label" for="budgetBasis">Basis</label>
+                <select class="select" id="budgetBasis" name="budgetBasis" aria-describedby="err-budgetBasis">
+                  <option value="">Choose one</option>
+                  {BUDGET_BASES.map((b) => <option>{b}</option>)}
+                </select>
+              </div>
+            </div>
+            <p class="field-error" id="err-budgetAmount" hidden></p>
+            <p class="field-error" id="err-budgetCurrency" hidden></p>
+            <p class="field-error" id="err-budgetBasis" hidden></p>
+            <label class="check unsure"><input type="checkbox" id="budgetGuidance" name="budgetGuidance" /><span class="check__box"></span>I’d like guidance on budget</label>
+          </fieldset>
+
+          <div class="field span">
+            <label class="field-label" for="notes">Anything else? <span class="opt">optional</span></label>
+            <textarea class="textarea" id="notes" name="notes" aria-describedby="hint-notes err-notes"></textarea>
+            <p class="field-hint" id="hint-notes">Meeting space, when people are arriving, hotel preferences, or a deadline for deciding.</p>
+            <p class="field-error" id="err-notes" hidden></p>
+          </div>
+        </div>
+
+        <!-- Honeypot: hidden from people, tempting to bots -->
+        <div class="hp" aria-hidden="true">
+          <label for="website">Website</label>
+          <input id="website" name="website" type="text" tabindex="-1" autocomplete="off" />
+        </div>
+
+        <div class="row submit-row">
+          <button class="btn btn--accent btn--lg" type="submit" id="submit">Send my trip details</button>
+          <a class="btn btn--link" href={SITE.bookUrl} target="_blank" rel="noopener">Prefer to talk? Book a call.</a>
+        </div>
+        <div class="message" id="message" role="alert" hidden></div>
+      </form>
+    </div>
+  </section>
+
+  <!-- FAQ -->
+  <section class="section faq-section">
+    <div class="container narrow">
+      <p class="eyebrow">Questions</p>
+      <h2 class="display-m">Before you get in touch.</h2>
+      <dl class="faq">
+        {faqs.map((f) => (
+          <div>
+            <dt class="serif-m">{f.q}</dt>
+            <dd class="soft">{f.a}</dd>
+          </div>
+        ))}
+      </dl>
+    </div>
+  </section>
+
+</Layout>
+
+<style>
+  .hero { padding: 88px 0; }
+  .hero-grid { display: grid; grid-template-columns: 1.15fr .85fr; gap: 56px; align-items: center; }
+  .hero h1 { color: var(--cream); margin-top: 18px; }
+  .hero h1 em { font-style: italic; font-weight: 400; color: var(--gold); }
+  .hero-lead { margin-top: 22px; max-width: 46ch; }
+  .hero-ctas { margin-top: 34px; gap: 28px; }
+  .hero-note { margin-top: 26px; font-size: 13px; color: var(--cream-90); opacity: .85; }
+  .hero-photo { box-shadow: var(--shadow-raised); }
+
+  .display-m { margin-top: 12px; }
+  .scope, .steps { margin-top: 40px; }
+  .rooms { margin-top: 48px; }
+  .scope-item { border-top: 1px solid rgba(27,26,23,.14); padding-top: 22px; }
+  .scope-item h3, .steps h3 { color: var(--emerald); }
+  .scope-item p, .steps p { margin-top: 10px; max-width: 40ch; }
+
+  .steps-section { padding-top: 0; }
+  .steps { list-style: none; padding: 0; counter-reset: step; }
+  .steps li { counter-increment: step; border-top: 1px solid rgba(27,26,23,.14); padding-top: 22px; }
+  .steps li::before {
+    content: counter(step, decimal-leading-zero); display: block; margin-bottom: 10px;
+    font-family: var(--serif); font-size: 34px; line-height: 1; color: var(--accent-ink);
+  }
+
+  .about-grid { display: grid; grid-template-columns: .8fr 1.2fr; gap: 56px; align-items: center; }
+  .about-photo { max-width: 400px; box-shadow: var(--shadow-raised); }
+  .about-lead { margin-top: 18px; max-width: 54ch; }
+  .about-sig { margin-top: 24px; font-size: 12px; letter-spacing: .14em; text-transform: uppercase; color: var(--gold); }
+
+  .testimonial { background: var(--paper); border-top: 1px solid var(--line); border-bottom: 1px solid var(--line); }
+  .quote { margin: 0 auto; max-width: 760px; }
+  .quote .display-m { color: var(--emerald); }
+  .quote blockquote { margin: 28px 0 0; padding-left: 24px; border-left: 2px solid var(--accent); }
+  .quote blockquote p { font-family: var(--serif); font-size: 23px; line-height: 1.5; color: var(--ink-soft); }
+  .quote figcaption { margin-top: 22px; padding-left: 26px; display: flex; flex-direction: column; gap: 2px; }
+  .quote-name { font-weight: 600; color: var(--ink); }
+  .quote-context { font-size: 13px; color: var(--sage); }
+
+  .narrow { max-width: 820px; }
+  .inquiry-section { scroll-margin-top: 0; }
+  .inquiry-head { margin-bottom: 28px; }
+  .inquiry-head .body-l { margin-top: 12px; max-width: 56ch; }
+  .group-form .grid-2 { gap: 22px 20px; }
+  .span { grid-column: 1 / -1; }
+  .group { border: none; margin: 0; padding: 0; min-width: 0; }
+  .group legend { padding: 0; }
+  .choices { gap: 28px; margin-top: 4px; }
+  .choices .radio { min-height: 44px; }
+  .sub { margin-top: 16px; }
+  .sub[hidden] { display: none; }
+  .unsure { margin-top: 10px; min-height: 32px; align-self: flex-start; }
+  .opt { font-weight: 400; letter-spacing: .04em; text-transform: none; color: var(--sage); margin-left: 6px; }
+  .sub-label { font-weight: 500; letter-spacing: .08em; }
+  .budget { display: grid; grid-template-columns: .9fr .7fr 1.4fr; gap: 14px; }
+  .input:disabled { background: var(--bone); color: var(--sage); }
+  .input[aria-invalid="true"], .select[aria-invalid="true"] { border-color: #9a3b2e; box-shadow: inset 0 0 0 1px #9a3b2e; }
+  .field-hint { color: #5d6a61; }
+
+  .error-summary {
+    margin-bottom: 26px; padding: 18px 20px; border-radius: var(--radius-btn);
+    background: rgba(154,59,46,.07); border: 1px solid rgba(154,59,46,.35); color: #9a3b2e;
+  }
+  .error-summary:focus-visible { outline: 2px solid #9a3b2e; outline-offset: 3px; }
+  .error-summary__title { font-size: 15px; font-weight: 600; }
+  .error-summary ul { margin: 8px 0 0; padding-left: 18px; font-size: 14px; }
+  .error-summary a { color: #9a3b2e; }
+
+  .hp { position: absolute; left: -10000px; width: 1px; height: 1px; overflow: hidden; }
+  .submit-row { margin-top: 30px; gap: 24px; }
+  .message { margin-top: 18px; padding: 14px 16px; border-radius: var(--radius-btn); font-size: 14px; line-height: 1.5; background: rgba(154,59,46,.08); color: #9a3b2e; }
+  .success { margin-bottom: 0; }
+  .success .serif-l { color: var(--emerald); }
+  .success .body-l { margin-top: 10px; }
+  .success:focus { outline: none; }
+
+  .faq-section { padding-top: 0; }
+  .faq { margin: 32px 0 0; }
+  .faq > div { border-top: 1px solid rgba(27,26,23,.14); padding: 22px 0; }
+  .faq dt { color: var(--emerald); }
+  .faq dd { margin: 8px 0 0; max-width: 62ch; }
+
+  @media (max-width: 860px) {
+    .hero { padding: 56px 0; }
+    .hero-grid, .about-grid { grid-template-columns: 1fr; gap: 32px; }
+    .hero-photo { max-width: 460px; }
+  }
+  @media (max-width: 760px) {
+    .span { grid-column: auto; }
+    .budget { grid-template-columns: 1fr 1fr; }
+    .budget .field:last-child { grid-column: 1 / -1; }
+    .panel { padding: 28px 22px; }
+    .quote blockquote p { font-size: 20px; }
+  }
+</style>
+
+<script>
+  import { validateGroupInquiry, nightsBetween } from "../lib/group-inquiry.js";
+  import { isCalendarDate } from "../lib/validation.js";
+
+  const form = document.getElementById("group-form") as HTMLFormElement;
+  const submit = document.getElementById("submit") as HTMLButtonElement;
+  const message = document.getElementById("message") as HTMLDivElement;
+  const summary = document.getElementById("error-summary") as HTMLDivElement;
+  const errorList = document.getElementById("error-list") as HTMLUListElement;
+  const success = document.getElementById("success") as HTMLDivElement;
+  const $ = <T extends HTMLElement = HTMLInputElement>(id: string) => document.getElementById(id) as T;
+
+  // Which control to focus/flag for each error key.
+  const TARGET: Record<string, string> = { dateMode: "date-known" };
+  const ORDER = ["name", "email", "company", "destination", "dateMode", "arrival", "departure", "flexibility", "timeframe",
+    "nights", "rooms", "stage", "budgetAmount", "budgetCurrency", "budgetBasis", "notes"];
+
+  function payload() {
+    const val = (id: string) => $(id).value;
+    const on = (id: string) => $(id).checked;
+    const mode = (form.querySelector('input[name="dateMode"]:checked') as HTMLInputElement | null)?.value ?? "";
+    return {
+      name: val("name"), email: val("email"), company: val("company"), destination: val("destination"),
+      dateMode: mode, arrival: val("arrival"), departure: val("departure"), flexibility: val("flexibility"),
+      timeframe: val("timeframe"), nights: val("nights"), nightsUnsure: on("nightsUnsure"),
+      rooms: val("rooms"), roomsUnsure: on("roomsUnsure"),
+      budgetAmount: val("budgetAmount"), budgetCurrency: val("budgetCurrency"), budgetBasis: val("budgetBasis"),
+      budgetGuidance: on("budgetGuidance"), stage: val("stage"), notes: val("notes"), website: val("website"),
+    };
+  }
+
+  function clearErrors() {
+    summary.hidden = true;
+    errorList.replaceChildren();
+    form.querySelectorAll<HTMLElement>(".field-error").forEach((el) => { el.hidden = true; el.textContent = ""; });
+    form.querySelectorAll("[aria-invalid]").forEach((el) => el.removeAttribute("aria-invalid"));
+  }
+
+  function showErrors(errors: Record<string, string>) {
+    clearErrors();
+    const keys = ORDER.filter((k) => errors[k]);
+    for (const key of keys) {
+      const err = document.getElementById(`err-${key}`);
+      if (err) { err.textContent = errors[key]; err.hidden = false; }
+      const control = $(TARGET[key] ?? key);
+      if (key === "dateMode") form.querySelectorAll('input[name="dateMode"]').forEach((r) => r.setAttribute("aria-invalid", "true"));
+      else control?.setAttribute("aria-invalid", "true");
+      const li = document.createElement("li");
+      const a = document.createElement("a");
+      a.href = `#${TARGET[key] ?? key}`;
+      a.textContent = errors[key];
+      a.addEventListener("click", (e) => { e.preventDefault(); control?.focus(); });
+      li.append(a);
+      errorList.append(li);
+    }
+    summary.hidden = false;
+    summary.focus();
+  }
+
+  // Dates: show the branch that matches the choice.
+  function syncDates() {
+    const mode = (form.querySelector('input[name="dateMode"]:checked') as HTMLInputElement | null)?.value;
+    $("dates-known").hidden = mode !== "known";
+    $("dates-deciding").hidden = mode !== "deciding";
+  }
+  form.querySelectorAll('input[name="dateMode"]').forEach((r) => r.addEventListener("change", syncDates));
+
+  // Known dates: departure can't precede arrival; show the derived night count.
+  function syncNights() {
+    const a = $("arrival").value, d = $("departure").value;
+    $("departure").min = a;
+    const n = isCalendarDate(a) && isCalendarDate(d) ? nightsBetween(a, d) : 0;
+    $("hint-nights").textContent = n > 0 ? `${n} night${n === 1 ? "" : "s"}` : "";
+  }
+  $("arrival").addEventListener("change", syncNights);
+  $("departure").addEventListener("change", syncNights);
+
+  // "Not sure yet" / "guidance" boxes stand in for the inputs they disable.
+  function link(boxId: string, inputIds: string[]) {
+    const sync = () => inputIds.forEach((id) => { $(id).disabled = $(boxId).checked; });
+    $(boxId).addEventListener("change", sync);
+    sync();
+  }
+  link("nightsUnsure", ["nights"]);
+  link("roomsUnsure", ["rooms"]);
+  link("budgetGuidance", ["budgetAmount", "budgetCurrency", "budgetBasis"]);
+  syncDates();
+  syncNights();
+
+  form.addEventListener("submit", async (e) => {
+    e.preventDefault();
+    if (submit.disabled) return;
+    message.hidden = true;
+
+    const data = payload();
+    const check = validateGroupInquiry(data);
+    if (!check.ok) { showErrors(check.errors ?? {}); return; }
+    clearErrors();
+
+    submit.disabled = true;
+    submit.textContent = "Sending…";
+    let sent = false;
+    try {
+      const res = await fetch("/api/group-inquiry", {
+        method: "POST",
+        headers: { "Content-Type": "application/json" },
+        body: JSON.stringify(data),
+      });
+      const out = await res.json().catch(() => ({}));
+      if (res.ok && out.ok) sent = true;
+      else if (res.status === 400 && out.errors) { showErrors(out.errors); return; }
+    } catch {
+      // Network failure — handled below.
+    } finally {
+      submit.disabled = false;
+      submit.textContent = "Send my trip details";
+    }
+
+    if (sent) {
+      form.hidden = true;
+      success.hidden = false;
+      success.focus();
+    } else {
+      message.textContent = "Your inquiry couldn’t be sent. Your details are still here—please try again.";
+      message.hidden = false;
+    }
+  });
+</script>
