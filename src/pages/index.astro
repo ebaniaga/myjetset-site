@@ -1,6 +1,7 @@
 ---
 import Layout from "../layouts/Layout.astro";
 import Star from "../components/Star.astro";
+import Photo from "../components/Photo.astro";
 import "../styles/global.css";
 import { SITE } from "../lib/site.js";
 import { AMINA } from "../lib/testimonials.js";
@@ -25,7 +26,7 @@ import { CABINS } from "../lib/cabins.js";
         </div>
       </div>
       <div class="photo photo--4x5 hero-photo">
-        <img src="/images/antarctica-1.jpg" alt="An iceberg with a blue ice cave, Antarctic Peninsula" width="1350" height="1800" loading="eager" fetchpriority="high" />
+        <Photo src="/images/antarctica-1.jpg" alt="An iceberg with a blue ice cave, Antarctic Peninsula" width={1350} height={1800} loading="eager" fetchpriority="high" sizes="(max-width: 760px) 100vw, 480px" />
       </div>
     </div>
   </section>
@@ -85,7 +86,7 @@ import { CABINS } from "../lib/cabins.js";
       <div class="grid-3 points-grid">
         {CABINS.map((c) => (
           <div class="photo photo--square">
-            <img src={c.src} alt={c.alt} width={c.width} height={c.height} loading="lazy" />
+            <Photo src={c.src} alt={c.alt} width={c.width} height={c.height} loading="lazy" sizes="(max-width: 760px) 80vw, 360px" />
             <div class="overlay"><div class="kicker">{c.kicker}</div><div class="caption">{c.caption}</div></div>
           </div>
         ))}
@@ -116,7 +117,7 @@ import { CABINS } from "../lib/cabins.js";
   <section class="section section--emerald">
     <div class="container about-grid">
       <div class="photo photo--4x5 about-photo">
-        <img src="/images/erickson.jpg" alt="Erickson Baniaga" width="1200" height="1500" loading="lazy" />
+        <Photo src="/images/erickson.jpg" alt="Erickson Baniaga" width={1200} height={1500} loading="lazy" sizes="(max-width: 760px) 100vw, 420px" />
       </div>
       <div>
         <p class="eyebrow eyebrow--gold">About</p>
@@ -133,15 +134,15 @@ import { CABINS } from "../lib/cabins.js";
       <p class="eyebrow">From the road</p>
       <div class="grid-3 road">
         <div class="photo photo--3x2">
-          <img src="/images/budapest-1.jpg" alt="Hungarian Parliament lit gold at blue hour, from the Danube" width="1800" height="1350" loading="lazy" />
+          <Photo src="/images/budapest-1.jpg" alt="Hungarian Parliament lit gold at blue hour, from the Danube" width={1800} height={1350} loading="lazy" sizes="(max-width: 760px) 100vw, 360px" />
           <div class="overlay"><div class="kicker">Hungary</div><div class="caption">Budapest at blue hour</div></div>
         </div>
         <div class="photo photo--3x2">
-          <img src="/images/leh-1.jpg" alt="Snow-covered Ladakh range under a clear sky" width="1800" height="1350" loading="lazy" />
+          <Photo src="/images/leh-1.jpg" alt="Snow-covered Ladakh range under a clear sky" width={1800} height={1350} loading="lazy" sizes="(max-width: 760px) 100vw, 360px" />
           <div class="overlay"><div class="kicker">Ladakh, India</div><div class="caption">Leh in January</div></div>
         </div>
         <div class="photo photo--3x2">
-          <img src="/images/honolulu-1.jpg" alt="Makapuʻu coastline, Oʻahu" width="1800" height="1350" loading="lazy" />
+          <Photo src="/images/honolulu-1.jpg" alt="Makapuʻu coastline, Oʻahu" width={1800} height={1350} loading="lazy" sizes="(max-width: 760px) 100vw, 360px" />
           <div class="overlay"><div class="kicker">Hawaiʻi</div><div class="caption">Makapuʻu, Oʻahu</div></div>
         </div>
       </div>

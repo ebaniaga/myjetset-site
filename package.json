@@ -5,9 +5,10 @@
   "description": "My Jet Set Life — travel advisory, miles & points optimization, and award search. Entry point to Erickson Baniaga's Fora travel services.",
   "scripts": {
     "thumbnails": "node scripts/generate-thumbnails.mjs",
-    "predev": "npm run thumbnails",
+    "responsive": "node scripts/generate-responsive.mjs",
+    "predev": "npm run thumbnails && npm run responsive",
     "dev": "astro dev",
-    "prebuild": "npm run thumbnails",
+    "prebuild": "npm run thumbnails && npm run responsive",
     "build": "astro build",
     "test": "node --test",
     "check:build": "node scripts/check-build.mjs",
@@ -15,6 +16,7 @@
     "deploy": "npm run build && npm run check:build && wrangler pages deploy dist --project-name myjetset --branch main"
   },
   "dependencies": {
+    "@astrojs/sitemap": "^3.7.4",
     "astro": "^5.0.0",
     "globe.gl": "^2.46.2",
     "three": "^0.186.0"

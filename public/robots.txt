@@ -1,0 +1,7 @@
+User-agent: *
+Allow: /
+Disallow: /api/
+Disallow: /submitted
+Disallow: /travel-reports
+
+Sitemap: https://myjetset.life/sitemap-index.xml

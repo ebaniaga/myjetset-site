@@ -1,0 +1,21 @@
+---
+// A photo from /public/images with AVIF/WebP responsive variants (built by
+// scripts/generate-responsive.mjs). Same props as <img>, plus `sizes`; the
+// original JPEG is the fallback so nothing breaks if a variant is missing.
+import { responsiveSrcset } from "../lib/responsive.js";
+
+interface Props extends astroHTML.JSX.ImgHTMLAttributes {
+  src: string;
+  alt: string;
+  width: number;
+  height: number;
+  sizes?: string;
+}
+const { src, sizes = "(max-width: 760px) 100vw, 50vw", ...img } = Astro.props;
+const maxWidth = Number(img.width);
+---
+<picture>
+  <source type="image/avif" srcset={responsiveSrcset(src, "avif", maxWidth)} sizes={sizes} />
+  <source type="image/webp" srcset={responsiveSrcset(src, "webp", maxWidth)} sizes={sizes} />
+  <img src={src} {...img} />
+</picture>

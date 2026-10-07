@@ -28,7 +28,10 @@ const {
   noindex = false,
 } = Astro.props;
 
-const canonical = new URL(Astro.url.pathname, Astro.site);
+// The build emits /about.html (build.format "file") but Pages serves it at
+// /about, so canonical + og:url use the clean path.
+const cleanPath = Astro.url.pathname.replace(/\/index\.html$/, "/").replace(/\.html$/, "");
+const canonical = new URL(cleanPath, Astro.site);
 const ogUrl = new URL(ogImage, Astro.site);
 ---
 <!DOCTYPE html>

@@ -6,17 +6,17 @@
   --gold:      #E3C36E; /* accent, CTAs on emerald, the star mark, hairline frames */
   --gold-soft: #C6A560; /* backup accent, held in reserve */
   --accent:    var(--gold);
-  --accent-ink:#8a6a1f; /* legible gold ink for text/icons on cream */
+  --accent-ink:#7a5d1a; /* legible gold ink for text/icons on cream (AA on cream) */
   --cream:   #F1EEE4;   /* light page background */
   --paper:   #FBFAF6;   /* cards on cream */
   --bone:    #E7E5DF;   /* neutral canvas behind cards */
-  --sage:    #6E7C72;   /* muted text, meta, dividers on light */
+  --sage:    #5A685E;   /* muted text, meta, dividers on light (AA on cream) */
   --ink:     #1B1A17;   /* body text on light */
   --ink-soft:#4A463D;   /* secondary body text on light */
   --cream-90:#CDD6CF;   /* body text on emerald */
   --line:    #ECE8DC;   /* hairline dividers on cream */
   --line-dark: rgba(241,238,228,.16); /* hairline dividers on emerald */
-  --meta:    #8a8275;   /* eyebrows / field labels */
+  --meta:    #6B6559;   /* eyebrows / field labels (AA on cream) */
   --field-line: #E3DFD2;
 
   /* Feel: Soft corners (matches the search-page restyle), full gold hairline frame */
