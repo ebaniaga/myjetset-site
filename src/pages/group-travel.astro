@@ -1,6 +1,7 @@
 ---
 import Layout from "../layouts/Layout.astro";
 import "../styles/global.css";
+import PrivacyNote from "../components/PrivacyNote.astro";
 import { SITE } from "../lib/site.js";
 import { AMINA } from "../lib/testimonials.js";
 import { FLEXIBILITY, CURRENCIES, BUDGET_BASES, STAGES } from "../lib/group-inquiry.js";
@@ -287,6 +288,7 @@ const faqs = [
           <button class="btn btn--accent btn--lg" type="submit" id="submit">Send my trip details</button>
           <a class="btn btn--link" href={SITE.bookUrl} target="_blank" rel="noopener">Prefer to talk? Book a call.</a>
         </div>
+        <PrivacyNote text="I use these details only to respond to your inquiry and plan your team’s hotel booking." />
         <div class="message" id="message" role="alert" hidden></div>
       </form>
     </div>

@@ -1,18 +1,136 @@
 ---
 import Layout from "../layouts/Layout.astro";
+import Star from "../components/Star.astro";
+import PrivacyNote from "../components/PrivacyNote.astro";
 import "../styles/global.css";
 import { SITE } from "../lib/site.js";
+
+// Most of this copy is the trip-planning and travel-protection service text
+// from the home page; keep the two in step.
+const perks = [
+  "Daily breakfast",
+  "Room upgrades when available",
+  "Resort or property credits",
+  "Early check-in and late checkout",
+];
+
+const services = [
+  { title: "Hotels", body: "The right place to stay for the trip you’re taking, booked through Fora — with partner perks where the property offers them." },
+  { title: "Itineraries", body: "How the days fit together: where to base yourself, how to get between places, and what’s worth the time." },
+  { title: "Travel protection", body: "The right coverage for the trip you’re taking — medical, cancellation, and the fine print most people skip. I’ll help you choose what actually fits." },
+];
+
+const steps = [
+  { title: "Tell me about the trip.", body: "Where you’re thinking, roughly when, who’s coming and how you like to travel. A few details is plenty to start." },
+  { title: "Review the options.", body: "I’ll come back with hotels and ideas that fit, and we’ll adjust until it feels right." },
+  { title: "Book it through Fora.", body: "Once you’ve chosen, I’ll book it and keep track of the details along the way." },
+];
+
+const places = [
+  { src: "/images/kyoto-1.jpg", alt: "The vermilion pagoda and gate at Kiyomizu-dera under a clear blue sky", kicker: "Japan", caption: "Kyoto" },
+  { src: "/images/queenstown-1.jpg", alt: "Lake Wakatipu and its islands below the mountains, from above Queenstown", kicker: "New Zealand", caption: "Queenstown" },
+  { src: "/images/rio-1.jpg", alt: "Sugarloaf Mountain silhouetted against an orange sunrise over the bay", kicker: "Brazil", caption: "Rio de Janeiro" },
+];
 ---
 <Layout
-  title="Plan a trip — My Jet Set Life"
-  description="Tell Erickson about the trip you have in mind — destinations, dates, travelers and budget — and he'll follow up within a day or two."
+  title="Trip Planning & Booking | My Jet Set Life"
+  description="Hotels, itineraries and travel protection, planned with Fora travel advisor Erickson Baniaga — with partner-hotel perks at no extra cost to you."
+  socialTitle="Trip planning, handled personally."
+  socialDescription="Hotels, itineraries and the small details, booked through Fora with Erickson at My Jet Set Life."
+  ogImage="/images/paris-1.jpg"
   active="inquiry"
 >
-  <section class="section page">
+
+  <!-- Hero -->
+  <section class="hero section--emerald">
+    <div class="container hero-grid">
+      <div>
+        <p class="eyebrow eyebrow--gold">Trip planning &amp; booking</p>
+        <h1 class="display-xl">Trip planning, <em>handled personally.</em></h1>
+        <p class="body-l hero-lead">Hotels, itineraries and the small details, booked through Fora — planned by a travel advisor who has been to all seven continents and more than fifty countries.</p>
+        <div class="row hero-ctas">
+          <a class="btn btn--accent btn--lg" href="#plan">Tell me about your trip</a>
+          <a class="btn btn--link btn--link-light" href={SITE.bookUrl} target="_blank" rel="noopener">Book a call</a>
+        </div>
+      </div>
+      <div class="photo photo--4x5 hero-photo">
+        <img src="/images/paris-1.jpg" alt="The Eiffel Tower lit gold at night above the Seine" width="1350" height="1800" loading="eager" fetchpriority="high" />
+      </div>
+    </div>
+  </section>
+
+  <!-- Perks -->
+  <section class="section">
+    <div class="container perks-grid">
+      <div>
+        <p class="eyebrow">Booked through Fora</p>
+        <h2 class="display-m">Partner-hotel perks, at no extra cost to you.</h2>
+        <p class="body-l soft perks-lead">When I book a Fora partner property, the stay can come with extras you wouldn’t get booking on your own.</p>
+      </div>
+      <div>
+        <ul class="perks">
+          {perks.map((p) => <li><Star size={16} /><span>{p}</span></li>)}
+        </ul>
+        <p class="body-s muted perks-note">Perks vary by property and depend on availability.</p>
+      </div>
+    </div>
+  </section>
+
+  <!-- What I help with -->
+  <section class="section section--tight flush">
+    <div class="container">
+      <p class="eyebrow">What I help with</p>
+      <h2 class="display-m">The trip, not just the booking.</h2>
+      <div class="grid-3 cols">
+        {services.map((s) => (
+          <div class="col">
+            <h3 class="serif-m">{s.title}</h3>
+            <p class="soft">{s.body}</p>
+          </div>
+        ))}
+      </div>
+      <p class="points-note soft">Want to use points for the flights? <a class="btn btn--link" href="/points">Points &amp; miles →</a></p>
+    </div>
+  </section>
+
+  <!-- How it works -->
+  <section class="section section--emerald">
+    <div class="container">
+      <p class="eyebrow eyebrow--gold">How it works</p>
+      <h2 class="display-m">From an idea to a booked trip.</h2>
+      <ol class="grid-3 steps">
+        {steps.map((s) => (
+          <li>
+            <h3 class="serif-m">{s.title}</h3>
+            <p>{s.body}</p>
+          </li>
+        ))}
+      </ol>
+    </div>
+  </section>
+
+  <!-- Places -->
+  <section class="section section--tight">
+    <div class="container">
+      <p class="eyebrow">From the road</p>
+      <div class="grid-3 places">
+        {places.map((p) => (
+          <div class="photo photo--4x5">
+            <img src={p.src} alt={p.alt} width="1350" height="1800" loading="lazy" decoding="async" />
+            <div class="overlay"><div class="kicker">{p.kicker}</div><div class="caption">{p.caption}</div></div>
+          </div>
+        ))}
+      </div>
+      <p class="places-more"><a class="btn btn--link" href="/globe">See every place on the globe →</a></p>
+    </div>
+  </section>
+
+  <!-- Inquiry -->
+  <section class="section page" id="plan" aria-labelledby="plan-title">
     <div class="container narrow">
       <header class="page-head">
         <p class="eyebrow">Plan a trip</p>
-        <h1 class="display-m">Tell me about the trip.</h1>
+        <h2 class="display-m" id="plan-title">Tell me about the trip.</h2>
         <p class="lead soft">A few details and I'll follow up within a day or two. Prefer to talk it through? <a class="btn btn--link" href={SITE.bookUrl} target="_blank" rel="noopener">Book a call →</a></p>
       </header>
 
@@ -78,6 +196,7 @@ import { SITE } from "../lib/site.js";
           <button class="btn btn--accent btn--lg" type="submit" id="submit">Send inquiry</button>
           <span class="body-s muted">Or email <a href={`mailto:${SITE.email}`}>{SITE.email}</a></span>
         </div>
+        <PrivacyNote />
         <div class="message" id="message" hidden></div>
       </form>
     </div>
@@ -85,10 +204,47 @@ import { SITE } from "../lib/site.js";
 </Layout>
 
 <style>
-  .page { padding-top: 64px; }
+  .hero { padding: 88px 0; }
+  .hero-grid { display: grid; grid-template-columns: 1.15fr .85fr; gap: 56px; align-items: center; }
+  .hero h1 { color: var(--cream); margin-top: 18px; }
+  .hero h1 em { font-style: italic; font-weight: 400; color: var(--gold); }
+  .hero-lead { margin-top: 22px; max-width: 46ch; }
+  .hero-ctas { margin-top: 34px; gap: 28px; }
+  .hero-photo { box-shadow: var(--shadow-raised); }
+
+  .display-m { margin-top: 12px; }
+  .perks-grid { display: grid; grid-template-columns: 1.1fr .9fr; gap: 56px; align-items: center; }
+  .perks-lead { margin-top: 16px; max-width: 46ch; }
+  .perks { list-style: none; margin: 0; padding: 0; }
+  .perks li {
+    display: flex; align-items: center; gap: 14px; padding: 16px 0;
+    border-top: 1px solid rgba(27,26,23,.14); font-family: var(--serif); font-size: 22px; color: var(--emerald);
+  }
+  .perks li:last-child { border-bottom: 1px solid rgba(27,26,23,.14); }
+  .perks-note { margin-top: 14px; }
+
+  .flush { padding-top: 0; }
+  .cols, .steps { margin-top: 40px; }
+  .col { border-top: 1px solid rgba(27,26,23,.14); padding-top: 22px; }
+  .col h3 { color: var(--emerald); }
+  .col p, .steps p { margin-top: 10px; max-width: 40ch; }
+  .points-note { margin-top: 36px; }
+  .points-note .btn--link { margin-left: 8px; font-size: 11px; }
+
+  .steps { list-style: none; padding: 0; counter-reset: step; }
+  .steps li { counter-increment: step; border-top: 1px solid var(--line-dark); padding-top: 22px; }
+  .steps li::before {
+    content: counter(step, decimal-leading-zero); display: block; margin-bottom: 10px;
+    font-family: var(--serif); font-size: 34px; line-height: 1; color: var(--gold);
+  }
+
+  .places { margin-top: 24px; }
+  .places-more { margin-top: 26px; }
+
+  .page { padding-top: 96px; }
   .narrow { max-width: 760px; }
   .page-head { margin-bottom: 28px; }
-  .page-head h1 { color: var(--emerald); margin-top: 12px; }
+  .page-head h2 { color: var(--emerald); }
   .lead { margin-top: 12px; max-width: 52ch; }
   .lead .btn--link { font-size: 11px; }
   .inquiry .grid-2 { gap: 18px 20px; }
@@ -100,7 +256,12 @@ import { SITE } from "../lib/site.js";
   .message { margin-top: 18px; padding: 14px 16px; border-radius: var(--radius-btn); font-size: 14px; line-height: 1.5; }
   .message.ok { background: rgba(31,94,75,.1); color: var(--verde); }
   .message.err { background: rgba(154,59,46,.08); color: #9a3b2e; }
-  @media (max-width: 760px) { .span { grid-column: auto; } .page { padding-top: 40px; } }
+  @media (max-width: 860px) {
+    .hero { padding: 56px 0; }
+    .hero-grid, .perks-grid { grid-template-columns: 1fr; gap: 32px; }
+    .hero-photo { max-width: 460px; }
+  }
+  @media (max-width: 760px) { .span { grid-column: auto; } .page { padding-top: 56px; } .panel { padding: 28px 22px; } }
 </style>
 
 <script>
@@ -112,6 +273,12 @@ import { SITE } from "../lib/site.js";
   const PRESELECT: Record<string, string> = { points: "Miles & points optimization" };
   const preset = PRESELECT[new URLSearchParams(location.search).get("help") ?? ""];
   if (preset) (document.getElementById("help") as HTMLSelectElement).value = preset;
+
+  // Links like /inquiry#plan should land on the form. The browser's own jump
+  // can be lost to smooth scrolling and late image layout, so do it here.
+  if (location.hash === "#plan") {
+    addEventListener("load", () => document.getElementById("plan")?.scrollIntoView({ behavior: "instant" as ScrollBehavior }));
+  }
 
   function show(kind: "ok" | "err", text: string) {
     message.textContent = text;

@@ -1,0 +1,12 @@
+---
+// One-line privacy notice for beside a form's submit button. Self-styled so it
+// works on the search page, which does not load global.css.
+const { text = "I use these details only to respond to you and plan your trip." } = Astro.props;
+---
+<p class="privacy-note">{text} <a href="/privacy">Privacy policy</a></p>
+
+<style>
+  .privacy-note { margin: 14px 0 0; font-size: 12px; line-height: 1.5; color: #5d6a61; }
+  .privacy-note a { color: inherit; text-decoration: underline; text-underline-offset: 2px; }
+  .privacy-note a:hover { color: #16463A; }
+</style>

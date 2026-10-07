@@ -41,6 +41,7 @@ const year = new Date().getFullYear();
   <div class="footer-bottom">
     <div class="footer-inner">
       <span>© {year} {SITE.name} · {SITE.advisor}, Fora Travel Advisor</span>
+      <a class="bottom-link" href="/privacy">Privacy policy</a>
     </div>
   </div>
 </footer>
@@ -77,6 +78,8 @@ const year = new Date().getFullYear();
   }
   .news-form button:hover { filter: brightness(.94); }
   .footer-bottom { border-top: 1px solid rgba(241,238,228,.16); }
+  .bottom-link { color: inherit; margin-left: 16px; text-decoration: none; }
+  .bottom-link:hover { color: var(--gold); }
   .footer-bottom .footer-inner { display: block; padding: 18px 24px; font-size: 12px; color: rgba(205,214,207,.7); }
   .sr-only { position: absolute; width: 1px; height: 1px; overflow: hidden; clip: rect(0 0 0 0); white-space: nowrap; }
   @media (max-width: 760px) {

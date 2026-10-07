@@ -1,0 +1,99 @@
+---
+// Privacy policy. Describes what this site actually does: the three forms
+// (/inquiry, /group-travel, /search), the Buttondown newsletter, and the
+// services those depend on. Update it whenever a form, provider, analytics or
+// cookie changes — and the "Last updated" date with it.
+import Layout from "../layouts/Layout.astro";
+import "../styles/global.css";
+import { SITE } from "../lib/site.js";
+
+const UPDATED = "October 6, 2026";
+---
+<Layout
+  title="Privacy Policy | My Jet Set Life"
+  description="How My Jet Set Life collects, uses and shares the information you send through this site."
+  active="privacy"
+>
+  <section class="section policy">
+    <div class="container narrow">
+      <p class="eyebrow">Privacy</p>
+      <h1 class="display-m">Privacy policy</h1>
+      <p class="muted updated">Last updated {UPDATED}</p>
+
+      <p class="body-l intro">{SITE.name} is the travel advisory practice of {SITE.advisor}, an independent travel advisor with Fora Travel. This policy explains what information this website collects, how I use it, and who it’s shared with. “I” and “me” mean {SITE.advisor} and {SITE.name}.</p>
+
+      <h2 class="serif-l">What I collect</h2>
+      <p><strong>Information you send me.</strong> When you use a form on this site, I receive what you enter:</p>
+      <ul>
+        <li><strong>Plan a trip:</strong> your name and email, and optionally your phone number, destinations, dates, number of travelers, budget and notes.</li>
+        <li><strong>Group travel:</strong> your name, email, company or group, destination, dates, approximate room count, hotel budget, planning stage and notes.</li>
+        <li><strong>Award search:</strong> your name and email, airports, travel dates, cabin, the airline and card point programs you hold, a point budget range, and any booking help you ask for.</li>
+        <li><strong>Newsletter:</strong> your email address.</li>
+      </ul>
+      <p>I also receive whatever you include when you email me or book a call.</p>
+      <p><strong>Technical information.</strong> Like most websites, the services that host and deliver this site process basic technical data — such as your IP address, browser type and the pages you request — to serve the site and protect it from abuse. I don’t use analytics or advertising tools to track you.</p>
+
+      <h2 class="serif-l">How I use it</h2>
+      <ul>
+        <li>To reply to your inquiry and plan, quote and book your travel.</li>
+        <li>To email you the award search results you asked for.</li>
+        <li>To send the newsletter, if you subscribed.</li>
+        <li>To keep the site working and secure, and to meet legal and record-keeping obligations.</li>
+      </ul>
+      <p>I don’t sell your personal information, and I don’t share it for advertising.</p>
+
+      <h2 class="serif-l">Who it’s shared with</h2>
+      <p>I use a small number of service providers to run this site. They receive only what they need to do their job:</p>
+      <ul>
+        <li><strong>Cloudflare</strong> hosts the site and runs its forms.</li>
+        <li><strong>Resend</strong> delivers form submissions to my inbox and sends you confirmation and results emails.</li>
+        <li><strong>Buttondown</strong> manages newsletter subscriptions.</li>
+        <li><strong>Google Fonts</strong> supplies the site’s typefaces, so your browser requests them from Google, which receives your IP address.</li>
+        <li><strong>seats.aero</strong> powers the award search. It receives the airports, dates, cabins and programs you search — not your name or email.</li>
+        <li><strong>Superhuman</strong> hosts my “Book a call” scheduling page, if you use it.</li>
+      </ul>
+      <p><strong>When you book.</strong> To make a booking, I share the details it needs with Fora Travel and with the travel suppliers involved, such as hotels, airlines, tour operators and insurers. Their own privacy policies apply to how they handle that information. Fora’s is available at <a href={SITE.foraUrl.replace(/\/advisor\/.*$/, "")} target="_blank" rel="noopener">foratravel.com</a>.</p>
+      <p>I may also disclose information if the law requires it, or to protect the rights and safety of my clients, myself or others.</p>
+
+      <h2 class="serif-l">Cookies and browser storage</h2>
+      <p>This site doesn’t use advertising or analytics cookies. The award search stores your search briefly in your browser’s session storage so the confirmation page can show it; it’s cleared when you close the tab. Cloudflare may set strictly necessary cookies to protect the site from automated abuse.</p>
+
+      <h2 class="serif-l">How long I keep it</h2>
+      <p>I keep inquiries and related emails for as long as I need them to respond, plan and book your travel, and afterward for business and legal records. Newsletter subscriptions last until you unsubscribe.</p>
+
+      <h2 class="serif-l">Your choices</h2>
+      <ul>
+        <li>You can ask to see, correct or delete the personal information I hold about you by emailing <a href={`mailto:${SITE.email}`}>{SITE.email}</a>. Some records may need to be kept where the law requires it, such as for completed bookings.</li>
+        <li>Every newsletter includes an unsubscribe link.</li>
+        <li>You don’t have to use the forms — you can always email me instead.</li>
+      </ul>
+
+      <h2 class="serif-l">Security</h2>
+      <p>I take reasonable steps to protect the information you send, and the site is served over an encrypted connection. No method of transmission or storage is completely secure, so please don’t send payment card numbers, passwords or passport details through the forms or by email unless I ask for them through a secure channel.</p>
+
+      <h2 class="serif-l">Children</h2>
+      <p>This site isn’t directed to children under 13, and I don’t knowingly collect their information through it. Travel for minors is arranged with a parent or guardian.</p>
+
+      <h2 class="serif-l">Changes</h2>
+      <p>If this policy changes, I’ll post the new version here and update the date at the top.</p>
+
+      <h2 class="serif-l">Contact</h2>
+      <p>Questions about privacy? Email <a href={`mailto:${SITE.email}`}>{SITE.email}</a>.</p>
+    </div>
+  </section>
+</Layout>
+
+<style>
+  .policy { padding-top: 72px; }
+  .narrow { max-width: 760px; }
+  .policy h1 { color: var(--emerald); margin-top: 12px; }
+  .updated { margin-top: 10px; font-size: 13px; }
+  .intro { margin-top: 28px; }
+  .policy h2 { color: var(--emerald); margin-top: 48px; padding-top: 24px; border-top: 1px solid rgba(27,26,23,.14); }
+  .policy p, .policy ul { margin-top: 14px; max-width: 68ch; color: var(--ink-soft); }
+  .policy ul { padding-left: 20px; }
+  .policy li { margin-top: 8px; }
+  .policy strong { color: var(--ink); font-weight: 600; }
+  .policy a { color: var(--emerald); }
+  @media (max-width: 760px) { .policy { padding-top: 48px; } .policy h2 { margin-top: 36px; } }
+</style>

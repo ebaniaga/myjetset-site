@@ -1,5 +1,6 @@
 ---
 import Layout from "../layouts/Layout.astro";
+import PrivacyNote from "../components/PrivacyNote.astro";
 // The award-search UI is carried over verbatim from the original search.html.
 // Its CSS stays page-scoped (is:global here, but only loaded on this page) and
 // its backend is the unchanged Cloudflare Pages Function at /api/search.
@@ -172,6 +173,7 @@ import Layout from "../layouts/Layout.astro";
       </div>
 
       <button type="submit" id="submit-btn">Find my options</button>
+      <PrivacyNote text="I use your details only to send your results and follow up if you ask for help." />
 
       <div class="message" id="message" hidden></div>
     </form>
