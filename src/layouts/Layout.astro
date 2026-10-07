@@ -12,6 +12,8 @@ interface Props {
   /** Share-card title/description when they should differ from the page's. */
   socialTitle?: string;
   socialDescription?: string;
+  /** Keep the page out of search results (e.g. pages hidden from the nav). */
+  noindex?: boolean;
   /** Which nav item is active, e.g. "search" | "about" | "inquiry" */
   active?: string;
 }
@@ -23,6 +25,7 @@ const {
   active,
   socialTitle = title,
   socialDescription = description,
+  noindex = false,
 } = Astro.props;
 
 const canonical = new URL(Astro.url.pathname, Astro.site);
@@ -36,6 +39,7 @@ const ogUrl = new URL(ogImage, Astro.site);
 <title>{title}</title>
 <meta name="description" content={description} />
 <link rel="canonical" href={canonical} />
+{noindex && <meta name="robots" content="noindex" />}
 <link rel="icon" href="/star-mark.svg" type="image/svg+xml" />
 <meta property="og:site_name" content="My Jet Set Life" />
 <meta property="og:type" content="website" />
