@@ -2,10 +2,11 @@ import test, { afterEach, mock } from "node:test";
 import assert from "node:assert/strict";
 import { onRequestPost as search } from "../functions/api/search.js";
 import { onRequestPost as inquiry } from "../functions/api/inquiry.js";
+import { OWNER_EMAIL } from "../src/lib/mail.js";
 import { onRequestPost as groupInquiry } from "../functions/api/group-inquiry.js";
 
 afterEach(() => mock.restoreAll());
-const env = { SEATS_AERO_KEY: "mock", RESEND_API_KEY: "mock", FROM_EMAIL: "site@example.invalid", OWNER_EMAIL: "owner@example.invalid" };
+const env = { SEATS_AERO_KEY: "mock", RESEND_API_KEY: "mock", FROM_EMAIL: "site@example.invalid" };
 const base = { programs: ["aeroplan"], balanceMin: 50000, balanceMax: 80000, origin: "JFK", destination: "LHR", startDate: "2099-12-01", endDate: "2099-12-02", cabins: ["business"], email: "traveler@example.invalid", name: "Traveler" };
 const context = (body) => ({ env, request: new Request("https://example.invalid/api/search", { method: "POST", body: JSON.stringify(body) }) });
 const trip = (overrides = {}) => ({ Cabin: "business", MileageCost: 70000, TotalTaxes: 1234, TaxesCurrency: "CAD", Stops: 1, TotalDuration: 650, Carriers: "AC", FlightNumbers: "AC 100", Connections: ["YYZ"], DepartsAt: "2099-12-01T15:00:00Z", ArrivesAt: "2099-12-02T03:00:00Z", ...overrides });
@@ -167,7 +168,7 @@ test("inquiry escapes text and retains owner-first delivery and reply-to", async
   const { emails } = services();
   const res = await inquiry(context({ name: '<b>Traveler</b>', email: 'traveler@example.invalid', notes: '<img src=x>' }));
   assert.equal(res.status, 200);
-  assert.deepEqual(emails[0].to, [env.OWNER_EMAIL]);
+  assert.deepEqual(emails[0].to, [OWNER_EMAIL]);
   assert.equal(emails[0].reply_to, 'traveler@example.invalid');
   assert.match(emails[0].html, /&lt;img src=x&gt;/);
   assert.deepEqual(emails[1].to, ['traveler@example.invalid']);
@@ -185,7 +186,7 @@ test("group inquiry reaches the owner first with derived nights, escaping and re
   const { emails } = services();
   const res = await groupInquiry(context(group));
   assert.equal(res.status, 200);
-  assert.deepEqual(emails[0].to, [env.OWNER_EMAIL]);
+  assert.deepEqual(emails[0].to, [OWNER_EMAIL]);
   assert.equal(emails[0].reply_to, group.email);
   assert.match(emails[0].html, /2099-05-04 → 2099-05-07 \(3 nights\)/);
   assert.match(emails[0].html, /USD 250 — per room, per night/);

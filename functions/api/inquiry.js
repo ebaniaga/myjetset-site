@@ -1,10 +1,10 @@
 // Cloudflare Pages Function — POST /api/inquiry
 // Validates a trip inquiry, emails it to the owner via Resend (reply-to the
 // traveler), then sends the traveler a short confirmation. Same env vars as
-// /api/search: RESEND_API_KEY, FROM_EMAIL, OWNER_EMAIL.
+// /api/search: RESEND_API_KEY, FROM_EMAIL.
 
 import { isRecord } from "../../src/lib/validation.js";
-import { OWNER_FALLBACK, send, renderOwnerEmail, renderConfirmation, json } from "../../src/lib/mail.js";
+import { OWNER_EMAIL, send, renderOwnerEmail, renderConfirmation, json } from "../../src/lib/mail.js";
 
 const CONFIRMATION =
   "I'll read through the details and follow up within a day or two with next steps. If anything comes to mind in the meantime, just reply to this email.";
@@ -42,7 +42,7 @@ export async function onRequestPost({ request, env }) {
   if (!/^[^\s@]+@[^\s@]+\.[^\s@]+$/.test(email)) errors.push("Please enter a valid email.");
   if (errors.length) return json({ error: errors.join(" ") }, 400);
 
-  const owner = env.OWNER_EMAIL || OWNER_FALLBACK;
+  const owner = OWNER_EMAIL;
   const subject = `Trip inquiry from ${name}${destinations ? ` — ${destinations.slice(0, 60)}` : ""}`;
   const rows = [
     ["Name", name],

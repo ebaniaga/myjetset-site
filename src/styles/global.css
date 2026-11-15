@@ -75,6 +75,8 @@ button { font: inherit; }
 /* ── Layout ───────────────────────────────────────────────────────────────── */
 .container { max-width: 1120px; margin: 0 auto; padding: 0 56px; }
 .section { padding: 96px 0; }
+/* Form anchors (#plan, #group-inquiry): land on the form heading, not the section's top padding. */
+.form-anchor { scroll-margin-top: -72px; }
 .section--tight { padding: 64px 0; }
 .section--emerald { background: var(--emerald); color: var(--cream-90); }
 .section--emerald .display-l, .section--emerald .display-m,
@@ -87,6 +89,7 @@ button { font: inherit; }
 @media (max-width: 760px) {
   .container { padding: 0 20px; }
   .section { padding: 56px 0; }
+  .form-anchor { scroll-margin-top: -40px; }
   .section--tight { padding: 40px 0; }
   .grid-2, .grid-3 { grid-template-columns: 1fr; }
 }
