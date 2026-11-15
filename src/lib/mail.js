@@ -2,8 +2,11 @@
 // summary email, the traveler's confirmation, and JSON responses.
 
 import { escapeHtml as esc } from "./validation.js";
+import { SITE } from "./site.js";
 
-export const OWNER_FALLBACK = "hello@myjetset.life";
+// Every form notification goes to the Fora inbox. Fixed in code on purpose,
+// so an old OWNER_EMAIL value in Cloudflare cannot send leads anywhere else.
+export const OWNER_EMAIL = SITE.email;
 
 export async function send(env, msg) {
   try {
