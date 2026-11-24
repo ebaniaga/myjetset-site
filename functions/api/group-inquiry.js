@@ -40,6 +40,7 @@ export async function onRequestPost({ request, env }) {
   // Best-effort confirmation to the organizer; the inquiry already reached the owner.
   await send(env, {
     to: [v.email],
+    cc: [owner],
     reply_to: owner,
     subject: "Your team trip details reached My Jet Set Life",
     html: renderConfirmation(v.name, owner, CONFIRMATION),

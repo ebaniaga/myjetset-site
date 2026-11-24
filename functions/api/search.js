@@ -391,7 +391,7 @@ export async function onRequestPost(context) {
       body: JSON.stringify({
         from: env.FROM_EMAIL,
         to: [email],
-        bcc: [OWNER_EMAIL],
+        cc: [OWNER_EMAIL],
         reply_to: OWNER_EMAIL,
         subject,
         html,

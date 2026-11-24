@@ -172,6 +172,7 @@ test("inquiry escapes text and retains owner-first delivery and reply-to", async
   assert.equal(emails[0].reply_to, 'traveler@example.invalid');
   assert.match(emails[0].html, /&lt;img src=x&gt;/);
   assert.deepEqual(emails[1].to, ['traveler@example.invalid']);
+  assert.deepEqual(emails[1].cc, [OWNER_EMAIL]);
   assert.doesNotMatch(emails[1].html, /<b>Traveler<\/b>/);
 });
 
@@ -193,6 +194,7 @@ test("group inquiry reaches the owner first with derived nights, escaping and re
   assert.match(emails[0].html, /&lt;script&gt;/);
   assert.doesNotMatch(emails[0].html, /<script>/);
   assert.deepEqual(emails[1].to, [group.email]);
+  assert.deepEqual(emails[1].cc, [OWNER_EMAIL]);
 });
 
 test("group inquiry accepts undecided dates and unknown counts", async () => {
