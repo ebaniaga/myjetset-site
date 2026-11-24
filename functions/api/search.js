@@ -4,6 +4,7 @@
 
 import { isRecord, isCalendarDate, escapeHtml as esc } from "../../src/lib/validation.js";
 import { PROGRAM_NAMES, CARD_NAMES } from "../../src/lib/programs.js";
+import { OWNER_EMAIL } from "../../src/lib/mail.js";
 
 // Shorter labels for the email table column.
 const PROGRAM_SHORT = {
@@ -390,8 +391,8 @@ export async function onRequestPost(context) {
       body: JSON.stringify({
         from: env.FROM_EMAIL,
         to: [email],
-        bcc: env.OWNER_EMAIL ? [env.OWNER_EMAIL] : undefined,
-        reply_to: env.OWNER_EMAIL || undefined,
+        bcc: [OWNER_EMAIL],
+        reply_to: OWNER_EMAIL,
         subject,
         html,
       }),

@@ -2,10 +2,10 @@
 // Validates a team-trip / hotel-block inquiry from /group-travel, emails it to
 // the owner via Resend (reply-to the organizer), then sends the organizer a
 // short confirmation. Same env vars as /api/inquiry: RESEND_API_KEY,
-// FROM_EMAIL, OWNER_EMAIL.
+// FROM_EMAIL.
 
 import { validateGroupInquiry, summaryRows } from "../../src/lib/group-inquiry.js";
-import { OWNER_FALLBACK, send, renderOwnerEmail, renderConfirmation, json } from "../../src/lib/mail.js";
+import { OWNER_EMAIL, send, renderOwnerEmail, renderConfirmation, json } from "../../src/lib/mail.js";
 
 const CONFIRMATION =
   "I'll review your team's plans and get in touch by email. Nothing is reserved or committed yet. If anything changes in the meantime — dates, room count, destinations — just reply to this email.";
@@ -28,7 +28,7 @@ export async function onRequestPost({ request, env }) {
   }
   const v = result.value;
 
-  const owner = env.OWNER_EMAIL || OWNER_FALLBACK;
+  const owner = OWNER_EMAIL;
   const sent = await send(env, {
     to: [owner],
     reply_to: v.email,
