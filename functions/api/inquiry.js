@@ -72,6 +72,7 @@ export async function onRequestPost({ request, env }) {
   // Best-effort confirmation to the traveler; the inquiry already reached the owner.
   await send(env, {
     to: [email],
+    cc: [owner],
     reply_to: owner,
     subject: "Got it — I'll be in touch shortly",
     html: renderConfirmation(name, owner, CONFIRMATION),
